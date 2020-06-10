@@ -1,0 +1,56 @@
+{
+  "name": "bumblebee-electron-app",
+  "version": "0.0.1",
+  "private": false,
+  "main": "public/electron.js",
+  "dependencies": {
+    "@material-ui/core": "^4.8.0",
+    "@material-ui/icons": "^4.5.1",
+    "bumblebee-hotword": "0.0.6",
+    "bumblebee-hotword-node": "git+https://github.com/jaxcore/bumblebee-hotword-node#porcupine-v1.8",
+    "electron-is-dev": "^1.1.0",
+    "jaxcore": "git+https://github.com/jaxcore/jaxcore#master",
+    "jaxcore-deepspeech-plugin": "git+https://github.com/jaxcore/deepspeech-plugin#deepspeech-0.7.3",
+    "jaxcore-say-node": "git+https://github.com/jaxcore/jaxcore-say-node#master",
+    "lodash": "^4.17.15",
+    "node-abi": "^2.12.0",
+    "numerizer": "git+https://github.com/dsteinman/numerizerJS#master",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "^3.3.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "speaker": "^0.5.1",
+    "wav": "^1.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
+    "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.0",
+    "electron": "^9.0.2",
+    "electron-builder": "^22.7.0",
+    "electron-rebuild": "^1.11.0",
+    "wait-on": "^3.3.0"
+  }
+}

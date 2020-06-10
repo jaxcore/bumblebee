@@ -1,0 +1,44 @@
+html {
+  background-color: #222;
+  color: #eee;
+}
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.block {
+  display: block;
+}
+.none {
+  display: none;
+}
+
+.controls {
+  text-align: center;
+}
+
+
+#vad-status {
+  position: fixed;
+  top: 2px;
+  /*top: 45px;*/
+  left: 0;
+  width: 100%;
+  height: 10px;
+  /*border: 1px solid red;*/
+  z-index: 3;
+}
+
+.content {
+  margin-top: 110px;
+}
