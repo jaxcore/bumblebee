@@ -1,6 +1,8 @@
 import EventEmitter from "events";
 import {SpectrumAnalyser} from "bumblebee-hotword";
 
+const ipcRenderer = window.ipcRenderer;
+
 function getAudioContext() {
 	let audioContext;
 	if (window.AudioContext) {
@@ -68,31 +70,31 @@ class SayQueue extends EventEmitter {
 		this.volume = v;
 	}
 	
-	queue(text, options, data) {
+	queue(text, options, data, callback) {
 		this._audio.push({
-			text, options, data
+			text, options, data, callback
 		});
 		if (!this.playing) {
 			this.playNext();
-			
 		}
 	}
 	
-	play(text, options, data) {
+	play(text, options, data, callback) {
 		this.emit('play', text, options, data);
 		const getAnalyzer = (analyser) => {
 			if (this.sayOscilloscopeRef) {
-			var canvas = this.sayOscilloscopeRef.current;
-			canvas.width = window.innerWidth;
-			canvas.height = 100;
-			this.analyser = new SpectrumAnalyser(analyser, canvas);
-			this.analyser.setLineColor(this.lineColor);
-			this.analyser.setBackgroundColor('#222');
-			this.analyser.start();
+				var canvas = this.sayOscilloscopeRef.current;
+				canvas.width = window.innerWidth;
+				canvas.height = 100;
+				this.analyser = new SpectrumAnalyser(analyser, canvas);
+				this.analyser.setLineColor(this.lineColor);
+				this.analyser.setBackgroundColor('#222');
+				this.analyser.start();
 			}
 		};
 		
 		playAudio(data, this.volume, getAnalyzer).then(() => {
+			if (callback) callback();
 			this.playNext();
 		})
 	}
@@ -105,7 +107,7 @@ class SayQueue extends EventEmitter {
 				this.emit('playing');
 			}
 			this.emit('say', nextAudio.text, nextAudio.options, nextAudio.data);
-			this.play(nextAudio.text, nextAudio.options, nextAudio.data);
+			this.play(nextAudio.text, nextAudio.options, nextAudio.data, nextAudio.callback);
 		}
 		else {
 			this.playing = false;
@@ -114,4 +116,15 @@ class SayQueue extends EventEmitter {
 	}
 }
 
-export default SayQueue;
+const sayQueue = new SayQueue();
+
+const say = function(text, options) {
+	return new Promise((resolve, reject) => {
+		ipcRenderer.invoke('say-data', text, options).then((data) => {
+			sayQueue.queue(text, options, data, resolve);
+		});
+	});
+};
+
+export { say };
+export { sayQueue };

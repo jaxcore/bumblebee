@@ -1,12 +1,29 @@
-const data = [];
+let data = [];
+
+function clear(canvas) {
+	const ctx = canvas.getContext('2d');
+	const h = 9;
+	const w = canvas.width;
+	ctx.clearRect(0, 0, w, h);
+}
+
+function clearVADCanvas(canvas) {
+	clear(canvas);
+	data = [];
+}
 
 function drawVADCanvas(canvas, status) {
 	const ctx = canvas.getContext('2d');
-	if (status === 2) {
-		let rh = 4 + Math.round(5*Math.random());
+	if (status === 1) {
+		let rh = 4 + Math.round(9*Math.random());
+		data.unshift(rh);
+	}
+	else if (status === 2) {
+		let rh = 2 + Math.round(6*Math.random());
 		data.unshift(rh);
 	}
 	else data.unshift(status);
+	// data.unshift(status);
 	
 	const h = 9;
 	// const w = Math.floor(canvas.width / 2);
@@ -14,31 +31,24 @@ function drawVADCanvas(canvas, status) {
 	if (data.length > w) {
 		data.length = w;
 	}
-	//console.log('draw', status, canvas.width);
-	ctx.clearRect(0, 0, w, h);
+	
+	clear(canvas);
+	
 	data.forEach((d, i) => {
 		const x = w - i;
 		
 		if (d === 0) {
-			ctx.fillStyle = '#888'; //'#fff';
-			// ctx.fillStyle = '#fff';
-			// ctx.fillStyle = '#ddd';
+			ctx.fillStyle = '#888';
 			ctx.fillRect(x, 4, 1, 1);
 		}
-		else if (d === 1) {
-			ctx.fillStyle = '#444'; //'#aaa';
-			// ctx.fillStyle = '#aaa';
-			// ctx.fillStyle = '#aaa';
-			ctx.fillRect(x, 3, 1, 3);
-		}
 		else {
-			ctx.fillStyle = '#999'; //'#fff';
-			// ctx.fillStyle = '#fff';
-			// ctx.fillStyle = '#ddd';
-			// (d - 4) / 2
+			if (d>8) ctx.fillStyle = '#bbb';
+			else if (d > 6) ctx.fillStyle = '#999';
+			else ctx.fillStyle = '#777';
 			ctx.fillRect(x, (9-d)/2, 1, d);
-			// ctx.fillRect(x, 0, 1, 9);
 		}
 	});
 }
+
 module.exports = drawVADCanvas;
+module.exports.clearVADCanvas = clearVADCanvas;

@@ -1,5 +1,5 @@
 {
-  "name": "bumblebee-electron-app",
+  "name": "com.jaxcore.bumblebee",
   "version": "0.0.1",
   "private": false,
   "main": "public/electron.js",
@@ -13,7 +13,7 @@
     "jaxcore-deepspeech-plugin": "git+https://github.com/jaxcore/deepspeech-plugin#deepspeech-0.7.3",
     "jaxcore-say-node": "git+https://github.com/jaxcore/jaxcore-say-node#master",
     "lodash": "^4.17.15",
-    "node-abi": "^2.12.0",
+    "node-abi": "^2.18.0",
     "numerizer": "git+https://github.com/dsteinman/numerizerJS#master",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

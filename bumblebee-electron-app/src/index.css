@@ -42,3 +42,17 @@ code {
 .content {
   margin-top: 110px;
 }
+
+#console-input input[type='text']{
+  flex-grow: 1;
+}
+#console-input {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 27px;
+  background: black;
+  border-top: 1px solid #999;
+  padding-top: 2px;
+}

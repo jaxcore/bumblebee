@@ -127,12 +127,14 @@ class Microphone extends EventEmitter {
 	setMuted(muted) {
 		this.muted = muted;
 		
-		if (muted) {
-			this._gain = this.gainNode.gain.value;
-			this.gainNode.gain.value = 0;
-		}
-		else {
-			this.gainNode.gain.value = this._gain || 1;
+		if (this.gainNode) {
+			if (muted) {
+				this._gain = this.gainNode.gain.value;
+				this.gainNode.gain.value = 0;
+			}
+			else {
+				this.gainNode.gain.value = this._gain || 1;
+			}
 		}
 	}
 }
