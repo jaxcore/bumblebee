@@ -1,4 +1,6 @@
 import EventEmitter from 'events';
+import {SpectrumAnalyser} from "bumblebee-hotword";
+const ipcRenderer = window.ipcRenderer;
 
 class Microphone extends EventEmitter {
 	constructor(options) {
@@ -140,3 +142,33 @@ class Microphone extends EventEmitter {
 }
 
 export default Microphone;
+
+const connectMicrophone = function(bumblebee) {
+	let micOptions = {
+		volume: bumblebee.state.microphoneVolume,
+		chunkSize: 8192 //1024,
+	};
+	
+	if (!bumblebee.state.useSystemMic) {
+		micOptions = {
+			...micOptions,
+			ipcRenderer,
+			ipcStreamEvent: 'stream-data',
+			ipcResetEvent: 'stream-reset'
+		}
+	}
+	
+	bumblebee.microphone = new Microphone(micOptions);
+	
+	bumblebee.microphone.on('analyser', (analyser) => {
+		var canvas = bumblebee.speechOscilloscopeRef.current;
+		canvas.width = window.innerWidth;
+		canvas.height = 100;
+		bumblebee.analyser = new SpectrumAnalyser(analyser, canvas);
+		bumblebee.analyser.setLineColor('#eee');
+		bumblebee.analyser.setBackgroundColor('#222');
+		bumblebee.analyser.start();
+	});
+}
+
+export { connectMicrophone };

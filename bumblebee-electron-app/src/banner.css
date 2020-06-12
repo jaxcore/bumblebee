@@ -1,9 +1,10 @@
 
 #banner {
-    position: absolute;
+    /*position: absolute;*/
+    position: relative;
     width: 100%;
     height: 100px;
-    top: 9px;
+    /*margin-top: 9px;*/
 }
 
 .banner-icon svg {
@@ -70,8 +71,9 @@
 }
 
 #speech-oscilloscope {
+    /*border: 1px solid red;*/
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 0;
 }
 #say-oscilloscope {

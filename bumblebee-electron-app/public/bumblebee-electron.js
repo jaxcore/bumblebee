@@ -5,6 +5,7 @@ const soundplayer = require('./services/soundplayer');
 const bumblebeeNode = require('./services/bumblebee-node');
 const executeFunction = require('./execute-function');
 const SpeechDownloader = require('./services/deepspeech-downloader');
+const connectSay = require('./services/say');
 
 const schema = {
 	id: {
@@ -165,6 +166,8 @@ class BumblebeeElectron extends Service {
 		})
 		
 		this.bumblebeeNode = connectBumblebeeNode(this, bumblebeeNode);
+		
+		this.say = connectSay(this);
 	}
 	
 	init(jaxcore, callback) {
@@ -221,7 +224,7 @@ class BumblebeeElectron extends Service {
 		
 		this.execFunction = function(functionName, args, callback) {
 			executeFunction(mainWindow, functionName, args, callback);
-		}
+		};
 		
 		ipcMain.on('get-bumblebee-config', async (event) => {
 			event.returnValue = this.state;

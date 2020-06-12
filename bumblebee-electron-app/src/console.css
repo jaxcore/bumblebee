@@ -1,9 +1,5 @@
 .recognition-output {
-    box-sizing: border-box;
-    padding-left: 1em;
-    width: 100%;
-    position: absolute;
-    bottom: 33px;
+    overflow: auto;
 }
 
 .recognition-output a:hover {

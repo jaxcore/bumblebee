@@ -158,14 +158,47 @@ async function say(text, options, onBegin, onEnd) {
 	});
 }
 
-// const say = function(text, options) {
-// 	return new Promise((resolve, reject) => {
-// 		ipcRenderer.invoke('say-data', text, options).then((data) => {
-// 			sayQueue.queue(text, options, data, resolve);
-// 		});
-// 	});
-// };
-
+const connectSayQueue = function(bumblebee) {
+	
+	window.say = (text, options) => {
+		const id = Math.random().toString().substring(2);
+		bumblebee.say(text, options, function() {
+			ipcRenderer.send('say-begin-'+id);
+		}, function() {
+			ipcRenderer.send('say-end-'+id);
+		});
+		return id;
+	};
+	
+	
+	sayQueue.sayOscilloscopeRef = bumblebee.sayOscilloscopeRef;
+	sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
+	
+	sayQueue.on('say-begin', (utterance) => {
+		if (utterance.options.ttsOutput === false) return;
+		
+		bumblebee.addSpeechOutput({
+			text: utterance.text,
+			options: utterance.options,
+			type: 'tts'
+		});
+	});
+	sayQueue.on('playing', () => {
+		bumblebee.setMuted(true);
+		bumblebee.setState({
+			sayPlaying: true,
+			logo: bumblebee.logos.speaking
+		});
+	});
+	sayQueue.on('stopped', () => {
+		bumblebee.setMuted(false);
+		bumblebee.setState({
+			sayPlaying: false,
+			logo: bumblebee.logos.default
+		});
+	});
+}
 
 export { say };
 export { sayQueue };
+export { connectSayQueue };

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import Microphone from './Microphone';
-import {SpectrumAnalyser} from 'bumblebee-hotword';
-import {say, sayQueue} from './SayQueue';
+import { connectMicrophone } from './Microphone';
+import {say, sayQueue, connectSayQueue} from './SayQueue';
 import EventEmitter from 'events';
 import drawVADCanvas, {clearVADCanvas} from './drawVADCanvas';
 import MicIcon from '@material-ui/icons/Mic';
@@ -23,7 +22,7 @@ const inputModePlaceholders = {
 	stt: "speech to text",
 	tts: "text to speech",
 	hot: "hotword commands"
-}
+};
 
 class App extends Component {
 	constructor(props) {
@@ -52,8 +51,9 @@ class App extends Component {
 		this.speechOscilloscopeRef = React.createRef();
 		this.sayOscilloscopeRef = React.createRef();
 		this.vadStatusRef = React.createRef();
-		
+		this.contentRef = React.createRef();
 		this.consoleInputRef = React.createRef();
+		this.recognitionOutputRef = React.createRef();
 		
 		this.logos = {
 			default: 'logo-autobots',
@@ -100,112 +100,38 @@ class App extends Component {
 	
 	async launch(appName) {
 		let r;
+		
+		this.console('launching: '+appName);
+		
 		if (!(appName in this.apps)) {
 			await this.say('there is no application named '+appName);
 			return false;
 		}
-		
-		// if (appName === 'MainMenu') {
-		// 	try {
-		// 		r = await this.apps[appName].app(this);
-		// 	}
-		// 	catch(e) {
-		// 		await this.say('the '+this.apps[appName].name+' application encountered an error');
-		// 		debugger;
-		// 	}
-		//
-		// 	// if (r) {
-		// 	// 	if (r.launchApp) {
-		// 	// 		debugger;
-		// 	// 		return this.launch(r.launchApp);
-		// 	// 	}
-		// 	// }
-		//
-		// 	return this.launch('MainMenu');
-		//
-		// 	// debugger;
-		// 	// return;
-		// }
 		
 		try {
 			r = await this.apps[appName].app(this);
 		}
 		catch(e) {
 			this.console(e.toString());
-			await this.say('the application '+this.apps[appName].name+' had an error');
-			return true;
-			// await this.say('the '+appName+' application has exited');
+			await this.say('the '+this.apps[appName].name+' application encountered an error');
+			return false;
 		}
 		
 		await this.say('the ' + this.apps[appName].name + ' application has ended');
-		return true;
-		//debugger;
 		
-		//return this.launch('MainMenu');
-		// return this.apps[appName](this);
+		if (appName === 'MainMenu') {
+			return this.launch(appName);
+		}
 		
-		// if (this.activeApp) {
-		// 	this.nextApp = appName;
-		// 	debugger;
-		// 	return;
-		// }
-		//
-		// this.activeApp = appName;
+		return r;
 	}
 	
 	componentDidMount() {
-		let micOptions = {
-			volume: this.state.microphoneVolume,
-			chunkSize: 8192 //1024,
-		};
+		connectMicrophone(this);
+		connectSayQueue(this);
 		
-		if (!this.state.useSystemMic) {
-			micOptions = {
-				...micOptions,
-				ipcRenderer,
-				ipcStreamEvent: 'stream-data',
-				ipcResetEvent: 'stream-reset'
-			}
-		}
-		this.microphone = new Microphone(micOptions);
-		
-		this.microphone.on('analyser', (analyser) => {
-			var canvas = this.speechOscilloscopeRef.current;
-			canvas.width = window.innerWidth;
-			canvas.height = 100;
-			this.analyser = new SpectrumAnalyser(analyser, canvas);
-			this.analyser.setLineColor('#eee');
-			this.analyser.setBackgroundColor('#222');
-			this.analyser.start();
-		});
-		
-		sayQueue.sayOscilloscopeRef = this.sayOscilloscopeRef;
-		sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
-		
-		sayQueue.on('say-begin', (utterance) => {
-			if (utterance.options.ttsOutput === false) return;
-			
-			this.addSpeechOutput({
-				text: utterance.text,
-				options: utterance.options,
-				type: 'tts'
-			});
-		});
-		sayQueue.on('playing', () => {
-			this.setMuted(true);
-			this.setState({
-				sayPlaying: true,
-				logo: this.logos.speaking
-			});
-		});
-		sayQueue.on('stopped', () => {
-			this.setMuted(false);
-			this.setState({
-				sayPlaying: false,
-				logo: this.logos.default
-			});
-		});
-		
+		let recognitionOutputRef = this.recognitionOutputRef.current;
+		recognitionOutputRef.style.height = (window.innerWidth - 27 - 110) + 'px';
 		
 		ipcRenderer.on('electron-ready', (event, config) => {
 			this.setElectronConfig(config);
@@ -265,12 +191,6 @@ class App extends Component {
 		window.deepspeechResults = (text, stats) => {
 			console.log('deepspeech results', text, stats);
 			this.events.emit('recognize', text, stats);
-			
-			// this.addSpeechOutput({
-			// 	text,
-			// 	stats,
-			// 	type: 'recognize'
-			// });
 			
 			this.setHotwordDetected(null);
 		};
@@ -370,10 +290,13 @@ class App extends Component {
 				</div>
 			</div>
 			
+			<div className="container">
+			
 			{this.renderContent()}
 			
 			{this.renderConsoleInput()}
 		
+			</div>
 		</div>);
 	}
 	
@@ -384,7 +307,7 @@ class App extends Component {
 	}
 	
 	renderContent() {
-		return (<div id="home" className="content">
+		return (<div className="content" ref={this.contentRef}>
 			{/*{this.renderControls()}*/}
 			{this.renderRecognitionOutput()}
 		</div>);
@@ -449,8 +372,6 @@ class App extends Component {
 		</div>);
 	}
 	
-	
-	
 	changeInputMode(value) {
 		this.setState({
 			inputMode: value
@@ -468,14 +389,19 @@ class App extends Component {
 	}
 	executeConsoleInput() {
 		let text = this.consoleInputRef.current.value;
-		this.inputModes[this.state.inputMode].call(this, text);
+		if (this.state.inputMode === 'tts') {
+			ipcRenderer.send('say', text, {
+				profile: 'Cylon'
+			});
+		}
+		else {
+			this.inputModes[this.state.inputMode].call(this, text);
+		}
 	}
 	
 	showSettings() {
 	
 	}
-	
-	
 	
 	// BUMBLEBEE METHODS
 	
@@ -487,19 +413,10 @@ class App extends Component {
 			});
 		}
 		else if (typeof component === 'object') {
-			// if (component.choose) {
-			
 			this.addSpeechOutput({
 				component,
 				type: 'component'
 			});
-			
-			// }
-			
-			// this.addSpeechOutput({
-			// 	component,
-			// 	type: 'console'
-			// });
 		}
 	}
 	
@@ -508,11 +425,13 @@ class App extends Component {
 		// recognitionOutput.unshift(data);
 		recognitionOutput.push(data);
 		// if (recognitionOutput.length > 100) recognitionOutput.length = 100;
-		this.setState({recognitionOutput});
+		this.setState({recognitionOutput}, () => {
+			this.recognitionOutputRef.current.scroll(0,100000000000000)
+		});
 	}
 	
 	renderRecognitionOutput() {
-		return (<div className="recognition-output">
+		return (<div className="recognition-output" ref={this.recognitionOutputRef}>
 			{this.state.recognitionOutput.map((data, index) => {
 				
 				if (data.type === 'component') {
