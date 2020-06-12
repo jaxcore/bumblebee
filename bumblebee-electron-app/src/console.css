@@ -1,0 +1,22 @@
+.recognition-output {
+    box-sizing: border-box;
+    padding-left: 1em;
+    width: 100%;
+    position: absolute;
+    bottom: 33px;
+}
+
+.recognition-output a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+.recognition-output a {
+    color: #57f;
+    text-decoration: none;
+    /*font-weight: bold;*/
+}
+
+ul.nobullet {
+    list-style: none;
+    padding-left: 0em;
+}

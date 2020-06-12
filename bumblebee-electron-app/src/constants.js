@@ -1,0 +1,7 @@
+const CANCELLED = 'CANCELLED';
+const UNRECOGNIZED = 'UNRECOGNIZED';
+const TIMEOUT = 'TIMEOUT';
+
+export {CANCELLED};
+export {UNRECOGNIZED};
+export {TIMEOUT};

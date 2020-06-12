@@ -10,7 +10,7 @@ let mainWindow;
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: 480,
-		height: 640,
+		height: 540,
 		webPreferences: {
 			// allow code inside this window to use use native window.open()
 			nativeWindowOpen: true,

@@ -3,15 +3,27 @@ import Microphone from './Microphone';
 import {SpectrumAnalyser} from 'bumblebee-hotword';
 import {say, sayQueue} from './SayQueue';
 import EventEmitter from 'events';
-
 import drawVADCanvas, {clearVADCanvas} from './drawVADCanvas';
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import SettingsIcon from '@material-ui/icons/Settings';
-
 import InstallDialog from './install/InstallDialog';
+import choose from './bumblebee-client/choose';
+import Choose from './console/Choose';
+
+// Voice Apps
+import MainMenu from './apps/MainMenu';
+import Help from './apps/Help';
+import Customize from './apps/Customize';
+import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
 
 const ipcRenderer = window.ipcRenderer;
+
+const inputModePlaceholders = {
+	stt: "speech to text",
+	tts: "text to speech",
+	hot: "hotword commands"
+}
 
 class App extends Component {
 	constructor(props) {
@@ -58,7 +70,87 @@ class App extends Component {
 		
 		this.events = new EventEmitter();
 		
+		this.choose = choose;
+		
+		this.apps = {
+			MainMenu: {
+				name: 'Main Menu',
+				app: MainMenu
+			},
+			Customize: {
+				name: 'Customize',
+				app: Customize
+			},
+			DeepSpeechInstalled: {
+				name: 'DeepSpeech Installed',
+				app: DeepSpeechInstalled
+			},
+			Help: {
+				name: 'Help',
+				app: Help
+			},
+		};
+		
+		this.sayQueue = sayQueue;
+		
 		window.app = this;
+		
+		this.callstack = [];
+	}
+	
+	async launch(appName) {
+		let r;
+		if (!(appName in this.apps)) {
+			await this.say('there is no application named '+appName);
+			return false;
+		}
+		
+		// if (appName === 'MainMenu') {
+		// 	try {
+		// 		r = await this.apps[appName].app(this);
+		// 	}
+		// 	catch(e) {
+		// 		await this.say('the '+this.apps[appName].name+' application encountered an error');
+		// 		debugger;
+		// 	}
+		//
+		// 	// if (r) {
+		// 	// 	if (r.launchApp) {
+		// 	// 		debugger;
+		// 	// 		return this.launch(r.launchApp);
+		// 	// 	}
+		// 	// }
+		//
+		// 	return this.launch('MainMenu');
+		//
+		// 	// debugger;
+		// 	// return;
+		// }
+		
+		try {
+			r = await this.apps[appName].app(this);
+		}
+		catch(e) {
+			this.console(e.toString());
+			await this.say('the application '+this.apps[appName].name+' had an error');
+			return true;
+			// await this.say('the '+appName+' application has exited');
+		}
+		
+		await this.say('the ' + this.apps[appName].name + ' application has ended');
+		return true;
+		//debugger;
+		
+		//return this.launch('MainMenu');
+		// return this.apps[appName](this);
+		
+		// if (this.activeApp) {
+		// 	this.nextApp = appName;
+		// 	debugger;
+		// 	return;
+		// }
+		//
+		// this.activeApp = appName;
 	}
 	
 	componentDidMount() {
@@ -88,17 +180,18 @@ class App extends Component {
 		});
 		
 		sayQueue.sayOscilloscopeRef = this.sayOscilloscopeRef;
-		sayQueue.lineColor = '#5d5dff'; //'#4c4cd5'; //'#55e';
+		sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
 		
-		sayQueue.on('say', (text, options, data) => {
+		sayQueue.on('say-begin', (utterance) => {
+			if (utterance.options.ttsOutput === false) return;
+			
 			this.addSpeechOutput({
-				text,
-				options,
+				text: utterance.text,
+				options: utterance.options,
 				type: 'tts'
 			});
 		});
 		sayQueue.on('playing', () => {
-			
 			this.setMuted(true);
 			this.setState({
 				sayPlaying: true,
@@ -118,9 +211,8 @@ class App extends Component {
 			this.setElectronConfig(config);
 			
 			if (this.state.config.deepspeechInstalled) {
-				if (this.state.config.recording) {
-					this.startRecording();
-				}
+				this.startRecording();
+				this.launch('MainMenu');
 			}
 			else {
 				// this.showInstall(true);
@@ -173,11 +265,13 @@ class App extends Component {
 		window.deepspeechResults = (text, stats) => {
 			console.log('deepspeech results', text, stats);
 			this.events.emit('recognize', text, stats);
-			this.addSpeechOutput({
-				text,
-				stats,
-				type: 'recognize'
-			});
+			
+			// this.addSpeechOutput({
+			// 	text,
+			// 	stats,
+			// 	type: 'recognize'
+			// });
+			
 			this.setHotwordDetected(null);
 		};
 		
@@ -204,38 +298,19 @@ class App extends Component {
 			showInstallDialog: false,
 		});
 		this.updateConfig();
-		this.startTutorial();
+		// this.startIntro();
+		debugger;
+		this.launch('DeepSpeechInstalled');
 	}
 	
-	startTutorial() {
-		this.stopRecording();
-		this.setState({
-			mode: 'intro-tutorial'
-		});
-		say('Congratulations').then(() => {
-			say('DeepSpeech has been installed').then(() => {
-				say('To begin, turn on the microphone').then(() => {
-					this.events.once('recording-started', () => {
-						say('Now say something').then(() => {
-							this.events.once('recognize', (text) => {
-								say('You said, '+text).then(() => {
-									say('This concludes the introduction.').then(() => {
-										say('For more information at any time, just say, bumblebee help').then(() => {
-											say('Or visit bumblebee on github').then(() => {
-												this.simulateSTT('LINK: https://github.com/jaxcore/bumblebee');
-												this.setState({
-													mode: 'default'
-												});
-											});
-										});
-									});
-								});
-							});
-						});
-					})
-				});
-			});
-		})
+	startIntro() {
+		// customize(this)
+		// .then(r => {
+		// 	debugger;
+		// })
+		// .catch(e => {
+		// 	debugger;
+		// });
 	}
 	
 	showInstall(show) {
@@ -244,18 +319,11 @@ class App extends Component {
 		});
 	}
 	
-	addSpeechOutput(data) {
-		const {recognitionOutput} = this.state;
-		recognitionOutput.unshift(data);
-		if (recognitionOutput.length > 100) recognitionOutput.length = 100;
-		this.setState({recognitionOutput});
-	}
-	
 	setHotwordDetected(hotword) {
 		if (this.state.hotwordDetected !== hotword) {
 			this.setState({
 				hotwordDetected: hotword,
-				logo: hotword? this.logos.hotword : this.logos.default
+				logo: hotword ? this.logos.hotword : this.logos.default
 			});
 			if (hotword) {
 				if (this.analyser) this.analyser.setLineColor('yellow');
@@ -267,44 +335,45 @@ class App extends Component {
 	}
 	
 	render() {
-		const sayClass = this.state.sayPlaying? 'visible' : 'hidden';
+		const sayClass = this.state.sayPlaying ? 'visible' : 'hidden';
 		
-		const Mic = this.state.recording? MicIcon : MicOffIcon;
+		const Mic = this.state.recording ? MicIcon : MicOffIcon;
 		
 		return (<div className="App">
 			
-			{this.state.showInstallDialog? (<InstallDialog onInstalled={() => this.deepspeechInstalled() } onCancel={() => this.showInstall(false)} />) : null}
+			{this.state.showInstallDialog ? (<InstallDialog onInstalled={() => this.deepspeechInstalled()}
+															onCancel={() => this.showInstall(false)}/>) : null}
 			
 			<div id="header">
 				
-				<canvas id="vad-status" ref={this.vadStatusRef} width="10" height="9" />
+				<canvas id="vad-status" ref={this.vadStatusRef} width="10" height="9"/>
 				
 				<div id="banner">
 					
-					<canvas id="speech-oscilloscope" className="oscilloscope" ref={this.speechOscilloscopeRef} />
-					<canvas id="say-oscilloscope" className={"oscilloscope "+sayClass} ref={this.sayOscilloscopeRef} />
+					<canvas id="speech-oscilloscope" className="oscilloscope" ref={this.speechOscilloscopeRef}/>
+					<canvas id="say-oscilloscope" className={"oscilloscope " + sayClass} ref={this.sayOscilloscopeRef}/>
 					
 					<div id="logo" onClick={e => this.toggleControls()}>
-						<img src={"images/logos/"+this.state.logo+".png"} />
+						<img src={"images/logos/" + this.state.logo + ".png"}/>
 					</div>
 					
-					<div id="mic-icon" className="banner-icon" onClick={e => this.toggleRecording() }>
-						<Mic />
-						<div className="text">Mic {this.state.recording?'On':'Off'}</div>
+					<div id="mic-icon" className="banner-icon" onClick={e => this.toggleRecording()}>
+						<Mic/>
+						<div className="text">Mic {this.state.recording ? 'On' : 'Off'}</div>
 					</div>
 					
-					<div id="settings-icon" className="banner-icon" onClick={e => this.showSettings() }>
-						<SettingsIcon />
+					<div id="settings-icon" className="banner-icon" onClick={e => this.showSettings()}>
+						<SettingsIcon/>
 						<div className="text">Settings</div>
 					</div>
-					
+				
 				</div>
 			</div>
 			
 			{this.renderContent()}
 			
 			{this.renderConsoleInput()}
-			
+		
 		</div>);
 	}
 	
@@ -322,55 +391,56 @@ class App extends Component {
 	}
 	
 	renderConsoleInput() {
-		let inputModePlaceholder;
-		if (this.state.inputMode === 'stt') inputModePlaceholder = "speech to text";
-		if (this.state.inputMode === 'tts') inputModePlaceholder = "text to speech";
-		if (this.state.inputMode === 'hot') inputModePlaceholder = "hotword commands";
 		
 		return (<div id="console-input">
 			
-			<select onChange={e => this.changeInputMode(e.target.options[e.target.selectedIndex].value) } value={this.state.inputMode}>
+			<select onChange={e => this.changeInputMode(e.target.options[e.target.selectedIndex].value)}
+					value={this.state.inputMode}>
 				<option value="stt">STT</option>
 				<option value="tts">TTS</option>
 				<option value="hot">HOT</option>
 			</select>
 			
-			<input type="text" ref={this.consoleInputRef} placeholder={inputModePlaceholder} onKeyPress={this.keypressConsoleInput}/>
+			<input type="text" ref={this.consoleInputRef} placeholder={inputModePlaceholders[this.state.inputMode]}
+				   onKeyPress={this.keypressConsoleInput}/>
 			
 			<button onClick={e => this.executeConsoleInput()}>
 				Execute
 			</button>
 			
-			<button onClick={e => this.clearOutput()}>
+			<button onClick={e => this.clearConsole()}>
 				Clear
 			</button>
 		</div>);
 	}
 	
+	// todo; settings
 	renderControls() {
-		const controlsClass = this.state.controlsVisible? 'block' : 'none';
+		const controlsClass = this.state.controlsVisible ? 'block' : 'none';
 		
-		return (<div className={'controls '+controlsClass}>
+		return (<div className={'controls ' + controlsClass}>
 			
-			Hotword: <select onChange={e => this.changeHotword(e.target.options[e.target.selectedIndex].value) } value={this.state.hotword}>
-				<option value="OFF">- OFF -</option>
-				<option value="bumblebee">bumblebee</option>
-				<option value="grasshopper">grasshopper</option>
-				<option value="hey_edison">hey_edison</option>
-				<option value="porcupine">porcupine</option>
-				<option value="terminator">terminator</option>
-				<option value="ANY">- ANY -</option>
-			</select>
+			Hotword: <select onChange={e => this.changeHotword(e.target.options[e.target.selectedIndex].value)}
+							 value={this.state.hotword}>
+			<option value="OFF">- OFF -</option>
+			<option value="bumblebee">bumblebee</option>
+			<option value="grasshopper">grasshopper</option>
+			<option value="hey_edison">hey_edison</option>
+			<option value="porcupine">porcupine</option>
+			<option value="terminator">terminator</option>
+			<option value="ANY">- ANY -</option>
+		</select>
 			
 			<br/><br/>
 			
 			<button disabled={!this.state.recording} onClick={e => this.toggleMute()}>
-				{this.state.muted? 'Unmute' : 'Mute'}
+				{this.state.muted ? 'Unmute' : 'Mute'}
 			</button>
 			
 			
-			
-			<button onClick={e => { ipcRenderer.send('dev-tools'); }}>
+			<button onClick={e => {
+				ipcRenderer.send('dev-tools');
+			}}>
 				Dev Console
 			</button>
 			
@@ -378,23 +448,8 @@ class App extends Component {
 		
 		</div>);
 	}
-	renderRecognitionOutput() {
-		return (<ul>
-			{this.state.recognitionOutput.map((data, index) => {
-				let text = data.text;
-				if (data.type === 'command') {
-					text = 'COMMAND: '+text;
-				}
-				if (data.type === 'tts') {
-					text = 'TTS: '+text;
-				}
-				if (data.type === 'hotword') {
-					text = 'HOTWORD: '+data.hotword;
-				}
-				return (<li key={index}>{text}</li>);
-			})}
-		</ul>)
-	}
+	
+	
 	
 	changeInputMode(value) {
 		this.setState({
@@ -407,9 +462,93 @@ class App extends Component {
 			this.executeConsoleInput();
 		}
 	}
+	
+	setConsoleInputText(t) {
+		this.consoleInputRef.current.value = t;
+	}
 	executeConsoleInput() {
 		let text = this.consoleInputRef.current.value;
 		this.inputModes[this.state.inputMode].call(this, text);
+	}
+	
+	showSettings() {
+	
+	}
+	
+	
+	
+	// BUMBLEBEE METHODS
+	
+	console(component) {
+		if (typeof component === 'text' || typeof component === 'boolean' || typeof component === 'number') {
+			this.addSpeechOutput({
+				text: component.toString(),
+				type: 'tts'
+			});
+		}
+		else if (typeof component === 'object') {
+			// if (component.choose) {
+			
+			this.addSpeechOutput({
+				component,
+				type: 'component'
+			});
+			
+			// }
+			
+			// this.addSpeechOutput({
+			// 	component,
+			// 	type: 'console'
+			// });
+		}
+	}
+	
+	addSpeechOutput(data) {
+		const {recognitionOutput} = this.state;
+		// recognitionOutput.unshift(data);
+		recognitionOutput.push(data);
+		// if (recognitionOutput.length > 100) recognitionOutput.length = 100;
+		this.setState({recognitionOutput});
+	}
+	
+	renderRecognitionOutput() {
+		return (<div className="recognition-output">
+			{this.state.recognitionOutput.map((data, index) => {
+				
+				if (data.type === 'component') {
+					if (data.component.choose) {
+						return (<Choose key={index} bumblebee={this} choose={data.component.choose}/>);
+					}
+					// return 'CHOOSE'
+				}
+				
+				let text = data.text;
+				if (data.type === 'command') {
+					text = 'COMMAND: ' + text;
+				}
+				if (data.type === 'tts') {
+					text = 'TTS: ' + text;
+				}
+				if (data.type === 'hotword') {
+					text = 'HOTWORD: ' + data.hotword;
+				}
+				if (data.type === 'console') {
+					text = data.component;
+					// text = 'blah'; //data.console;
+				}
+				
+				if (!text) text = '[undefined]';
+				
+				return (<div key={index}>{text}</div>);
+			})}
+		</div>)
+	}
+	
+	async say() {
+		return say(...arguments);
+	}
+	sayProfile(profile) {
+		sayQueue.setProfile(profile);
 	}
 	
 	simulateHotword(text) {
@@ -421,6 +560,12 @@ class App extends Component {
 	}
 	
 	simulateSTT(text) {
+		if (this.state.muted) {
+			this.console('muted');
+			return;
+		}
+		// debugger;
+		this.setConsoleInputText(text);
 		ipcRenderer.send('simulate-stt', text);
 	}
 	
@@ -435,12 +580,6 @@ class App extends Component {
 			hotwordEnabled
 		});
 		ipcRenderer.send('hotword-select', hotword);
-	}
-	
-	showSettings() {
-		if (this.state.mode === 'intro-tutorial') {
-			return;
-		}
 	}
 	
 	toggleRecording() {
@@ -466,6 +605,41 @@ class App extends Component {
 		this.events.emit('recording-started');
 	};
 	
+	async recognize(options) {
+		if (!options) options = {};
+		return new Promise((resolve, reject) => {
+			let timedOut = false;
+			
+			if (options.timeout) {
+				let timer = setTimeout(function () {
+					timedOut = true;
+					reject();
+				}, options.timeout || 10000);
+				
+				this.events.once('recognize', function (text, stats) {
+					clearTimeout(timer);
+					if (!timedOut) resolve({text, stats});
+				});
+			}
+			else {
+				this.events.once('recognize', function (text, stats) {
+					resolve({text, stats});
+				});
+			}
+		});
+	}
+	
+	async onRecordingStarted() {
+		return new Promise((resolve, reject) => {
+			this.events.once('recording-started', resolve);
+		});
+	}
+	async onRecordingStopped() {
+		return new Promise((resolve, reject) => {
+			this.events.once('recording-stopped', resolve);
+		});
+	}
+	
 	stopRecording() {
 		if (!this.state.config.deepspeechInstalled) {
 			return;
@@ -480,11 +654,8 @@ class App extends Component {
 				recording: false
 			}, () => {
 				this.microphone.stop();
-				// setTimeout(() => {
-				this.analyser.stop();
-				clearVADCanvas(this.vadStatusRef.current);
-					
-				// },1000);
+				if (this.analyser) this.analyser.stop();
+				if (this.vadStatusRef) clearVADCanvas(this.vadStatusRef.current);
 			});
 		}
 		this.events.emit('recording-stopped');
@@ -504,8 +675,8 @@ class App extends Component {
 		this.setMuted(!this.state.muted);
 	};
 	
-	clearOutput() {
-		this.setState({recognitionOutput:[]});
+	clearConsole() {
+		this.setState({recognitionOutput: []});
 	}
 }
 

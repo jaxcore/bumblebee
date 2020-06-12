@@ -64,15 +64,24 @@ class SayQueue extends EventEmitter {
 		this.playing = false;
 		this.lineColor = '#fff';
 		this.sayOscilloscopeRef = null;
+		this.profile = null;
 	}
 	
+	setProfile(profile) {
+		this.profile = profile;
+	}
 	setVolume(v) {
 		this.volume = v;
 	}
 	
-	queue(text, options, data, callback) {
+	queue(text, options, data, onBegin, onEnd, callback) {
+		if (!options) options = {};
+		if (!options.profile && this.profile) {
+			// options.profile = this.profile;
+			// debugger;
+		}
 		this._audio.push({
-			text, options, data, callback
+			text, options, data, onBegin, onEnd, callback
 		});
 		if (!this.playing) {
 			this.playNext();
@@ -106,8 +115,19 @@ class SayQueue extends EventEmitter {
 				this.playing = true;
 				this.emit('playing');
 			}
-			this.emit('say', nextAudio.text, nextAudio.options, nextAudio.data);
-			this.play(nextAudio.text, nextAudio.options, nextAudio.data, nextAudio.callback);
+			
+			this.emit('say-begin', nextAudio);
+			if (nextAudio.onBegin) nextAudio.onBegin();
+			
+			// if (nextAudio.options.console) {
+			// 	this.emit('console', nextAudio.options.console);
+			// }
+			
+			this.play(nextAudio.text, nextAudio.options, nextAudio.data, () => {
+				this.emit('say-end', nextAudio);
+				if (nextAudio.onEnd) nextAudio.onEnd();
+				nextAudio.callback();
+			});
 		}
 		else {
 			this.playing = false;
@@ -118,13 +138,34 @@ class SayQueue extends EventEmitter {
 
 const sayQueue = new SayQueue();
 
-const say = function(text, options) {
+async function say(text, options, onBegin, onEnd) {
+	if (options && options.profile) {
+		// debugger;
+	}
+	if (!options) options = {};
 	return new Promise((resolve, reject) => {
-		ipcRenderer.invoke('say-data', text, options).then((data) => {
-			sayQueue.queue(text, options, data, resolve);
+		
+		const sayOptions = {
+			profile: options.profile
+		}
+		if (!sayOptions.profile && sayQueue.profile) sayOptions.profile = sayQueue.profile;
+		
+		// if ('console' in options) delete options.console;
+		
+		ipcRenderer.invoke('say-data', text, sayOptions).then((data) => {
+			sayQueue.queue(text, options, data, onBegin, onEnd, resolve);
 		});
 	});
-};
+}
+
+// const say = function(text, options) {
+// 	return new Promise((resolve, reject) => {
+// 		ipcRenderer.invoke('say-data', text, options).then((data) => {
+// 			sayQueue.queue(text, options, data, resolve);
+// 		});
+// 	});
+// };
+
 
 export { say };
 export { sayQueue };

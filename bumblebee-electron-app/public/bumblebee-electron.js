@@ -64,7 +64,7 @@ function connectDeepspeech(bumblebeeElectron, deepspeech, bumblebeeNode) {
 	});
 	
 	ipcMain.on('simulate-stt', (event, text) => {
-		deepspeech.processRecognition(text, {
+		deepspeech.processRecognition(text.toLowerCase(), {
 			recogTime: 0,
 			audioLength: 0,
 			model: deepspeech.state.modelName
@@ -236,9 +236,15 @@ class BumblebeeElectron extends Service {
 		});
 		
 		ipcMain.handle('say-data', async (event, text, options) => {
+			if (options && options.profile) {
+				debugger;
+			}
+			else {
+				debugger;
+			}
 			const result = await this.sayNode.getAudioData(text, options);
 			return result;
-		})
+		});
 	}
 	
 	connect() {
