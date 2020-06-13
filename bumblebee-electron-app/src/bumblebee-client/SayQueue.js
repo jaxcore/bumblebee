@@ -57,23 +57,23 @@ function playAudio(data, volume, analyzerCallback) {
 }
 
 class SayQueue extends EventEmitter {
-	constructor() {
+	constructor(app) {
 		super();
 		this._audio = [];
 		this.volume = 1;
 		this.playing = false;
-		this.lineColor = '#fff';
 		this.sayOscilloscopeRef = null;
 		this.profile = null;
+		this.app = app;
 	}
-	
+
 	setProfile(profile) {
 		this.profile = profile;
 	}
 	setVolume(v) {
 		this.volume = v;
 	}
-	
+
 	queue(text, options, data, onBegin, onEnd, callback) {
 		if (!options) options = {};
 		if (!options.profile && this.profile) {
@@ -87,27 +87,27 @@ class SayQueue extends EventEmitter {
 			this.playNext();
 		}
 	}
-	
+
 	play(text, options, data, callback) {
 		this.emit('play', text, options, data);
 		const getAnalyzer = (analyser) => {
-			if (this.sayOscilloscopeRef) {
-				var canvas = this.sayOscilloscopeRef.current;
+			// if (this.sayOscilloscopeRef) {
+				var canvas = this.app.sayOscilloscopeRef.current;
 				canvas.width = window.innerWidth;
 				canvas.height = 100;
 				this.analyser = new SpectrumAnalyser(analyser, canvas);
-				this.analyser.setLineColor(this.lineColor);
+				this.analyser.setLineColor('#7c9fff');
 				this.analyser.setBackgroundColor('#222');
 				this.analyser.start();
-			}
+			// }
 		};
-		
+
 		playAudio(data, this.volume, getAnalyzer).then(() => {
 			if (callback) callback();
 			this.playNext();
 		})
 	}
-	
+
 	playNext() {
 		let nextAudio = this._audio.shift();
 		if (nextAudio) {
@@ -115,14 +115,14 @@ class SayQueue extends EventEmitter {
 				this.playing = true;
 				this.emit('playing');
 			}
-			
+
 			this.emit('say-begin', nextAudio);
 			if (nextAudio.onBegin) nextAudio.onBegin();
-			
+
 			// if (nextAudio.options.console) {
 			// 	this.emit('console', nextAudio.options.console);
 			// }
-			
+
 			this.play(nextAudio.text, nextAudio.options, nextAudio.data, () => {
 				this.emit('say-end', nextAudio);
 				if (nextAudio.onEnd) nextAudio.onEnd();
@@ -134,32 +134,32 @@ class SayQueue extends EventEmitter {
 			this.emit('stopped');
 		}
 	}
-}
-
-const sayQueue = new SayQueue();
-
-async function say(text, options, onBegin, onEnd) {
-	if (options && options.profile) {
-		// debugger;
-	}
-	if (!options) options = {};
-	return new Promise((resolve, reject) => {
-		
-		const sayOptions = {
-			profile: options.profile
-		}
-		if (!sayOptions.profile && sayQueue.profile) sayOptions.profile = sayQueue.profile;
-		
-		// if ('console' in options) delete options.console;
-		
-		ipcRenderer.invoke('say-data', text, sayOptions).then((data) => {
-			sayQueue.queue(text, options, data, onBegin, onEnd, resolve);
-		});
-	});
-}
-
-const connectSayQueue = function(bumblebee) {
 	
+	async say(text, options, onBegin, onEnd) {
+		if (options && options.profile) {
+			// debugger;
+		}
+		if (!options) options = {};
+		return new Promise((resolve, reject) => {
+			
+			const sayOptions = {
+				profile: options.profile
+			}
+			if (!sayOptions.profile && this.profile) sayOptions.profile = this.profile;
+			
+			// if ('console' in options) delete options.console;
+			
+			ipcRenderer.invoke('say-data', text, sayOptions).then((data) => {
+				this.queue(text, options, data, onBegin, onEnd, resolve);
+			});
+		});
+	};
+}
+
+
+const connectSayQueue = function(bumblebee, app) {
+	const sayQueue = new SayQueue(app);
+
 	window.say = (text, options) => {
 		const id = Math.random().toString().substring(2);
 		bumblebee.say(text, options, function() {
@@ -169,36 +169,35 @@ const connectSayQueue = function(bumblebee) {
 		});
 		return id;
 	};
-	
-	
+
 	sayQueue.sayOscilloscopeRef = bumblebee.sayOscilloscopeRef;
 	sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
-	
+
 	sayQueue.on('say-begin', (utterance) => {
 		if (utterance.options.ttsOutput === false) return;
-		
-		bumblebee.addSpeechOutput({
+		bumblebee.console({
+			type: 'tts',
 			text: utterance.text,
-			options: utterance.options,
-			type: 'tts'
+			options: utterance.options
 		});
+		
 	});
 	sayQueue.on('playing', () => {
 		bumblebee.setMuted(true);
-		bumblebee.setState({
+		bumblebee.app.setState({
 			sayPlaying: true,
-			logo: bumblebee.logos.speaking
+			logo: bumblebee.app.logos.speaking
 		});
 	});
 	sayQueue.on('stopped', () => {
 		bumblebee.setMuted(false);
-		bumblebee.setState({
+		bumblebee.app.setState({
 			sayPlaying: false,
-			logo: bumblebee.logos.default
+			logo: bumblebee.app.logos.default
 		});
 	});
+	
+	return sayQueue;
 }
 
-export { say };
-export { sayQueue };
 export { connectSayQueue };

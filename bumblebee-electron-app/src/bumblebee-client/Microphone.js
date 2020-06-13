@@ -141,15 +141,13 @@ class Microphone extends EventEmitter {
 	}
 }
 
-export default Microphone;
-
-const connectMicrophone = function(bumblebee) {
+const connectMicrophone = function(bumblebee, app) {
 	let micOptions = {
-		volume: bumblebee.state.microphoneVolume,
+		volume: app.state.microphoneVolume,
 		chunkSize: 8192 //1024,
 	};
 	
-	if (!bumblebee.state.useSystemMic) {
+	if (!app.state.useSystemMic) {
 		micOptions = {
 			...micOptions,
 			ipcRenderer,
@@ -158,10 +156,10 @@ const connectMicrophone = function(bumblebee) {
 		}
 	}
 	
-	bumblebee.microphone = new Microphone(micOptions);
+	const microphone = new Microphone(micOptions);
 	
-	bumblebee.microphone.on('analyser', (analyser) => {
-		var canvas = bumblebee.speechOscilloscopeRef.current;
+	microphone.on('analyser', (analyser) => {
+		var canvas = app.speechOscilloscopeRef.current;
 		canvas.width = window.innerWidth;
 		canvas.height = 100;
 		bumblebee.analyser = new SpectrumAnalyser(analyser, canvas);
@@ -169,6 +167,9 @@ const connectMicrophone = function(bumblebee) {
 		bumblebee.analyser.setBackgroundColor('#222');
 		bumblebee.analyser.start();
 	});
+	
+	return microphone;
 }
 
+export default Microphone;
 export { connectMicrophone };

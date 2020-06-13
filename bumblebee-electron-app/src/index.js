@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import './banner.css';
-import './console.css';
+import './css/index.css';
+import './css/banner.css';
+import './css/console.css';
 
 import App from './App';
 ReactDOM.render(<App/>, document.getElementById('root'));

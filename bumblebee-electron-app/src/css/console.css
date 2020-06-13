@@ -1,0 +1,35 @@
+.content-panel {
+    overflow: auto;
+}
+
+.recognition-output {
+    margin-left: 1em;
+}
+
+.recognition-output a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+.recognition-output a {
+    /*color: #57f;*/
+    color: #7c9fff;
+    /*color: #fff;*/
+    text-decoration: none;
+    /*font-weight: bold;*/
+}
+
+.recognition-output a.number {
+    color: #fff;
+}
+
+ul.nobullet {
+    list-style: none;
+    padding-left: 0em;
+}
+
+/*.recognition-output div.hotword {*/
+/*    color: yellow;*/
+/*}*/
+.recognition-output div.command {
+    color: #d6bc22;
+}

@@ -1,6 +1,17 @@
-async function Help(bumblebee) {
-	await bumblebee.say("The help menu is not ready yet");
-	return true;
+export default async function main(bumblebee) {
+	await bumblebee.say('Sorry, help menu is not ready yet');
+	await bumblebee.say('To return to the main menu, say "exit"');
+	return loop(bumblebee);
 }
 
-export default Help;
+async function loop(bumblebee) {
+	let r = await bumblebee.recognize();
+	bumblebee.console('Help: '+r.text);
+	
+	if (r.text === 'exit') {
+		await bumblebee.say("help menu exiting");
+		return true;
+	}
+	
+	return loop(bumblebee);
+}

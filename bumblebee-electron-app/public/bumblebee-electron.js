@@ -44,11 +44,11 @@ function connectDeepspeech(bumblebeeElectron, deepspeech, bumblebeeNode) {
 		}
 	});
 	
-	
 	ipcMain.on('simulate-hotword', (event, text, hotword) => {
 		if (hotword === 'ANY') hotword = 'bumblebee';
 		else if (hotword === 'OFF') return;
 		
+		bumblebeeNode.emit('hotword', hotword);
 		// bumblebee.emit('hotword', hotword);
 		
 		deepspeech.setState({hotword});
@@ -60,7 +60,7 @@ function connectDeepspeech(bumblebeeElectron, deepspeech, bumblebeeNode) {
 				model: deepspeech.state.modelName,
 				hotword
 			});
-		},300);
+		},1500);
 		
 	});
 	
@@ -101,12 +101,6 @@ function connectDeepspeech(bumblebeeElectron, deepspeech, bumblebeeNode) {
 
 function connectBumblebeeNode(bumblebeeElectron, bumblebeeNode) {
 	
-	ipcMain.on('simulate-hotword', (event, text, hotword) => {
-		// deepspeech also listens to this event
-		if (hotword === 'ANY') hotword = 'bumblebee';
-		else if (hotword === 'OFF') return;
-		bumblebeeNode.emit('hotword', hotword);
-	});
 	
 	ipcMain.on('hotword-select', (event, hotword) => {
 		if (hotword === 'OFF') {

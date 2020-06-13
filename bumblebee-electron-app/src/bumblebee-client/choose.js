@@ -6,15 +6,35 @@ async function choose(text, choices, options) {
 		await this.say(text);
 	}
 	
+	if (options.numberize) {
+		choices = choices.map((choice, index) => {
+			if (!('number' in choice)) choice.number = index + 1;
+			return choice;
+		})
+	}
+	
 	if (options.narrateChoices) {
 		// const sayChoices = choices.map(c => {
 		// 	return this.say(c.number + ': ' + c.text);
 		// })
 		// await Promise.allSettled(sayChoices);
-		for (const choice of choices) {
-			await this.say(choice.number + ': ' + choice.text, {
-				ttsOutput: false
-			});
+		for (let i=0;i<choices.length;i++) {
+			let choice = choices[i];
+			if (options.numberize && choice.number) {
+				await this.say(choice.number + ': ' + choice.text, {
+					ttsOutput: false
+				});
+			}
+			else {
+				await this.say(choice.text, {
+					ttsOutput: false
+				});
+				if (i<choices.length-1) {
+					await this.say('or', {
+						ttsOutput: false
+					});
+				}
+			}
 		}
 	}
 	
@@ -26,19 +46,15 @@ async function choose(text, choices, options) {
 		}
 	});
 	
-	if (options.numberize) {
-		choices = choices.map((choice, index) => {
-			let num;
-			if ('number' in choice) num = choice.number;
-			else choice.number = index + 1;
-			return choice;
-		})
-	}
+	
 	this.console({
-		choose: {
-			choices,
-			style: options.style,
-			numberize: options.numberize
+		type: 'component',
+		component: {
+			choose: {
+				choices,
+				style: options.style,
+				numberize: options.numberize
+			}
 		}
 	});
 	

@@ -28,18 +28,6 @@ code {
   text-align: center;
 }
 
-
-#vad-status {
-  /*position: fixed;*/
-  top: 2px;
-  /*top: 45px;*/
-  left: 0;
-  width: 100%;
-  height: 10px;
-  /*border: 1px solid red;*/
-  z-index: 3;
-}
-
 .container {
   width: 100%;
 }
@@ -54,8 +42,6 @@ code {
 
 #console-input {
   display: flex;
-  /*position: fixed;*/
-  /*bottom: 0;*/
   width: 100%;
   height: 27px;
   background: black;
