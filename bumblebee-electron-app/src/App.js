@@ -10,6 +10,7 @@ import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
 // Voice Apps
+import Main from './Main';
 import MainMenu from './apps/MainMenu';
 import Help from './apps/Help';
 import Settings from './apps/Settings';
@@ -31,18 +32,13 @@ class App extends Component {
 			recording: false,
 			muted: false,
 			hotword: 'ANY',
-			
 			microphoneVolume: 1,
 			sayVolume: 1,
-			
 			recognitionOutput: [],
 			logo: 'logo-autobots',
-			
 			controlsVisible: false,
 			useSystemMic: true,
-			
 			showInstallDialog: false,
-			
 			inputMode: 'stt',
 			config: {}
 		};
@@ -62,19 +58,14 @@ class App extends Component {
 			speaking: 'logo-autobots-speaking',
 		};
 		
-		// this.choose = choose;
-		
-		// this.sayQueue = sayQueue;
-		
 		window.app = this;
 	}
 	
 	async main() {
 		this.bumblebee.console('main()');
-		// await this.bumblebee.say('main');
 		
 		try {
-			await MainMenu(this.bumblebee);
+			await Main(this.bumblebee);
 		}
 		catch(e) {
 			this.addSpeechOutput({
@@ -86,7 +77,6 @@ class App extends Component {
 		
 		await this.bumblebee.say('restarting main');
 		
-		// return MainMenu(this.bumblebee);
 		return this.main();
 	}
 	
@@ -107,16 +97,16 @@ class App extends Component {
 			
 			this.bumblebee = new BumbleBee(this);
 			
-			// this.bumblebee.addApp('Main Menu', MainMenu);
+			this.bumblebee.addApp('Main Menu', MainMenu);
 			this.bumblebee.addApp('Settings', Settings);
 			this.bumblebee.addApp('DeepSpeech Installed', DeepSpeechInstalled);
 			this.bumblebee.addApp('Help', Help);
-			this.bumblebee.addApp('Main Menu', MainMenu);
 			
 			if (this.state.config.deepspeechInstalled) {
 				this.bumblebee.startRecording();
 				// this.launch('MainMenu');
 				this.main();
+				this.bumblebee.simulateSTT('main menu');
 			}
 			else {
 				// this.showInstall(true);
@@ -259,7 +249,7 @@ class App extends Component {
 		
 		return (<div className={'controls ' + controlsClass}>
 			
-			Hotword: <select onChange={e => this.changeHotword(e.target.options[e.target.selectedIndex].value)}
+			Hotword: <select onChange={e => this.bumblebee.changeHotword(e.target.options[e.target.selectedIndex].value)}
 							 value={this.state.hotword}>
 			<option value="OFF">- OFF -</option>
 			<option value="bumblebee">bumblebee</option>
@@ -317,7 +307,7 @@ class App extends Component {
 	}
 	
 	showSettings() {
-	
+		// load Settings
 	}
 	
 	addSpeechOutput(data) {
@@ -332,10 +322,6 @@ class App extends Component {
 	renderRecognitionOutput() {
 		return (<ConsoleOutput bumblebee={this.bumblebee} recognitionOutput={this.state.recognitionOutput}/>);
 	}
-	
-	
-	// BUMBLEBEE METHODS
-	
 }
 
 export default App;

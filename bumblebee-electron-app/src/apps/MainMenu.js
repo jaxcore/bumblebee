@@ -103,7 +103,6 @@ async function loop(bumblebee) {
 	}
 	else if (r.text === 'help') {
 		await bumblebee.launch('Help');
-		await bumblebee.say("main help done");
 	}
 	
 	return loop(bumblebee);

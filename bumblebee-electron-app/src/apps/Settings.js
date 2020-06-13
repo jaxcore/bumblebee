@@ -74,13 +74,12 @@ async function loop(bumblebee) {
 	bumblebee.console('Settings: '+r.text);
 	
 	if (r.text === 'exit') {
-		await bumblebee.say("settings menu exiting");
+		await bumblebee.say("Exiting...");
 		return true;
 	}
 	if (r.text === 'change voice') {
 		await SayProfile(bumblebee);
 		await bumblebee.console("Say Profile done");
-		await bumblebee.say("Exiting...");
 	}
 	
 	return loop(bumblebee);
