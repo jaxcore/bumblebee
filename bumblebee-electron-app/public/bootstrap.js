@@ -24,8 +24,6 @@ const createJaxcore = function(callback) {
 	
 	});
 	
-	
-	
 	jaxcore.addPlugin(websocketPlugin);
 	jaxcore.addPlugin(deepspeechPlugin);
 	
@@ -35,12 +33,6 @@ const createJaxcore = function(callback) {
 	return jaxcore;
 };
 
-// const createBumblebeeElectron = function(jaxcore) {
-// 	// return new BumblebeeElectron(jaxcore);
-// };
-
-
-
 const startBumblebeeElectron = function(callback) {
 	const jaxcore = createJaxcore();
 	console.log('createJaxcore');
@@ -48,7 +40,14 @@ const startBumblebeeElectron = function(callback) {
 	jaxcore.startServiceProfile('Bumblebee Electron',  function(err, bumblebeeElectron) {
 		console.log('bumblebeeElectron');
 		
-		bumblebeeElectron.init(jaxcore, () => {
+		bumblebeeElectron.init(jaxcore, (err, bumblebee) => {
+			if (err) {
+				console.log('init: ', err);
+			}
+			else {
+				console.log('init: bumblebee started', typeof bumblebee);
+			}
+			
 			const mainWindow = windowManager(jaxcore);
 			
 			bumblebeeElectron.setWindow(mainWindow);
@@ -56,20 +55,6 @@ const startBumblebeeElectron = function(callback) {
 			callback(bumblebeeElectron);
 		});
 	});
-
-	// jaxcore.startService('bumblebee-electron', {}, (err, bumblebeeElectron) => {
-	//
-	// 	console.log('bumblebeeElectron');
-	//
-	// 	bumblebeeElectron.init(jaxcore, () => {
-	// 		const mainWindow = windowManager(jaxcore);
-	//
-	// 		bumblebeeElectron.setWindow(mainWindow);
-	//
-	// 		callback(bumblebeeElectron);
-	// 	});
-	//
-	// });
 }
 
 module.exports = {

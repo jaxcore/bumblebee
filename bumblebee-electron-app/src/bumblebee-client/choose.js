@@ -22,16 +22,16 @@ async function choose(text, choices, options) {
 			let choice = choices[i];
 			if (options.numberize && choice.number) {
 				await this.say(choice.number + ': ' + choice.text, {
-					ttsOutput: false
+					consoleOutput: false
 				});
 			}
 			else {
 				await this.say(choice.text, {
-					ttsOutput: false
+					consoleOutput: false
 				});
 				if (i<choices.length-1) {
 					await this.say('or', {
-						ttsOutput: false
+						consoleOutput: false
 					});
 				}
 			}

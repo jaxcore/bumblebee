@@ -1,11 +1,9 @@
 const Jaxcore = require('jaxcore');
 const {Service, createClientStore, createLogger} = Jaxcore;
 const ipcMain = require('electron').ipcMain;
-const soundplayer = require('./services/soundplayer');
-const bumblebeeNode = require('./services/bumblebee-node');
 const executeFunction = require('./execute-function');
 const SpeechDownloader = require('./services/deepspeech-downloader');
-const connectSay = require('./services/say');
+const BumblebeeNode = require('./bumblebee-node/BumblebeeNode');
 
 const schema = {
 	id: {
@@ -16,132 +14,11 @@ const schema = {
 	},
 	deepspeechInstalled: {  // set by SpeechDownloader
 		type: 'boolean'
-	},
-	recording: {
-		type: 'boolean'
 	}
+	// recording: {
+	// 	type: 'boolean'
+	// }
 };
-
-function connectDeepspeech(bumblebeeElectron, deepspeech, bumblebeeNode) {
-	
-	process.env.NODE_ENV = 'dev';
-	
-	bumblebeeNode.on('data', function (intData, sampleRate, hotword, float32arr) {
-		// console.log('bb', typeof intData, sampleRate, hotword, float32arr);
-		
-		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
-		deepspeech.streamData(intData,16000, hotword, float32arr);
-	});
-	
-	deepspeech.on('no-recognition', function (hotword) {
-		if (hotword) {
-			bumblebeeElectron.playSound('cancel');
-			let functionName = 'hotwordResults';
-			let args = [hotword, null, null];
-			bumblebeeElectron.execFunction(functionName, args, function () {
-				console.log('deepspeechResults code complete');
-			});
-		}
-	});
-	
-	ipcMain.on('simulate-hotword', (event, text, hotword) => {
-		if (hotword === 'ANY') hotword = 'bumblebee';
-		else if (hotword === 'OFF') return;
-		
-		bumblebeeNode.emit('hotword', hotword);
-		// bumblebee.emit('hotword', hotword);
-		
-		deepspeech.setState({hotword});
-		
-		setTimeout(function() {
-			deepspeech.processRecognition(text, {
-				recogTime: 0,
-				audioLength: 0,
-				model: deepspeech.state.modelName,
-				hotword
-			});
-		},1500);
-		
-	});
-	
-	ipcMain.on('simulate-stt', (event, text) => {
-		deepspeech.processRecognition(text.toLowerCase(), {
-			recogTime: 0,
-			audioLength: 0,
-			model: deepspeech.state.modelName
-		});
-	});
-	
-	deepspeech.on('vad', function (status) {
-		// console.log('VAD', status);
-		let functionName = 'updateVADStatus';
-		let args = [status];
-		bumblebeeElectron.execFunction(functionName, args);
-	});
-	
-	deepspeech.on('hotword', function (hotword, text, stats) {
-		console.log('DS hotword:'+hotword, 'text='+text, stats);
-		let functionName = 'hotwordResults';
-		let args = [hotword, text, stats];
-		
-		bumblebeeElectron.playSound('hail');
-		
-		bumblebeeElectron.execFunction(functionName, args);
-	});
-	
-	deepspeech.on('recognize', function (text, stats) {
-		console.log('DS recognize', text, stats);
-		let functionName = 'deepspeechResults';
-		let args = [text, stats];
-		bumblebeeElectron.execFunction(functionName, args);
-	});
-	
-	return deepspeech;
-}
-
-function connectBumblebeeNode(bumblebeeElectron, bumblebeeNode) {
-	
-	
-	ipcMain.on('hotword-select', (event, hotword) => {
-		if (hotword === 'OFF') {
-			hotword = null;
-			bumblebeeNode.setEnabled(false);
-		}
-		else {
-			if (hotword === 'ANY') {
-				hotword = null;
-			}
-			bumblebeeNode.setEnabled(true);
-		}
-		bumblebeeNode.setHotword(hotword);
-	});
-	
-	bumblebeeNode.on('hotword', function (hotword) {
-		console.log('');
-		console.log('Hotword Detected:', hotword);
-		let functionName = 'hotwordDetected';
-		let args = [hotword];
-		bumblebeeElectron.execFunction(functionName, args, function () {
-			console.log('hotwordDetected code complete');
-		});
-	});
-	
-	ipcMain.on('microphone-muted', (event, muted) => {
-		console.log('bumblebee.setMuted', muted)
-		bumblebeeNode.setMuted(muted);
-	});
-	
-	ipcMain.on('recording-start', (event) => {
-		bumblebeeElectron.setState({recording: true});
-		bumblebeeElectron.playSound('on');
-		bumblebeeNode.start();
-	});
-	ipcMain.on('recording-stop', (event) => {
-		bumblebeeElectron.setState({recording: false});
-		bumblebeeElectron.playSound('off');
-		bumblebeeNode.stop();
-	});
-}
 
 let serviceInstance;
 
@@ -158,29 +35,24 @@ class BumblebeeElectron extends Service {
 			});
 			this.startDeepspeech();
 		})
-		
-		this.bumblebeeNode = connectBumblebeeNode(this, bumblebeeNode);
-		
-		this.say = connectSay(this);
 	}
 	
 	init(jaxcore, callback) {
 		this.jaxcore = jaxcore;
 		
-		this.startDeepspeech();
+		this.jaxcore.defineService('Say', 'sayNode', {});
 		
-		jaxcore.startService('sayNode', {}, (err, sayNode) => {
-			// sayNode.say('bumblebee starting');
+		this.jaxcore.startServiceProfile('Say',  (err, sayNode) => {
 			this.sayNode = sayNode;
-			callback(jaxcore);
+			
+			this.startDeepspeech((err, bumblebee) => {
+				callback(err, bumblebee);
+			});
 		});
+		
 	}
 	
-	playSound(type) {
-		soundplayer(__dirname + '/sounds/startrek1/'+type);
-	}
-	
-	startDeepspeech() {
+	startDeepspeech(callback) {
 		if (this.state.deepspeechInstalled) {
 			
 			let modelsPath = this.downloader.modelsPath;
@@ -193,23 +65,19 @@ class BumblebeeElectron extends Service {
 				debug: true
 			});
 			
+			console.log('hello');
+			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {
 				
 				// console.log('deepspeech', deepspeech);
-				this.deepspeech = connectDeepspeech(this, deepspeech, bumblebeeNode);
 				
+				this.bumblebee = new BumblebeeNode(this.jaxcore, this, deepspeech, this.sayNode);
+				
+				callback(null, this.bumblebee);
 			});
-			
-			// jaxcore.defineAdapter('Bumblebee Deepspeech Adapter', {
-			// 	adapterType: 'bumblebee-speech',
-			// 	serviceProfiles: [
-			// 		'Bumblebee Electron',
-			// 		'Deepspeech English',
-			// 		'Say Node'
-			// 	]
-			// });
-			//
-			// jaxcore.connectAdapter(null, 'Bumblebee Speech Adapter');
+		}
+		else {
+			callback('deepspeech not installed');
 		}
 	}
 	
@@ -232,16 +100,7 @@ class BumblebeeElectron extends Service {
 			event.reply('electron-ready', this.state);
 		});
 		
-		ipcMain.handle('say-data', async (event, text, options) => {
-			if (options && options.profile) {
-				debugger;
-			}
-			else {
-				debugger;
-			}
-			const result = await this.sayNode.getAudioData(text, options);
-			return result;
-		});
+		
 	}
 	
 	connect() {
@@ -271,7 +130,7 @@ class BumblebeeElectron extends Service {
 		else {
 			// console.log('getOrCreateInstance BumblebeeElectron', serviceConfig);
 			serviceConfig = {
-				id: 'simulatorService'
+				id: 'BumblebeeElectron'
 			};
 			serviceInstance = new BumblebeeElectron(serviceConfig, serviceStore);
 			

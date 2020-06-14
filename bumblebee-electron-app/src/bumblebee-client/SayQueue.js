@@ -174,7 +174,7 @@ const connectSayQueue = function(bumblebee, app) {
 	sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
 
 	sayQueue.on('say-begin', (utterance) => {
-		if (utterance.options.ttsOutput === false) return;
+		if (utterance.options.consoleOutput === false) return;
 		bumblebee.console({
 			type: 'tts',
 			text: utterance.text,

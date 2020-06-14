@@ -5,16 +5,11 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InstallDialog from './install/InstallDialog';
 
-import BumbleBee from './bumblebee-client/BumbleBee';
+import BumbleBeeClient from './bumblebee-client/BumbleBeeClient';
 import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
-// Voice Apps
 import Main from './Main';
-import MainMenu from './apps/MainMenu';
-import Help from './apps/Help';
-import Settings from './apps/Settings';
-import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -27,20 +22,26 @@ const inputModePlaceholders = {
 class App extends Component {
 	constructor(props) {
 		super(props);
+		
+		
 		this.state = {
 			connected: false,
 			recording: false,
 			muted: false,
+			microphoneLineColor: '#eee',
+			soundPlaying: false,
+			soundTheme: 'startrek1',
 			hotword: 'ANY',
 			microphoneVolume: 1,
 			sayVolume: 1,
 			recognitionOutput: [],
-			logo: 'logo-autobots',
+			logo: null,
 			controlsVisible: false,
 			useSystemMic: true,
 			showInstallDialog: false,
 			inputMode: 'stt',
-			config: {}
+			config: {},
+			appDisplay: {}
 		};
 		
 		this.console = _console.bind(this);
@@ -52,13 +53,27 @@ class App extends Component {
 		this.consoleInputRef = React.createRef();
 		this.contentPanelRef = React.createRef();
 		
+		this.logosPath = "images/logos/";
+		
 		this.logos = {
-			default: 'logo-autobots',
-			hotword: 'logo-autobots-hotword',
-			speaking: 'logo-autobots-speaking',
+			default: this.logosPath + '/logo-autobots.png',
+			hotword: this.logosPath + '/logo-autobots-hotword.png',
+			speaking: this.logosPath + '/logo-autobots-speaking.png',
 		};
 		
+		this.state.logo = this.logos.default;
+		
 		window.app = this;
+	}
+	
+	displayApp(hotword, appName, logo) {
+		this.setState({
+			appDisplay: {
+				hotword,
+				appName,
+				logo
+			}
+		});
 	}
 	
 	async main() {
@@ -95,18 +110,13 @@ class App extends Component {
 		ipcRenderer.on('electron-ready', (event, config) => {
 			this.setElectronConfig(config);
 			
-			this.bumblebee = new BumbleBee(this);
-			
-			this.bumblebee.addApp('Main Menu', MainMenu);
-			this.bumblebee.addApp('Settings', Settings);
-			this.bumblebee.addApp('DeepSpeech Installed', DeepSpeechInstalled);
-			this.bumblebee.addApp('Help', Help);
+			this.bumblebee = new BumbleBeeClient(this);
 			
 			if (this.state.config.deepspeechInstalled) {
 				this.bumblebee.startRecording();
 				// this.launch('MainMenu');
 				this.main();
-				this.bumblebee.simulateSTT('main menu');
+				// this.bumblebee.simulateSTT('main menu');
 			}
 			else {
 				// this.showInstall(true);
@@ -178,7 +188,8 @@ class App extends Component {
 					<canvas id="say-oscilloscope" className={"oscilloscope " + sayClass} ref={this.sayOscilloscopeRef}/>
 					
 					<div id="logo" onClick={e => this.toggleControls()}>
-						<img src={"images/logos/" + this.state.logo + ".png"}/>
+						{/*<img src={"images/logos/" + this.state.logo + ".png"}/>*/}
+						<img src={this.state.logo}/>
 					</div>
 					
 					<div id="mic-icon" className="banner-icon" onClick={e => this.bumblebee.toggleRecording()}>

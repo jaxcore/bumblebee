@@ -163,7 +163,7 @@ const connectMicrophone = function(bumblebee, app) {
 		canvas.width = window.innerWidth;
 		canvas.height = 100;
 		bumblebee.analyser = new SpectrumAnalyser(analyser, canvas);
-		bumblebee.analyser.setLineColor('#eee');
+		bumblebee.analyser.setLineColor(app.state.microphoneLineColor);
 		bumblebee.analyser.setBackgroundColor('#222');
 		bumblebee.analyser.start();
 	});

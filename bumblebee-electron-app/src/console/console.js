@@ -4,6 +4,9 @@ export default function(data) {
 	}
 	else if (typeof data === 'object') {
 		if (data.type === 'tts' && data.text && data.options) {
+			if (data.options.consoleOutput === false) {
+				return;
+			}
 			this.addSpeechOutput({
 				text: data.text,
 				options: data.options,
