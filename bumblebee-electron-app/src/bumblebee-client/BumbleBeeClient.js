@@ -8,7 +8,7 @@ import choose from './choose';
 
 const ipcRenderer = window.ipcRenderer;
 
-class BumbleBeeClient extends EventEmitter {
+class BumblebeeClient extends EventEmitter {
 	constructor(app) {
 		super();
 		
@@ -111,8 +111,16 @@ class BumbleBeeClient extends EventEmitter {
 	}
 	
 	async launchAssistant(hotword) {
+		debugger;
 		// debugger;
-		return this.launch(hotword, null, true);
+		// if (!this.assistants[hotword]) {
+		// 	this.assistants[hotword] = new BumblebeeAssistant(hotword);
+		// 	return this.assistants[hotword].main(this);
+		// }
+		// else {
+		//
+		// }
+		// return this.launch(hotword, null, true);
 	}
 	async launch(hotword, appName, isAssistant) {
 		let r;
@@ -441,4 +449,4 @@ class BumbleBeeClient extends EventEmitter {
 	
 }
 
-export default BumbleBeeClient;
+export default BumblebeeClient;

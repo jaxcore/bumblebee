@@ -5,7 +5,7 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InstallDialog from './install/InstallDialog';
 
-import BumbleBeeClient from './bumblebee-client/BumbleBeeClient';
+import BumblebeeClient from './bumblebee-client/BumblebeeClient';
 import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
@@ -77,22 +77,28 @@ class App extends Component {
 	}
 	
 	async main() {
-		this.bumblebee.console('main()');
-		
-		try {
-			await Main(this.bumblebee);
-		}
-		catch(e) {
-			this.addSpeechOutput({
-				text: e.toString()
-			});
+		setTimeout(function() {
 			debugger;
-			await this.bumblebee.say('the main application encountered an error');
-		}
+			ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
+			
+		},1000);
 		
-		await this.bumblebee.say('restarting main');
-		
-		return this.main();
+		// this.bumblebee.console('main()');
+		//
+		// try {
+		// 	await Main(this.bumblebee);
+		// }
+		// catch(e) {
+		// 	this.addSpeechOutput({
+		// 		text: e.toString()
+		// 	});
+		// 	debugger;
+		// 	await this.bumblebee.say('the main application encountered an error');
+		// }
+		//
+		// await this.bumblebee.say('restarting main');
+		//
+		// return this.main();
 	}
 	
 	resize() {
@@ -110,7 +116,7 @@ class App extends Component {
 		ipcRenderer.on('electron-ready', (event, config) => {
 			this.setElectronConfig(config);
 			
-			this.bumblebee = new BumbleBeeClient(this);
+			this.bumblebee = new BumblebeeClient(this);
 			
 			if (this.state.config.deepspeechInstalled) {
 				this.bumblebee.startRecording();

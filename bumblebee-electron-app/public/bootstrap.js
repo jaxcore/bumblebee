@@ -8,6 +8,8 @@ const deepspeechPlugin = require('jaxcore-deepspeech-plugin');
 const windowManager = require('./window-manager');
 const BumblebeeElectron = require('./bumblebee-electron');
 
+const BumblebeeWebsocketPlugin = require('./services/websocket')
+
 // const websocketClient = require('jaxcore-websocket-plugin/websocket-client');
 // jaxcore.startService('simulator-service', {}, (err, service) => {
 // 	service.init(jaxcore);
@@ -29,6 +31,24 @@ const createJaxcore = function(callback) {
 	
 	sayPlugin.speaker = Speaker;
 	jaxcore.addPlugin(sayPlugin);
+	
+	
+	jaxcore.addPlugin(BumblebeeWebsocketPlugin);
+	
+	jaxcore.defineService('Bumblebee Assistant Server', 'bbWebsocketServer', {
+		host: 'localhost',
+		port: 37688,
+		allowClients: ['::1', '::ffff:127.0.0.1', '127.0.0.1'],   // only allow clients to connect from localhost or 127.0.0.1
+		options: {
+			allowUpgrades: true,
+			transports: ['polling', 'websocket']
+		}
+	});
+	
+	// jaxcore.defineAdapter('Bumblebee Assistant Adapter', {
+	// 	adapterType: 'bbWebsocketServer',
+	// 	serviceProfiles: ['Bumblebee Assistant Server']
+	// });
 	
 	return jaxcore;
 };

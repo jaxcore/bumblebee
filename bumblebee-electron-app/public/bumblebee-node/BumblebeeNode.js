@@ -6,7 +6,7 @@ const connectSTT = require('./stt');
 
 const ipcMain = require('electron').ipcMain;
 
-class BumblebeeClient extends EventEmitter {
+class BumblebeeNode extends EventEmitter {
 	constructor(jaxcore, bumblebeeElectron, deepspeech, sayNode) {
 		super();
 		
@@ -27,6 +27,12 @@ class BumblebeeClient extends EventEmitter {
 			return result;
 		});
 		
+		ipcMain.once('bumblebee-start-server', (event, hotword, command) => {
+			console.log('bumblebee-start-service', hotword, command);
+			this.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, server) => {
+				server.init(this.app, this, ipcMain);
+			})
+		});
 	}
 	
 	async playSoundNode(name, theme) {
@@ -47,4 +53,4 @@ class BumblebeeClient extends EventEmitter {
 	
 }
 
-module.exports = BumblebeeClient;
+module.exports = BumblebeeNode;

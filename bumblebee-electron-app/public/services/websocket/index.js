@@ -1,11 +1,11 @@
 module.exports = {
 	services: {
-		websocketServer: {
-			service: require('./bumblebee-websocket-service'),
+		bbWebsocketServer: {
+			service: require('./bumblebee-websocket-server'),
 			storeType: 'client'
 		}
 	},
 	adapters: {
-		// websocketServer: require('./websocket-adapter')
+		bbWebsocketServer: require('./bumblebee-websocket-adapter')
 	}
 };

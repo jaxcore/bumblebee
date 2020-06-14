@@ -34,7 +34,8 @@ class BumblebeeElectron extends Service {
 				deepspeechInstalled: true
 			});
 			this.startDeepspeech();
-		})
+		});
+		
 	}
 	
 	init(jaxcore, callback) {
@@ -62,10 +63,8 @@ class BumblebeeElectron extends Service {
 				modelPath: modelsPath,
 				silenceThreshold: 300,
 				vadMode: 'VERY_AGGRESSIVE',
-				debug: true
+				debug: false
 			});
-			
-			console.log('hello');
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {
 				

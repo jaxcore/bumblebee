@@ -14,37 +14,22 @@ const schema = {
 	port: {
 		type: 'number',
 		defaultValue: 0
-	},
-	connectedSpins: {
-		type: 'object'
 	}
 };
 
 const websocketInstances = {};
 
-class BumblebeeWebsocketService extends Client {
+class BumblebeeWebsocketServer extends Client {
 	constructor(defaults, store) {
 		super(schema, store, defaults);
-		this.log = createLogger('Websocket Service');
+		this.log = createLogger('BBServer');
 		this.log('created');
 		this._onConnect = this.onConnect.bind(this);
 		this._onDisconnect = this.onDisconnect.bind(this);
-		this._onSpinCcommand = this.onSpinCcommand.bind(this);
 	}
 	
 	connect() {
 		this.app = http.createServer(function (req, res) {
-			// fs.readFile(__dirname + '/index.html',
-			// 	function (err, data) {
-			// 		if (err) {
-			// 			res.writeHead(500);
-			// 			return res.end('Error loading index.html');
-			// 		}
-			//
-			// 		res.writeHead(200);
-			// 		res.end(data);
-			// 	});
-			// }
 			res.writeHead(200);
 			res.write('bumblebee');
 			res.end();
@@ -70,16 +55,22 @@ class BumblebeeWebsocketService extends Client {
 		});
 	}
 	
+	init(app, bumblebee, ipcMain) {
+		debugger;
+	}
+	
 	onConnect(socket) {
 		this.log('Socket connected', socket.id, socket.handshake.headers.host, socket.handshake.headers['user-agent']);
 		
 		this.log('socket', socket.conn.remoteAddress);
+		
 		// '::ffff:192.168.1.29',
 		if (this.state.allowClients && this.state.allowClients.length) {
 			if (this.state.allowClients.indexOf(socket.conn.remoteAddress) === -1) { //} !== '::ffff:127.0.0.1') {
 				this.log('invalid remote address', socket.conn.remoteAddress, 'allowed clients are:', this.state.allowClients);
 				// this.log('socket', socket);
 				// socket.disconnect();
+				debugger;
 				process.exit();
 				return;
 			}
@@ -87,18 +78,19 @@ class BumblebeeWebsocketService extends Client {
 		
 		socket.once('disconnect', () => {
 			this.log('socket disconnected');
-			socket.removeListener('spin-command', this._onSpinCcommand);
+			// socket.removeListener('spin-command', this._onSpinCcommand);
 		});
+		
+		// const handshake = {
+		// 	stuff: 123
+		// };
+		// console.log('send handshake');
+		// this.io.emit('handshake', handshake);
 	};
 	
 	onDisconnect(socket) {
 		this.log('Socket disconnected', socket);
 	};
-	
-	speechRecognize(text, stats) {
-		this.log('websocket-service emit speech-recognize', text);
-		this.io.emit('speech-recognize', text, stats);
-	}
 	
 	disconnect() {
 		this.log('disconnecting...');
@@ -110,7 +102,7 @@ class BumblebeeWebsocketService extends Client {
 	}
 	
 	static id(serviceConfig) {
-		return 'websocket:'+serviceConfig.port;
+		return 'bbserver:'+serviceConfig.port;
 	}
 	
 	static getOrCreateInstance(serviceStore, serviceId, serviceConfig, callback) {
@@ -120,11 +112,11 @@ class BumblebeeWebsocketService extends Client {
 			websocketInstance = websocketInstances[serviceId];
 		}
 		else {
-			console.log('CREATE WEBSOCKET', serviceConfig);
-			websocketInstance = new WebsocketService(serviceConfig, serviceStore);
+			console.log('CREATE WEBSOCKET SERVER', serviceConfig);
+			websocketInstance = new BumblebeeWebsocketServer(serviceConfig, serviceStore);
 		}
 		callback(null, websocketInstance);
 	}
 }
 
-module.exports = BumblebeeWebsocketService;
+module.exports = BumblebeeWebsocketServer;
