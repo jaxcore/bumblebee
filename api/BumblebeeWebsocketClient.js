@@ -35,6 +35,7 @@ class BumblebeeWebsocketClient extends Client {
 		this.log = createLogger('BumblebeeWebsocketClient ' + (_instance++));
 		this.log('create', defaults);
 		this._instance = _instance;
+		
 		clients[this.state.id] = this;
 	}
 	
@@ -47,22 +48,72 @@ class BumblebeeWebsocketClient extends Client {
 		this.socket = socket;
 		
 		socket.once('connect', () => {
+			this.setState({connected: true});
 			this.log('socket connect');
-			debugger;
-			this.emit('connect', socket);
+			const handshake = {
+				jaxcore: {
+					version: '0.0.2',
+					protocol: {
+						bumblebee: 1
+					}
+				}
+			};
+			console.log('handshake:', handshake);
+			socket.emit('jaxcore-handshake', handshake);
+		});
+		
+		socket.once('jaxcore-handshake-response', (response) => {
+			console.log('jaxcore-handshake-response', response);
+			if (response.success) {
+				if (response.bumblebee) {
+					this.setState({
+						remoteState: response.bumblebee
+					});
+					console.log('remoteState', this.state.remoteState);
+				}
+				this.emit('connect', socket);
+			}
+			else {
+				console.log('jaxcore-handshake error', handshake);
+				process.exit();
+			}
 		});
 		
 		socket.once('disconnect', () => {
-			this.log('socket connect');
+			this.setState({connected: true});
+			this.log('socket disconnect');
 			debugger;
-			
 			socket.destroy();
-			
 			this.emit('disconnect');
 		});
 		
 		return socket;
 	};
+	
+	async registerAssistant(hotword, AssistantClass) {
+		return new Promise((resolve, reject) => {
+			if (!this.socket) {
+				reject(new Error('no socket'));
+				return;
+			}
+			if (!this.state.connected) {
+				reject(new Error('not connected'));
+				return;
+			}
+			this.socket.once('register-assistant-response', (response) => {
+				if (response[hotword] && response[hotword].success) {
+					console.log('launch adapter', AssistantClass);
+					debugger;
+					resolve();
+				}
+				else {
+					debugger;
+					// reject();
+				}
+			});
+			this.socket.emit('register-assistant', hotword);
+		});
+	}
 	
 	destroy() {
 		this.emit('teardown');
@@ -88,41 +139,19 @@ class BumblebeeWebsocketClient extends Client {
 		else {
 			var instance = BumblebeeWebsocketClient.create(serviceConfig, serviceStore);
 			console.log('CREATED BumblebeeWebsocketClient', serviceId, serviceConfig, instance.state);
-			
 			callback(null, clients[serviceId], true);
-			
-			// instance.on('connect', function() {
-			// 	// console.log('hix');
-			// 	// process.exit();
-			// 	if (callback) callback(null, instance, true);
-			// });
-			//
-			// instance.connect();
-			
 		}
-		// if (serviceInstance.clients[serviceId]) {
-		// 	let instance = serviceInstance.clients[serviceId];
-		// 	log('RETURNING WSC CLIENT', instance);
-		// 	// process.exit();
-		// 	return instance;
-		// }
-		// else {
-		
-		// }
 	}
 	
 	
 	static create(config, serviceStore) {
 		var id = BumblebeeWebsocketClient.id(config);
 		config.id = id;
-		console.log('create wsc', id);
 		let client = new BumblebeeWebsocketClient(config, serviceStore);
-		
 		clients[id].once('disconnect', () => {
 			debugger;
 			console.log('wsc disconnect');
 		});
-		
 		return client;
 	}
 }

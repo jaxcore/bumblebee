@@ -1,8 +1,50 @@
 const Jaxcore = require('jaxcore');
-const BumblebeeWebSocketPlugin = require('./websocket-client');
+// const BumblebeeWebSocketPlugin = require('./websocket-client');
+
+const BumblebeeWebSocketPlugin = {
+	devices: {
+		// bumblebee: {
+		// 	device: require('./websocket-bumblebee-device'),
+		// 	storeType: 'service'
+		// }
+	},
+	services: {
+		bbWebsocketClient: {
+			service: require('./BumblebeeWebsocketClient'),
+			storeType: 'client'
+		}
+	}
+};
+
+const App = require('./App');
+const Assistant = require('./Assistant');
+const BumblebeeDevice = require('./BumblebeeDevice');
+
+function createBumblebee(options, callback) {
+	
+	//
+	// console.log('createBumblebee', options);
+	// debugger;
+	//
+	// options.jaxcore.startDevice('bumblebee', {
+	// 	websocketId: options.bbWebsocketClient.state.id
+	// }, (device) => {
+	// 	debugger;
+	// 	// callback(device);
+	// }, {
+	// 	jaxcore: options.jaxcore,
+	// 	bbWebsocketClient: options.bbWebsocketClient
+	// });
+	
+	// const bumblebee = new BumblebeeDevice({}, options.jaxcore, options.bbWebsocketClient);
+	// callback(bumblebee);
+		// launchAssistant,
+		// launchApp,
+		// recognize,
+		// say
+}
 
 function connect(options) {
-	debugger;
 	if (!options) options = {};
 	
 	let websocketOptions = {
@@ -16,54 +58,47 @@ function connect(options) {
 	
 	return new Promise(function (resolve, reject) {
 		const jaxcore = new Jaxcore();
-		debugger;
 		jaxcore.addPlugin(BumblebeeWebSocketPlugin);
+		
+		jaxcore.addDevice('bumblebee', BumblebeeDevice, 'client');
 		
 		let connected = false;
 		let failed = false;
 		
-		function launch(customSpinAdapterClass, onAdapterCreated, onAdapterDestroyed) {
-			debugger;
-			
-			// jaxcore.addAdapter('custom-spin-adapter', customSpinAdapterClass);
-			//
-			// jaxcore.defineAdapter('CustomSpinAdapterClass', {
-			// 	adapterType: 'custom-spin-adapter',
-			// 	deviceType: 'spin'
-			// });
-			//
-			// jaxcore.on('device-connected', function (type, device) {
-			// 	if (type === 'bumblebee') {
-			//
-			// 	}
-			// 	debugger;
-			//
-			// 	// if (type === 'websocketSpin') {
-			// 	// 	const spin = device;
-			// 	//
-			// 	// 	console.log('connected', spin);
-			// 	//
-			// 	// 	jaxcore.connectAdapter(spin, 'CustomSpinAdapterClass', function (err, adapter) {
-			// 	// 		if (err) {
-			// 	// 			console.log('adapter error', e);
-			// 	// 		} else {
-			// 	// 			console.log('adapter created', adapter);
-			// 	// 			if (onAdapterCreated) onAdapterCreated(adapter);
-			// 	// 		}
-			// 	// 	});
-			// 	// } else {
-			// 	// 	//console.log('device-connected', type);
-			// 	// }
-			// });
-		}
+		
 		
 		function connectSocket(options) {
 			
+			
 			// this.startService('websocketClient', null, null, webSocketClientConfig, (err, websocketClient) => {
 			jaxcore.startService('bbWebsocketClient', websocketOptions, (err, bbWebsocketClient) => {
-				console.log('bbWebsocketClient', typeof bbWebsocketClient);
-				debugger;
-				
+				if (err) {
+					reject(err);
+				}
+				else {
+					
+					async function launchApp(AppAdapterClass) {
+						debugger;
+					}
+					
+					async function launchAssistant(hotword, AssistantAdapterClass) {
+						return bbWebsocketClient.registerAssistant(hotword, AssistantAdapterClass);
+					}
+					
+					console.log('bbWebsocketClient', typeof bbWebsocketClient);
+					resolve({
+						jaxcore,
+						bbWebsocketClient,
+						launchApp,
+						launchAssistant
+					});
+					
+					// createBumblebee({
+					// 	jaxcore,
+					// 	websocketOptions,
+					// 	bbWebsocketClient
+					// }, resolve);
+				}
 				// this.startDevice('speech', null, function(speech) {
 				//
 				// 	const onRecog = (text, stats) => {
@@ -138,11 +173,13 @@ function connect(options) {
 }
 
 module.exports = {
-	Jaxcore: Jaxcore,
+	Jaxcore,
 	Adapter: Jaxcore.Adapter,
 	Client: Jaxcore.Client,
 	Service: Jaxcore.Service,
 	Store: Jaxcore.Store,
-	connect
+	connect,
+	App,
+	Assistant
 	// connectExtension?
 };

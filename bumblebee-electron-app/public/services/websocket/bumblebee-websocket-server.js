@@ -26,6 +26,8 @@ class BumblebeeWebsocketServer extends Client {
 		this.log('created');
 		this._onConnect = this.onConnect.bind(this);
 		this._onDisconnect = this.onDisconnect.bind(this);
+		
+		this.sockets = {};
 	}
 	
 	connect() {
@@ -55,8 +57,27 @@ class BumblebeeWebsocketServer extends Client {
 		});
 	}
 	
-	init(app, bumblebee, ipcMain) {
-		debugger;
+	
+	init(bumblebee, app, onSocketConnect, onSocketDisconnect) {
+		this.app = app;
+		this.bumblebee = bumblebee;
+		this.onSocketConnect = onSocketConnect;
+		this.onSocketDisconnect = onSocketDisconnect;
+		// console.log('init', typeof app, typeof bumblebee);
+		// bumblebee.connectWebsocketServer();
+		// bumblebee.on('hotword', (hotword) => {
+		// 	console.log('hotword', hotword)
+		// 	if (hotword in this.app.state.assistants) {
+		// 		this.setActiveAssistant(hotword);
+		//
+		// 		// const hotword = this.app.state.socketAssistants[socketId];
+		// 	}
+		// 	else {
+		// 		debugger;
+		// 	}
+		//
+		// })
+		// debugger;
 	}
 	
 	onConnect(socket) {
@@ -71,15 +92,24 @@ class BumblebeeWebsocketServer extends Client {
 				// this.log('socket', socket);
 				// socket.disconnect();
 				debugger;
-				process.exit();
+				// process.exit();
 				return;
 			}
 		}
 		
+		this.onSocketConnect(socket);
+		
 		socket.once('disconnect', () => {
-			this.log('socket disconnected');
+			this.log('socket.once disconnected', socket.id);
+			
+			this.onSocketDisconnect(socket);
+			
+			delete this.sockets[socket.id];
+			
 			// socket.removeListener('spin-command', this._onSpinCcommand);
 		});
+		
+		this.sockets[socket.id] = socket;
 		
 		// const handshake = {
 		// 	stuff: 123
@@ -89,7 +119,7 @@ class BumblebeeWebsocketServer extends Client {
 	};
 	
 	onDisconnect(socket) {
-		this.log('Socket disconnected', socket);
+		this.log('Socket onDisconnect', socket);
 	};
 	
 	disconnect() {

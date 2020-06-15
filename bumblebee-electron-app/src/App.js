@@ -78,7 +78,7 @@ class App extends Component {
 	
 	async main() {
 		setTimeout(function() {
-			debugger;
+			// debugger;
 			ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
 			
 		},1000);

@@ -4,21 +4,28 @@ const connectHotword = require('./hotword');
 const connectTTS = require('./tts');
 const connectSTT = require('./stt');
 
+const connectWSServer = require('./wsserver');
+
 const ipcMain = require('electron').ipcMain;
 
 class BumblebeeNode extends EventEmitter {
 	constructor(jaxcore, bumblebeeElectron, deepspeech, sayNode) {
 		super();
 		
+		global.bumblebee = this;
+		
 		this.recording = false;
 		
 		this.jaxcore = jaxcore;
-		
 		this.app = bumblebeeElectron;
+		
 		this.bumblebeeHotword = connectHotword(this, this.app, deepspeech);
 		this.deepspeech = connectSTT(this, this.app, deepspeech, this.bumblebeeHotword);
-		
 		this.say = connectTTS(this, this.app, sayNode);
+		
+		connectWSServer(this, this.app, deepspeech, this.bumblebeeHotword, (bbWebsocketServer) => {
+			this.bbWebsocketServer = bbWebsocketServer;
+		});
 		
 		this.soundThemesPath = __dirname + '/../sounds';
 		
@@ -27,12 +34,6 @@ class BumblebeeNode extends EventEmitter {
 			return result;
 		});
 		
-		ipcMain.once('bumblebee-start-server', (event, hotword, command) => {
-			console.log('bumblebee-start-service', hotword, command);
-			this.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, server) => {
-				server.init(this.app, this, ipcMain);
-			})
-		});
 	}
 	
 	async playSoundNode(name, theme) {

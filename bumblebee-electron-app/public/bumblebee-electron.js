@@ -1,5 +1,5 @@
 const Jaxcore = require('jaxcore');
-const {Service, createClientStore, createLogger} = Jaxcore;
+const {Service, createLogger} = Jaxcore;
 const ipcMain = require('electron').ipcMain;
 const executeFunction = require('./execute-function');
 const SpeechDownloader = require('./services/deepspeech-downloader');
@@ -12,9 +12,26 @@ const schema = {
 	connected: {
 		type: 'boolean'
 	},
-	deepspeechInstalled: {  // set by SpeechDownloader
+	deepspeechInstalled: {  // set by DeepSpeechDownloader
 		type: 'boolean'
-	}
+	},
+	
+	hotwordsAvailable: {
+		type: 'array',
+		defaultValue: ['bumblebee', 'grasshopper', 'porcupine', 'terminator', 'hey_edison']
+	},
+	
+	assistants: {		// assistants[hotword] = socket.id
+		type: 'object'
+	},
+	
+	socketAssistants: {   //socketAssistants[socket.id] = hotword
+		type: 'object'
+	},
+	
+	activeAssistant: {
+		type: 'string'
+	},
 	// recording: {
 	// 	type: 'boolean'
 	// }
@@ -36,6 +53,7 @@ class BumblebeeElectron extends Service {
 			this.startDeepspeech();
 		});
 		
+		global.app = this;
 	}
 	
 	init(jaxcore, callback) {
@@ -93,13 +111,8 @@ class BumblebeeElectron extends Service {
 		
 		ipcMain.on('client-ready', (event, arg) => {
 			console.log('client-ready');
-			
-			debugger;
-			
 			event.reply('electron-ready', this.state);
 		});
-		
-		
 	}
 	
 	connect() {
