@@ -1,13 +1,5 @@
 const Jaxcore = require('jaxcore');
-// const BumblebeeWebSocketPlugin = require('./websocket-client');
-
 const BumblebeeWebSocketPlugin = {
-	devices: {
-		// bumblebee: {
-		// 	device: require('./websocket-bumblebee-device'),
-		// 	storeType: 'service'
-		// }
-	},
 	services: {
 		bbWebsocketClient: {
 			service: require('./BumblebeeWebsocketClient'),
@@ -20,30 +12,6 @@ const App = require('./App');
 const Assistant = require('./Assistant');
 const BumblebeeDevice = require('./BumblebeeDevice');
 
-function createBumblebee(options, callback) {
-	
-	//
-	// console.log('createBumblebee', options);
-	// debugger;
-	//
-	// options.jaxcore.startDevice('bumblebee', {
-	// 	websocketId: options.bbWebsocketClient.state.id
-	// }, (device) => {
-	// 	debugger;
-	// 	// callback(device);
-	// }, {
-	// 	jaxcore: options.jaxcore,
-	// 	bbWebsocketClient: options.bbWebsocketClient
-	// });
-	
-	// const bumblebee = new BumblebeeDevice({}, options.jaxcore, options.bbWebsocketClient);
-	// callback(bumblebee);
-		// launchAssistant,
-		// launchApp,
-		// recognize,
-		// say
-}
-
 function connect(options) {
 	if (!options) options = {};
 	
@@ -52,119 +20,95 @@ function connect(options) {
 		host: options.host || 'localhost',
 		port: options.port || 37688,
 		options: {
-			reconnection: true
-		}
+			reconnection: false
+		},
+		serviceTimeout: 10000
 	};
 	
 	return new Promise(function (resolve, reject) {
 		const jaxcore = new Jaxcore();
 		jaxcore.addPlugin(BumblebeeWebSocketPlugin);
-		
 		jaxcore.addDevice('bumblebee', BumblebeeDevice, 'client');
 		
-		let connected = false;
-		let failed = false;
-		
-		
-		
 		function connectSocket(options) {
+			let wOptions = {
+				...websocketOptions
+			}
+			if (options) {
+				if (options.host) wOptions.host = options.host;
+				if (options.port) wOptions.port = options.port;
+			}
 			
+			let serviceProfileName = 'websocket:'+websocketOptions.host+':'+websocketOptions.port;
 			
-			// this.startService('websocketClient', null, null, webSocketClientConfig, (err, websocketClient) => {
-			jaxcore.startService('bbWebsocketClient', websocketOptions, (err, bbWebsocketClient) => {
+			jaxcore.defineService(serviceProfileName, 'bbWebsocketClient', wOptions);
+			// debugger;
+			
+			let didConnect = false;
+			jaxcore.startServiceProfile(serviceProfileName,(err, bbWebsocketClient) => {
 				if (err) {
 					reject(err);
 				}
 				else {
+					didConnect = true;
+					
+					// bbWebsocketClient.on('disconnect', function() {
+					// 	console.log('disconnected', bbWebsocketClient.id);
+					// 	// process.exit();
+					// })
+					
+					// debugger;
+					bbWebsocketClient.init(jaxcore);
 					
 					async function launchApp(AppAdapterClass) {
 						debugger;
 					}
 					
 					async function launchAssistant(hotword, AssistantAdapterClass) {
-						return bbWebsocketClient.registerAssistant(hotword, AssistantAdapterClass);
+						await bbWebsocketClient.registerAssistant(hotword, AssistantAdapterClass);
+						
+						let adapterProfileName = 'bbassistant:'+websocketOptions.host+':'+websocketOptions.port;
+						
+						jaxcore.addAdapter(adapterProfileName, AssistantAdapterClass);
+						jaxcore.defineAdapter(adapterProfileName, {
+							adapterType: adapterProfileName,
+							websocketOptions,
+							serviceProfiles: [serviceProfileName]
+						});
+						
+						debugger;
+						jaxcore.connectAdapter(null, adapterProfileName, function(err, adapter) {
+							debugger;
+						});
+					}
+					
+					if (options.enableReconnect) {
+						bbWebsocketClient.on('disconnect', function() {
+							console.log('reconnecting...');
+							options.enableReconnect();
+						})
 					}
 					
 					console.log('bbWebsocketClient', typeof bbWebsocketClient);
-					resolve({
+					const api = {
 						jaxcore,
 						bbWebsocketClient,
 						launchApp,
 						launchAssistant
-					});
-					
-					// createBumblebee({
-					// 	jaxcore,
-					// 	websocketOptions,
-					// 	bbWebsocketClient
-					// }, resolve);
+					};
+					global.api = api;
+					global.jaxcore = api.jaxcore;
+					resolve(api);
 				}
-				// this.startDevice('speech', null, function(speech) {
-				//
-				// 	const onRecog = (text, stats) => {
-				// 		console.log('speech.emit recognize', text, stats);
-				// 		speech.speechRecognize(text, stats);
-				// 	};
-				//
-				// 	websocketClient.on('disconnect', (text, stats) => {
-				// 		console.log('websocketClient speech-recognize REMOVE --------------')
-				// 		websocketClient.removeListener('speech-recognize', onRecog);
-				// 	});
-				//
-				// 	websocketClient.on('speech-recognize', onRecog);
-				// });
-				//
-				// if (callback) callback(err, websocketClient);
 			});
-			
-			// jaxcore.connectWebsocket(options, function (err, bbWebsocketClient) {
-			// 	if (err) {
-			// 		if (options.onError) {
-			// 			options.onError(err);
-			// 		}
-			//
-			// 		if (!connected && !failed) {
-			// 			failed = true;
-			// 			reject(err);
-			// 		}
-			//
-			// 		if (options.onConnect) {
-			// 			options.onConnect();
-			// 		}
-			// 	} else if (bbWebsocketClient) {
-			// 		if (!connected && !failed) {
-			// 			connected = true;
-			//
-			// 			resolve({
-			// 				websocketOptions,
-			// 				jaxcore,
-			// 				bbWebsocketClient,
-			// 				launch
-			// 			});
-			// 		}
-			// 	}
-			// });
 		}
 		
 		jaxcore.on('service-disconnected', (type, device) => {
+			console.log('service-disconnected', type, device);
 			if (type === 'bbWebsocketClient') {
-				
 				console.log('websocket service-disconnected', type, device.id);
-				if (options.onDisconnect) {
-					let reconnect = options.onDisconnect(device);
-					if (reconnect) {
-						connectSocket();
-					}
-				} else {
-					connectSocket();
-				}
-			}
-		});
-		
-		jaxcore.on('service-connected', (type, device) => {
-			console.log('service-connected', type, device.id);
-			if (options.onConnect) {
-				options.onConnect(device);
+				console.log('reconnecting', device.id, '...');
+				process.exit();
 			}
 		});
 		
@@ -172,14 +116,45 @@ function connect(options) {
 	});
 }
 
-module.exports = {
+const BumblebeeAPI = {
 	Jaxcore,
 	Adapter: Jaxcore.Adapter,
 	Client: Jaxcore.Client,
 	Service: Jaxcore.Service,
 	Store: Jaxcore.Store,
 	connect,
+	connectAssistant,
 	App,
 	Assistant
-	// connectExtension?
 };
+
+function connectAssistant(hotword, assistantClass) {
+	async function _connect() {
+		try {
+			const api = await BumblebeeAPI.connect({
+				// enableReconnect: connect
+			});
+			
+			const assistant = await api.launchAssistant(hotword, assistantClass);
+			console.log('assistant', assistant);
+			
+			api.enableReconnect = function(callback) {
+				api.bbWebsocketClient.on('disconnect', function() {
+					console.log('reconnecting...');
+					callback();
+				})
+			}
+			api.enableReconnect(_connect);
+			
+		}
+		catch(e) {
+			console.error('error:', e);
+			console.log('error reconnecting...');
+			_connect();
+		}
+	}
+	_connect();
+}
+
+
+module.exports = BumblebeeAPI;

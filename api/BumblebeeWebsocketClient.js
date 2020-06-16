@@ -39,6 +39,10 @@ class BumblebeeWebsocketClient extends Client {
 		clients[this.state.id] = this;
 	}
 	
+	init(jaxcore) {
+		this.jaxcore = jaxcore;
+	}
+	
 	connect() {
 		let socketConfig = this.state;
 		const url = socketConfig.protocol + '://' + socketConfig.host + ':' + socketConfig.port;
@@ -75,22 +79,38 @@ class BumblebeeWebsocketClient extends Client {
 			}
 			else {
 				console.log('jaxcore-handshake error', handshake);
-				process.exit();
+				// process.exit();
 			}
 		});
 		
 		socket.once('disconnect', () => {
-			this.setState({connected: true});
+			this.setState({
+				connected: false,
+				assistantActive: false
+			});
 			this.log('socket disconnect');
 			debugger;
-			socket.destroy();
+			// socket.destroy();
 			this.emit('disconnect');
+			
+			// this.destroy();
+			socket.destroy();
+		});
+		
+		socket.on('recognize', (text, stats) => {
+			console.log('recognize', text, stats);
+		});
+		
+		socket.on('assistant-active', (active) => {
+			console.log('assistant-active', active);
+			debugger;
+			this.setState({assistantActive: true});
 		});
 		
 		return socket;
 	};
 	
-	async registerAssistant(hotword, AssistantClass) {
+	async registerAssistant(hotword, AssistantClass, wOptions) {
 		return new Promise((resolve, reject) => {
 			if (!this.socket) {
 				reject(new Error('no socket'));
@@ -103,12 +123,13 @@ class BumblebeeWebsocketClient extends Client {
 			this.socket.once('register-assistant-response', (response) => {
 				if (response[hotword] && response[hotword].success) {
 					console.log('launch adapter', AssistantClass);
-					debugger;
+					
 					resolve();
+					// s//
 				}
 				else {
 					debugger;
-					// reject();
+					reject();
 				}
 			});
 			this.socket.emit('register-assistant', hotword);
@@ -116,9 +137,10 @@ class BumblebeeWebsocketClient extends Client {
 	}
 	
 	destroy() {
-		this.emit('teardown');
+		// this.emit('teardown');
 		if (this.socket) this.socket.destroy();
-		this.removeAllListeners();
+		
+		// this.removeAllListeners();
 		delete this.socket;
 		delete clients[this.state.id];
 		// debugger;
@@ -133,7 +155,7 @@ class BumblebeeWebsocketClient extends Client {
 		
 		if (serviceId in clients) {
 			console.log('wsc', serviceId, 'exists');
-			process.exit();
+			// process.exit();
 			callback(null, clients[serviceId], false);
 		}
 		else {
@@ -148,10 +170,10 @@ class BumblebeeWebsocketClient extends Client {
 		var id = BumblebeeWebsocketClient.id(config);
 		config.id = id;
 		let client = new BumblebeeWebsocketClient(config, serviceStore);
-		clients[id].once('disconnect', () => {
-			debugger;
-			console.log('wsc disconnect');
-		});
+		// clients[id].once('disconnect', () => {
+		// 	debugger;
+		// 	console.log('wsc disconnect');
+		// });
 		return client;
 	}
 }

@@ -23,6 +23,10 @@ class App extends Jaxcore.Adapter {
 		// this.addEvents(bumblebee, {
 		// 	recognize: function
 		// });
+		
+		this.on('teardown', function() {
+			debugger;
+		})
 	}
 }
 

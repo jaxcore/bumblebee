@@ -22,8 +22,8 @@ module.exports = function connectSTT(bumblebee, app, deepspeech, bbHotword) {
 	});
 	
 	ipcMain.on('simulate-hotword', (event, text, hotword) => {
-		if (hotword === 'ANY') hotword = 'bumblebee';
-		else if (hotword === 'OFF') return;
+		// if (hotword === 'ANY') hotword = 'bumblebee';
+		// else if (hotword === 'OFF') return;
 		
 		bbHotword.emit('hotword', hotword);
 		// bumblebee.emit('hotword', hotword);
@@ -56,22 +56,22 @@ module.exports = function connectSTT(bumblebee, app, deepspeech, bbHotword) {
 		app.execFunction(functionName, args);
 	});
 	
-	deepspeech.on('hotword', function (hotword, text, stats) {
-		console.log('DS hotword:'+hotword, 'text='+text, stats);
-		let functionName = 'hotwordResults';
-		let args = [hotword, text, stats];
-		
-		// bumblebee.playSound('hail');
-		
-		app.execFunction(functionName, args);
-	});
-	
-	deepspeech.on('recognize', function (text, stats) {
-		console.log('DS recognize', text, stats);
-		let functionName = 'deepspeechResults';
-		let args = [text, stats];
-		app.execFunction(functionName, args);
-	});
+	// deepspeech.on('hotword', function (hotword, text, stats) {
+	// 	console.log('DS hotword:'+hotword, 'text='+text, stats);
+	// 	let functionName = 'hotwordResults';
+	// 	let args = [hotword, text, stats];
+	//
+	// 	// bumblebee.playSound('hail');
+	//
+	// 	app.execFunction(functionName, args);
+	// });
+	//
+	// deepspeech.on('recognize', function (text, stats) {
+	// 	console.log('DS recognize', text, stats);
+	// 	let functionName = 'deepspeechResults';
+	// 	let args = [text, stats];
+	// 	app.execFunction(functionName, args);
+	// });
 	
 	return deepspeech;
 }

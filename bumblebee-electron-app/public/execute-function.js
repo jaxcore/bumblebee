@@ -16,7 +16,7 @@ const executeJavaScript = (win, codeStr, callback) => {
 				console.error('executeJavaScript', e);
 			});
 		} catch (e) {
-			console.error(e);
+			console.erroor('executeJavaScript', e);
 			process.exit();
 		}
 	}

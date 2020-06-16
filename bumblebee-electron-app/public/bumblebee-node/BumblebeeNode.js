@@ -19,11 +19,11 @@ class BumblebeeNode extends EventEmitter {
 		this.jaxcore = jaxcore;
 		this.app = bumblebeeElectron;
 		
-		this.bumblebeeHotword = connectHotword(this, this.app, deepspeech);
-		this.deepspeech = connectSTT(this, this.app, deepspeech, this.bumblebeeHotword);
+		this.hotword = connectHotword(this, this.app, deepspeech);
+		this.deepspeech = connectSTT(this, this.app, deepspeech, this.hotword);
 		this.say = connectTTS(this, this.app, sayNode);
 		
-		connectWSServer(this, this.app, deepspeech, this.bumblebeeHotword, (bbWebsocketServer) => {
+		connectWSServer(this, this.app, deepspeech, this.hotword, (bbWebsocketServer) => {
 			this.bbWebsocketServer = bbWebsocketServer;
 		});
 		

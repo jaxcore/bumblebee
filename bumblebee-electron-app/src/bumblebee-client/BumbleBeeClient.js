@@ -110,18 +110,18 @@ class BumblebeeClient extends EventEmitter {
 		this.app.displayApp(hotword, appName, logo);
 	}
 	
-	async launchAssistant(hotword) {
-		debugger;
-		// debugger;
-		// if (!this.assistants[hotword]) {
-		// 	this.assistants[hotword] = new BumblebeeAssistant(hotword);
-		// 	return this.assistants[hotword].main(this);
-		// }
-		// else {
-		//
-		// }
-		// return this.launch(hotword, null, true);
-	}
+	// async launchAssistant(hotword) {
+	// 	debugger;
+	// 	// debugger;
+	// 	// if (!this.assistants[hotword]) {
+	// 	// 	this.assistants[hotword] = new BumblebeeAssistant(hotword);
+	// 	// 	return this.assistants[hotword].main(this);
+	// 	// }
+	// 	// else {
+	// 	//
+	// 	// }
+	// 	// return this.launch(hotword, null, true);
+	// }
 	async launch(hotword, appName, isAssistant) {
 		let r;
 		// debugger;
