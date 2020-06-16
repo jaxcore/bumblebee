@@ -50,7 +50,9 @@ class BumblebeeElectron extends Service {
 			this.setState({
 				deepspeechInstalled: true
 			});
-			this.startDeepspeech();
+			this.startDeepspeech(function() {
+				console.log('done');
+			});
 		});
 		
 		global.app = this;

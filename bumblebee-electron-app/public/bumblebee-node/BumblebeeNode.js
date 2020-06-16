@@ -25,6 +25,8 @@ class BumblebeeNode extends EventEmitter {
 		
 		connectWSServer(this, this.app, deepspeech, this.hotword, (bbWebsocketServer) => {
 			this.bbWebsocketServer = bbWebsocketServer;
+			
+			this.startMainMenu();
 		});
 		
 		this.soundThemesPath = __dirname + '/../sounds';
@@ -33,7 +35,10 @@ class BumblebeeNode extends EventEmitter {
 			const result = await this.playSound(name);
 			return result;
 		});
-		
+	}
+	
+	startMainMenu() {
+	
 	}
 	
 	async playSoundNode(name, theme) {

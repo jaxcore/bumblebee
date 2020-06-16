@@ -20,19 +20,19 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 	
 	deepspeech.on('recognize', function (text, stats) {
 		
-		// let functionName = 'deepspeechResults';
-		// let args = [text, stats];
-		// app.execFunction(functionName, args);
 		
 		let activeAssistantSocket = getActiveAssistantSocket();
 		if (activeAssistantSocket) {
 			console.log('DS Assistant recognize ('+app.state.activeAssistant+')', text, stats);
 			const recogId = Math.random().toString().substring(2);
 			activeAssistantSocket.emit('recognize', text, stats, recogId);
-			// activeAssistantSocket.on('recognize-response-'+recogId, text, stats, recogId);
 			
 		}
 		else {
+			let functionName = 'deepspeechResults';
+			let args = [text, stats];
+			app.execFunction(functionName, args);
+			// activeAssistantSocket.on('recognize-response-'+recogId, text, stats, recogId);
 			console.log('DS recognize', text, stats);
 		}
 	});
@@ -178,6 +178,9 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
 			
 			bumblebee.bbWebsocketServer = bbWebsocketServer;
+			
+			// debugger;
+			// bumblebee.say('okay, starting server...');
 			
 			callback(bbWebsocketServer);
 			// bbWebsocketServer

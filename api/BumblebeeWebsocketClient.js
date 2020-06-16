@@ -98,7 +98,7 @@ class BumblebeeWebsocketClient extends Client {
 		});
 		
 		socket.on('recognize', (text, stats) => {
-			console.log('recognize', text, stats);
+			console.log('BB recognize', text, stats);
 		});
 		
 		socket.on('assistant-active', (active) => {

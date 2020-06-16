@@ -9,6 +9,9 @@ import BumblebeeClient from './bumblebee-client/BumblebeeClient';
 import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
+import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
+
+
 import Main from './Main';
 
 const ipcRenderer = window.ipcRenderer;
@@ -80,8 +83,7 @@ class App extends Component {
 		setTimeout(function() {
 			// debugger;
 			ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
-			
-		},1000);
+		},100);
 		
 		// this.bumblebee.console('main()');
 		//
@@ -125,9 +127,22 @@ class App extends Component {
 				// this.bumblebee.simulateSTT('main menu');
 			}
 			else {
-				// this.showInstall(true);
+					debugger;
+				// this.bumblebee.say('Welcome to Bumblebee')
+				// .then(() => {
+				// 	return this.bumblebee.say('It looks like you don\'t have DeepSpeech installed');
+				// })
+				// .then(() => {
+				// 	return this.bumblebee.say('Let\'s install it now');
+				// })
+				// .then(() => {
+				// 	this.showInstall(true);
+				// });
+					this.showInstall(true);
+				
+				
 				// return;
-				this.bumblebee.launch('DeepSpeechInstall');
+				// this.bumblebee.launch('DeepSpeechInstall');
 			}
 			console.log('electron ready');
 		});
@@ -155,7 +170,9 @@ class App extends Component {
 		this.updateConfig();
 		// this.startIntro();
 		debugger;
-		this.launch('DeepSpeechInstalled');
+		
+		let r = DeepSpeechInstalled(this.bumblebee);
+		this.main();
 	}
 	
 	startIntro() {
@@ -173,7 +190,6 @@ class App extends Component {
 			showInstallDialog: show
 		});
 	}
-	
 	
 	render() {
 		const sayClass = this.state.sayPlaying ? 'visible' : 'hidden';

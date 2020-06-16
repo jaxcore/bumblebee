@@ -122,6 +122,11 @@ class BumblebeeClient extends EventEmitter {
 	// 	// }
 	// 	// return this.launch(hotword, null, true);
 	// }
+	
+	async launchApp(fn) {
+	
+	}
+	
 	async launch(hotword, appName, isAssistant) {
 		let r;
 		// debugger;

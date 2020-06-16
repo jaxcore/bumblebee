@@ -3,7 +3,7 @@ export default async function DeepSpeechInstalled(bumblebee) {
 	
 	await bumblebee.say('Congratulations');
 	await bumblebee.say('DeepSpeech has been installed');
-	await bumblebee.say('To begin, turn on the microphone');
+	await bumblebee.say('To begin, click the microphone icon');
 	await bumblebee.onRecordingStarted();
 	
 	// if (this.state.config.recording) {
@@ -28,7 +28,8 @@ export default async function DeepSpeechInstalled(bumblebee) {
 	//
 	
 	await bumblebee.say('You said, ' + r.text);
-	await bumblebee.say('Alright, you are all set.');
+	await bumblebee.say('Alright, we are all set.');
+	// await bumblebee.say('Starting bumblebee assistant.');
 	
 	// return;
 	// return bumblebee.launch('Customize');

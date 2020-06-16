@@ -12,11 +12,11 @@ class SpeechDownloader extends EventEmitter {
 		
 		this.bumblebeeElectron = bumblebeeElectron;
 		
-		// this.deepSpeechModelUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.pbmm';
-		// this.deepSpeechScorerUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.scorer';
+		this.deepSpeechModelUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.pbmm';
+		this.deepSpeechScorerUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.scorer';
 		
-		this.deepSpeechModelUrl = 'http://localhost:8000/deepspeech-0.7.3-models.pbmm';
-		this.deepSpeechScorerUrl = 'http://localhost:8000/deepspeech-0.7.3-models.scorer';
+		// this.deepSpeechModelUrl = 'http://localhost:8000/deepspeech-0.7.3-models.pbmm';
+		// this.deepSpeechScorerUrl = 'http://localhost:8000/deepspeech-0.7.3-models.scorer';
 		
 		// /Users/dstein/Library/Application\ Support/com.jaxcore.bumblebee
 		this.path = path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');

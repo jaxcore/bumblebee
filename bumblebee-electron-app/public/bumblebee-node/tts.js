@@ -17,11 +17,11 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 				
 				ipcMain.once('say-begin-'+id, function (id, text, optionss) {
 					// debugger;
-					onBegin();
+					if (onBegin) onBegin();
 				})
 				ipcMain.once('say-end-'+id, function (id, text, optionss) {
 					// debugger;
-					onEnd();
+					if (onEnd) onEnd();
 					resolve();
 				});
 				// ipcMain.on('say-cancel', function (id, text, optionss) {
