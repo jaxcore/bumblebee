@@ -25,9 +25,18 @@ class BumblebeeClient extends EventEmitter {
 		this.sayQueue.setVolume(app.state.sayVolume);
 		
 		// receive speech recognition result by a synchronous message from public/electron.js
+		window.hotwordAssistantApp = (activeApp) => {
+			this.setActiveAssistantApp(activeApp);
+		};
+
+		window.hotwordAssistant = (hotword, assistantName, activeApp) => {
+			this.setActiveAssistant(hotword, assistantName, activeApp);
+		}
 		window.hotwordDetected = (hotword) => {
-			this.app.addSpeechOutput('hotwordDetected '+hotword);
-			this.setHotwordDetected(hotword);
+			// this.app.addSpeechOutput('hotwordDetected '+hotword);
+			// this.setHotwordDetected(hotword);
+			
+			debugger;
 		};
 		
 		window.hotwordResults = (hotword, text, stats) => {
@@ -51,7 +60,7 @@ class BumblebeeClient extends EventEmitter {
 				});
 			}
 			this.emit('hotwordCommand', text, stats);
-			this.setHotwordDetected(null);
+			// this.setHotwordDetected(null);
 		};
 		
 		app.vadStatusRef.current.width = window.innerWidth;
@@ -59,22 +68,36 @@ class BumblebeeClient extends EventEmitter {
 		window.updateVADStatus = (status) => {
 			drawVADCanvas(app.vadStatusRef.current, status);
 		};
-		
-		
+
 		window.deepspeechResults = (text, stats) => {
 			// debugger;
-			console.log('deepspeech results', text, stats);
 			
-			if (stats.hotword) {
-				debugger;
-				// this.emit('hotwordRecognize', text, stats);
+			if (this.app.state.activeAssistant) {
+				console.log('activeAssistant results', text, stats);
 			}
 			else {
-				this.emit('recognize', text, stats);
+				console.log('deepspeech results', text, stats);
+				this.console({
+					text,
+					stats,
+					type: 'stt'
+				});
 			}
+			// if (stats.hotword) {
+			// 	debugger;
+			// 	// this.emit('hotwordRecognize', text, stats);
+			// }
+			// else {
+			// 	this.emit('recognize', text, stats);
+			// }
 			
-			this.setHotwordDetected(null);
+			// this.setHotwordDetected(null);
 		};
+
+		window.displayConsole = (component) => {
+			this.app.console(component);
+		};
+
 	}
 	
 	addAssistant(hotword, appName, assistantFunction) {
@@ -106,9 +129,9 @@ class BumblebeeClient extends EventEmitter {
 		}
 	}
 	
-	displayApp(hotword, appName, logo) {
-		this.app.displayApp(hotword, appName, logo);
-	}
+	// displayApp(hotword, appName, logo) {
+	// 	this.app.displayApp(hotword, appName, logo);
+	// }
 	
 	// async launchAssistant(hotword) {
 	// 	debugger;
@@ -369,31 +392,48 @@ class BumblebeeClient extends EventEmitter {
 		});
 	}
 	
-	setHotwordDetected(hotword) {
-		
-		if (hotword) {
-			this.emit('hotword', hotword);
-		}
-		
-		if (this.app.state.hotwordDetected !== hotword) {
-			if (hotword) {
-				// this.app.addSpeechOutput({
-				// 	hotword,
-				// 	type: 'hotword'
-				// });
-			}
+	setActiveAssistantApp(activeApp) {
+		this.app.setState({
+			activeAssistantApp: activeApp
+		}, () => {
+			this.app.updateBanner();
+		});
+	}
+	setActiveAssistant(hotword, assistantName, activeApp) {
+		if (this.app.state.activeAssistant !== hotword) {
 			this.app.setState({
-				hotwordDetected: hotword,
-				logo: hotword ? this.app.logos.hotword : this.app.logos.default
+				activeAssistant: hotword,
+				activeAssistantName: assistantName,
+				activeAssistantApp: activeApp
+			}, () => {
+				this.app.updateBanner();
 			});
-			if (hotword) {
-				if (this.analyser) this.analyser.setLineColor('#d6bc22');
-			}
-			else {
-				if (this.analyser) this.analyser.setLineColor('#fff');
-			}
 		}
 	}
+	
+	// setHotwordDetected(hotword) {
+	// 	if (hotword) {
+	// 		this.emit('hotword', hotword);
+	// 	}
+	// 	if (this.app.state.hotwordDetected !== hotword) {
+	// 		if (hotword) {
+	// 			// this.app.addSpeechOutput({
+	// 			// 	hotword,
+	// 			// 	type: 'hotword'
+	// 			// });
+	// 		}
+	// 		this.app.setState({
+	// 			hotwordDetected: hotword,
+	// 			logo: hotword ? this.app.logos.hotword : this.app.logos.default
+	// 		});
+	// 		if (hotword) {
+	// 			if (this.analyser) this.analyser.setLineColor('#d6bc22');
+	// 		}
+	// 		else {
+	// 			if (this.analyser) this.analyser.setLineColor('#fff');
+	// 		}
+	// 	}
+	// }
 	
 	async onRecordingStarted() {
 		return new Promise((resolve, reject) => {

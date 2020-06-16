@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import AppsIcon from '@material-ui/icons/Apps';
+
 import MicIcon from '@material-ui/icons/Mic';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -31,7 +33,7 @@ class App extends Component {
 			connected: false,
 			recording: false,
 			muted: false,
-			microphoneLineColor: '#eee',
+			// microphoneColor: '#eee',
 			soundPlaying: false,
 			soundTheme: 'startrek1',
 			hotword: 'ANY',
@@ -44,7 +46,11 @@ class App extends Component {
 			showInstallDialog: false,
 			inputMode: 'stt',
 			config: {},
-			appDisplay: {}
+			appDisplay: {},
+			sayPlaying: false,
+			
+			activeAssistant: null,
+			activeAssistantApp: null
 		};
 		
 		this.console = _console.bind(this);
@@ -57,26 +63,81 @@ class App extends Component {
 		this.contentPanelRef = React.createRef();
 		
 		this.logosPath = "images/logos/";
+
+		this.images = {
+			bumblebee: {
+				default: this.logosPath + '/logo-autobots.png',
+				hotword: this.logosPath + '/logo-autobots-hotword.png',
+				speaking: this.logosPath + '/logo-autobots-speaking.png',
+			}
+			// mainMenu: this.logosPath + '/logo-decepticons.png',
+		};
 		
 		this.logos = {
+			// mainMenu: this.logosPath + '/logo-decepticons.png',
 			default: this.logosPath + '/logo-autobots.png',
 			hotword: this.logosPath + '/logo-autobots-hotword.png',
 			speaking: this.logosPath + '/logo-autobots-speaking.png',
 		};
 		
-		this.state.logo = this.logos.default;
+		this.colors = {
+			micAssistantMainColor: '#d6bc22',
+			micAssistantAppColor: '#fff',
+			micMainMenuColor: '#777',
+			ttsColor: '#7c9fff' //'#57f'
+		}
+		
+		// this.state.logo = this.logos.mainMenu;
 		
 		window.app = this;
 	}
 	
-	displayApp(hotword, appName, logo) {
-		this.setState({
-			appDisplay: {
-				hotword,
-				appName,
-				logo
+	// displayApp(hotword, appName, logo) {
+	// 	debugger;
+	// 	this.setState({
+	// 		appDisplay: {
+	// 			hotword,
+	// 			appName,
+	// 			logo
+	// 		}
+	// 	});
+	// }
+	
+	setMicrophoneColor(color) {
+		this.setState({microphoneColor: color});
+		if (this.bumblebee.analyser) {
+			this.bumblebee.analyser.setLineColor(color);
+		}
+		else {
+			debugger;
+		}
+	}
+	
+	updateBanner() {
+		
+		if (this.state.activeAssistant) {
+			const isMain = this.state.activeAssistantApp==='main'
+			let logo;
+			
+			if (this.state.sayPlaying) {
+				logo = this.logos.speaking
 			}
-		});
+			else {
+				logo = isMain? this.logos.hotword : this.logos.default
+			}
+			
+			this.setState({
+				logo
+			});
+			
+			this.setMicrophoneColor(isMain? this.colors.micAssistantMainColor : this.colors.micAssistantAppColor);
+		}
+		else {
+			this.setState({
+				logo: null //this.logos.mainMenu
+			});
+			this.setMicrophoneColor(this.colors.micMainMenuColor);
+		}
 	}
 	
 	async main() {
@@ -106,7 +167,7 @@ class App extends Component {
 	resize() {
 		let contentPanelRef = this.contentPanelRef.current;
 		if (contentPanelRef) {
-			let h = (window.innerHeight - 141);
+			let h = (window.innerHeight - 151);
 			contentPanelRef.style.height = h + 'px';
 		}
 	}
@@ -196,6 +257,10 @@ class App extends Component {
 		
 		const Mic = this.state.recording ? MicIcon : MicOffIcon;
 		
+		let logoImage;
+		if (this.state.logo) logoImage = (<img src={this.state.logo}/>);
+		else logoImage = (<AppsIcon />);
+		
 		return (<div className="App">
 			
 			{this.state.showInstallDialog ? (<InstallDialog onInstalled={() => this.deepspeechInstalled()}
@@ -211,7 +276,7 @@ class App extends Component {
 					
 					<div id="logo" onClick={e => this.toggleControls()}>
 						{/*<img src={"images/logos/" + this.state.logo + ".png"}/>*/}
-						<img src={this.state.logo}/>
+						{logoImage}
 					</div>
 					
 					<div id="mic-icon" className="banner-icon" onClick={e => this.bumblebee.toggleRecording()}>
@@ -223,28 +288,52 @@ class App extends Component {
 						<SettingsIcon/>
 						<div className="text">Settings</div>
 					</div>
-				
 				</div>
 			</div>
 			
+			{this.renderAppBar()}
+			
 			<div className="container">
-			
-			{this.renderContent()}
-			
-			{this.renderConsoleInput()}
-		
+				{this.renderContent()}
+				{this.renderConsoleInput()}
 			</div>
 		</div>);
 	}
 	
+	renderAppBar() {
+		let name;
+		let clss = '';
+		
+		if (this.state.activeAssistant) {
+			if (this.state.activeAssistantApp) {
+				if (this.state.activeAssistantApp === 'main') {
+					name = this.state.activeAssistantName;
+					clss = 'assistant-main';
+				}
+				else name = this.state.activeAssistantApp;
+			}
+			else name = '[none]';
+		}
+		else name = 'Main Menu';
+		
+		if (this.state.sayPlaying) {
+			clss = 'tts';
+		}
+		
+		return (<div id="app-bar" className={clss}>
+			{name}
+		</div>);
+	}
+	
 	toggleControls() {
-		this.setState({
-			controlsVisible: !this.state.controlsVisible
-		});
+		// this.setState({
+		// 	controlsVisible: !this.state.controlsVisible
+		// });
 	}
 	
 	renderContent() {
 		return (<div className="content" ref={this.contentRef}>
+
 			<div className="content-panel" ref={this.contentPanelRef}>
 				{/*{this.renderControls()}*/}
 				{this.renderRecognitionOutput()}
@@ -276,40 +365,40 @@ class App extends Component {
 		</div>);
 	}
 	
-	// todo; settings
-	renderControls() {
-		const controlsClass = this.state.controlsVisible ? 'block' : 'none';
-		
-		return (<div className={'controls ' + controlsClass}>
-			
-			Hotword: <select onChange={e => this.bumblebee.changeHotword(e.target.options[e.target.selectedIndex].value)}
-							 value={this.state.hotword}>
-			<option value="OFF">- OFF -</option>
-			<option value="bumblebee">bumblebee</option>
-			<option value="grasshopper">grasshopper</option>
-			<option value="hey_edison">hey_edison</option>
-			<option value="porcupine">porcupine</option>
-			<option value="terminator">terminator</option>
-			<option value="ANY">- ANY -</option>
-		</select>
-			
-			<br/><br/>
-			
-			<button disabled={!this.state.recording} onClick={e => this.toggleMute()}>
-				{this.state.muted ? 'Unmute' : 'Mute'}
-			</button>
-			
-			
-			<button onClick={e => {
-				ipcRenderer.send('dev-tools');
-			}}>
-				Dev Console
-			</button>
-			
-			<br/>
-		
-		</div>);
-	}
+	// // todo; settings
+	// renderControls() {
+	// 	const controlsClass = this.state.controlsVisible ? 'block' : 'none';
+	//
+	// 	return (<div className={'controls ' + controlsClass}>
+	//
+	// 		Hotword: <select onChange={e => this.bumblebee.changeHotword(e.target.options[e.target.selectedIndex].value)}
+	// 						 value={this.state.hotword}>
+	// 		<option value="OFF">- OFF -</option>
+	// 		<option value="bumblebee">bumblebee</option>
+	// 		<option value="grasshopper">grasshopper</option>
+	// 		<option value="hey_edison">hey_edison</option>
+	// 		<option value="porcupine">porcupine</option>
+	// 		<option value="terminator">terminator</option>
+	// 		<option value="ANY">- ANY -</option>
+	// 	</select>
+	//
+	// 		<br/><br/>
+	//
+	// 		<button disabled={!this.state.recording} onClick={e => this.toggleMute()}>
+	// 			{this.state.muted ? 'Unmute' : 'Mute'}
+	// 		</button>
+	//
+	//
+	// 		<button onClick={e => {
+	// 			ipcRenderer.send('dev-tools');
+	// 		}}>
+	// 			Dev Console
+	// 		</button>
+	//
+	// 		<br/>
+	//
+	// 	</div>);
+	// }
 	
 	changeInputMode(value) {
 		this.setState({
@@ -345,6 +434,8 @@ class App extends Component {
 	
 	addSpeechOutput(data) {
 		const {recognitionOutput} = this.state;
+		data.activeAsszistant = this.bumblebee.activeAssistant;
+		data.activeAsszistantApp = this.bumblebee.activeAsszistantApp;
 		recognitionOutput.push(data);
 		// if (recognitionOutput.length > 100) recognitionOutput.length = 100;
 		this.setState({recognitionOutput}, () => {

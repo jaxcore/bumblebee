@@ -57,6 +57,9 @@ class BumblebeeNode extends EventEmitter {
 		});
 	}
 	
+	console(data) {
+		this.app.execFunction('displayConsole', [data]);
+	}
 }
 
 module.exports = BumblebeeNode;

@@ -4,6 +4,7 @@
 
 .recognition-output {
     margin-left: 1em;
+    line-height: 1.8em;
 }
 
 .recognition-output a:hover {
@@ -20,6 +21,24 @@
 
 .recognition-output a.number {
     color: #fff;
+}
+
+.recognition-output img {
+    margin-top: 3px;
+    margin-left: 4px;
+    margin-right: 9px;
+    width: 18px;
+    vertical-align: top;
+}
+.recognition-output svg {
+    vertical-align: top;
+    margin-right: 0.3em;
+    /*border: 1px solid red;*/
+}
+
+
+.recognition-output .text {
+    color: #888;
 }
 
 ul.nobullet {

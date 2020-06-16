@@ -36,6 +36,25 @@ code {
   width: 100%;
 }
 
+#app-bar.assistant-main {
+  color: #d6bc22;
+}
+#app-bar.tts {
+  color: #7c9fff;
+}
+
+#app-bar {
+  position: absolute;
+  z-index: 2;
+  top: 87px;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  /*border: 1px solid red;*/
+}
+
 #console-input input[type='text']{
   flex-grow: 1;
 }
@@ -48,3 +67,4 @@ code {
   border-top: 1px solid #999;
   padding-top: 2px;
 }
+

@@ -19,6 +19,15 @@ const schema = {
 	},
 	connected: {
 		type: 'boolean'
+	},
+	name: {
+		type: 'string'
+	},
+	activeApps: {
+		type: 'object'
+	},
+	activeApp: {
+		type: 'string'
 	}
 };
 
@@ -89,7 +98,7 @@ class BumblebeeWebsocketClient extends Client {
 				assistantActive: false
 			});
 			this.log('socket disconnect');
-			debugger;
+			
 			// socket.destroy();
 			this.emit('disconnect');
 			
@@ -97,20 +106,73 @@ class BumblebeeWebsocketClient extends Client {
 			socket.destroy();
 		});
 		
+		socket.on('hotword', (hotword) => {
+			console.log('BB hotword', hotword);
+			this.emit('hotword', hotword);
+		});
 		socket.on('recognize', (text, stats) => {
-			console.log('BB recognize', text, stats);
+			// console.log('BB recognize', text, stats);
+			this.emit('recognize', text, stats);
+		});
+		socket.on('command', (text, stats) => {
+			// console.log('BB recognize', text, stats);
+			this.emit('command', text, stats);
 		});
 		
 		socket.on('assistant-active', (active) => {
 			console.log('assistant-active', active);
-			debugger;
-			this.setState({assistantActive: true});
+			// console.log('wasAutoStarted', wasAutoStarted);
+			const wasActive = this.state.assistantActive;
+			
+			this.setState({
+				assistantActive: true
+			});
+			
+			if (!wasActive) {
+				this.main();
+				// this.setActiveApp('Bumblebee');
+			}
 		});
 		
 		return socket;
 	};
 	
-	async registerAssistant(hotword, AssistantClass, wOptions) {
+	console(data) {
+		this.socketEmit('console', data);
+	}
+	
+	async say(text, options) {
+		return new Promise((resolve, reject) => {
+			let id = Math.random().toString().substring(2);
+			this.socket.on('say-end-'+id, () => {
+				console.log('say-ended', id, text, options);
+				resolve();
+				// process.exit();
+			});
+			this.socketEmit('say', text, options, id);
+		});
+	}
+	
+	async main() {
+		console.log('start main', this.state.hotword, this.state.assistantName);
+		// this.activeApp
+		this.setActiveApp('main');
+	}
+	
+	setActiveApp(appName) {
+		this.setState({
+			appName
+		});
+		this.emit('active-app', appName);
+		this.socketEmit('active-app', appName);
+	}
+	
+	socketEmit() {
+		let args = Array.prototype.slice.call(arguments);
+		if (this.socket) this.socket.emit.apply(this.socket, args);
+	}
+	
+	async registerAssistant(hotword, assistantName, AssistantClass, assistantOptions) {
 		return new Promise((resolve, reject) => {
 			if (!this.socket) {
 				reject(new Error('no socket'));
@@ -123,16 +185,18 @@ class BumblebeeWebsocketClient extends Client {
 			this.socket.once('register-assistant-response', (response) => {
 				if (response[hotword] && response[hotword].success) {
 					console.log('launch adapter', AssistantClass);
+					this.setState({
+						hotword,
+						assistantName
+					});
 					
 					resolve();
-					// s//
 				}
 				else {
-					debugger;
 					reject();
 				}
 			});
-			this.socket.emit('register-assistant', hotword);
+			this.socket.emit('register-assistant', hotword, assistantName, assistantOptions);
 		});
 	}
 	
@@ -140,10 +204,8 @@ class BumblebeeWebsocketClient extends Client {
 		// this.emit('teardown');
 		if (this.socket) this.socket.destroy();
 		
-		// this.removeAllListeners();
 		delete this.socket;
 		delete clients[this.state.id];
-		// debugger;
 	}
 	
 	static id(serviceConfig) {
@@ -170,10 +232,6 @@ class BumblebeeWebsocketClient extends Client {
 		var id = BumblebeeWebsocketClient.id(config);
 		config.id = id;
 		let client = new BumblebeeWebsocketClient(config, serviceStore);
-		// clients[id].once('disconnect', () => {
-		// 	debugger;
-		// 	console.log('wsc disconnect');
-		// });
 		return client;
 	}
 }

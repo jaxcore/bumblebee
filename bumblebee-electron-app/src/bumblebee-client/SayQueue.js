@@ -96,7 +96,9 @@ class SayQueue extends EventEmitter {
 				canvas.width = window.innerWidth;
 				canvas.height = 100;
 				this.analyser = new SpectrumAnalyser(analyser, canvas);
-				this.analyser.setLineColor('#7c9fff');
+				// this.analyser.setLineColor('#7c9fff');
+				this.analyser.setLineColor(this.app.colors.ttsColor);
+				
 				this.analyser.setBackgroundColor('#222');
 				this.analyser.start();
 			// }
@@ -171,7 +173,7 @@ const connectSayQueue = function(bumblebee, app) {
 	};
 
 	sayQueue.sayOscilloscopeRef = bumblebee.sayOscilloscopeRef;
-	sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
+	// sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
 
 	sayQueue.on('say-begin', (utterance) => {
 		if (utterance.options.consoleOutput === false) return;
@@ -186,15 +188,15 @@ const connectSayQueue = function(bumblebee, app) {
 		bumblebee.setMuted(true);
 		bumblebee.app.setState({
 			sayPlaying: true,
-			logo: bumblebee.app.logos.speaking
-		});
+			// logo: bumblebee.app.logos.speaking
+		}, bumblebee.app.updateBanner);
 	});
 	sayQueue.on('stopped', () => {
 		bumblebee.setMuted(false);
 		bumblebee.app.setState({
 			sayPlaying: false,
-			logo: bumblebee.app.logos.default
-		});
+			// logo: bumblebee.app.logos.default
+		}, bumblebee.app.updateBanner);
 	});
 	
 	return sayQueue;

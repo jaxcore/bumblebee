@@ -64,8 +64,14 @@ function connect(options) {
 						debugger;
 					}
 					
-					async function launchAssistant(hotword, AssistantAdapterClass) {
-						await bbWebsocketClient.registerAssistant(hotword, AssistantAdapterClass);
+					async function launchAssistant(options) {
+						const {hotword, name, assistant, autoStart} = options;
+						const AssistantAdapterClass = assistant;
+
+						const assistantOptions = {
+							autoStart
+						};
+						await bbWebsocketClient.registerAssistant(hotword, name, assistant, assistantOptions);
 						
 						let adapterProfileName = 'bbassistant:'+websocketOptions.host+':'+websocketOptions.port;
 						
@@ -128,14 +134,28 @@ const BumblebeeAPI = {
 	Assistant
 };
 
-function connectAssistant(hotword, assistantClass) {
+function connectAssistant(options) {
+	// {
+	// 	hotword: 'bumblebee',
+	// 		name: 'Bumblebee',
+	// 	assistant: BumblebeeAssistant,
+	// 	autoStart: true
+	// }
+	// const {hotword, name, assistant, autoStart} = options;
+	
+	// console.log('options', options);
+
+	// return;
+	// const assistantOptions = {
+	// 	autoStart
+	// };
+	
 	async function _connect() {
 		try {
 			const api = await BumblebeeAPI.connect({
 				// enableReconnect: connect
 			});
-			
-			const assistant = await api.launchAssistant(hotword, assistantClass);
+			const assistant = await api.launchAssistant(options);
 			console.log('assistant', assistant);
 			
 			api.enableReconnect = function(callback) {

@@ -1,9 +1,19 @@
 export default function(data) {
 	if (typeof data === 'string' || typeof data === 'boolean' || typeof data === 'number') {
-		this.addSpeechOutput(data.toString());
+		this.addSpeechOutput({
+			text: data.toString(),
+			type: 'text'
+		});
 	}
 	else if (typeof data === 'object') {
-		if (data.type === 'tts' && data.text && data.options) {
+		if (data.type === 'text') {
+			this.addSpeechOutput({
+				text: data.text,
+				options: data.options,
+				type: 'text'
+			});
+		}
+		else if (data.type === 'tts' && data.text && data.options) {
 			if (data.options.consoleOutput === false) {
 				return;
 			}
@@ -14,7 +24,7 @@ export default function(data) {
 			});
 		}
 		else if (data.text && data.stats) {
-			if (data.stats.hotword) {
+			if (data.type === 'command' || data.stats.hotword) {
 				this.addSpeechOutput({
 					text: data.text,
 					options: data.stats,
