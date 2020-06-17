@@ -22,14 +22,13 @@ The core technologies that Bumblebee utilizes are:
 
 Bumblebee builds upon these by making them easier to use and tying them
 together into an integrated voice application API.  Because these systems
-run locally without any cloud services, stand-alone privacy-focused always-on voice applications can finally be realized.  And as you will see, they are both ***EASIER*** and ***MORE FUN*** to write than you think.
-
+run locally without any cloud services, stand-alone privacy-focused always-on voice applications can finally be realized.
 
 The Bumblebee project includes a voice app server console ([bumblebee-electron-app](bumblebee-electron-app)), which
 automatically installs and sets up DeepSpeech, and runs the bumblebee websocket service that
-voice assistants can connect to.
+voice assistants can connect to. The voice applications run independently of the bumblebee server, and use a websocket client API to connect and communicate by receiving speech-to-text results and hotword commands, or issuing text-to-speech instructions.  
 
-The voice assistants and the applications run independently of the bumblebee server, and use a websocket client API to connect, and add new assistants or applications.  There are limitless ways to expand Bumblebee's capabilities by write applications that control devices or services on a home network, retrieve data from the internet, and anything else you can think of.
+There are limitless ways to expand Bumblebee's capabilities by writing new applications that control devices or services on a home network, retrieve data from the internet, and anything else you can think of.  And as you will see, they are both ***EASIER*** and ***MORE FUN*** to write than you think.
 
 ## Install
 
