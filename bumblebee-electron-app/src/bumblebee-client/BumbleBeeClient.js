@@ -234,7 +234,12 @@ class BumblebeeClient extends EventEmitter {
 	
 	simulateHotword(text) {
 		// debugger;
-		ipcRenderer.send('simulate-hotword', text, this.app.state.hotword);
+		let hotword = this.app.state.activeAssistant;
+		if (hotword) ipcRenderer.send('simulate-hotword', text, hotword);
+		else {
+			console.log('no assistant');
+		}
+		
 		// this.app.setMuted(true);
 		// setTimeout(() => {
 		// 	this.app.setMuted(false);
@@ -255,18 +260,18 @@ class BumblebeeClient extends EventEmitter {
 		ipcRenderer.send('simulate-stt', text);
 	}
 	
-	changeHotword(value) {
-		let hotword = value;
-		let hotwordEnabled = true;
-		if (value === 'OFF') {
-			hotwordEnabled = false;
-		}
-		this.app.setState({
-			hotword,
-			hotwordEnabled
-		});
-		ipcRenderer.send('hotword-select', hotword);
-	}
+	// changeHotword(value) {
+	// 	let hotword = value;
+	// 	let hotwordEnabled = true;
+	// 	if (value === 'OFF') {
+	// 		hotwordEnabled = false;
+	// 	}
+	// 	this.app.setState({
+	// 		hotword,
+	// 		hotwordEnabled
+	// 	});
+	// 	ipcRenderer.send('hotword-select', hotword);
+	// }
 	
 	toggleRecording() {
 		if (this.app.state.recording) this.stopRecording()
@@ -393,22 +398,27 @@ class BumblebeeClient extends EventEmitter {
 	}
 	
 	setActiveAssistantApp(activeApp) {
-		this.app.setState({
-			activeAssistantApp: activeApp
-		}, () => {
-			this.app.updateBanner();
-		});
+		this.app.updateConfig();
+		this.app.updateBanner();
+		
+		// this.app.setState({
+		// 	activeAssistantApp: activeApp
+		// }, () => {
+		// 	this.app.updateBanner();
+		// });
 	}
 	setActiveAssistant(hotword, assistantName, activeApp) {
-		if (this.app.state.activeAssistant !== hotword) {
-			this.app.setState({
-				activeAssistant: hotword,
-				activeAssistantName: assistantName,
-				activeAssistantApp: activeApp
-			}, () => {
-				this.app.updateBanner();
-			});
-		}
+		this.app.updateConfig();
+		this.app.updateBanner();
+		// if (this.app.state.activeAssistant !== hotword) {
+		// 	this.app.setState({
+		// 		activeAssistant: hotword,
+		// 		activeAssistantName: assistantName,
+		// 		activeAssistantApp: activeApp
+		// 	}, () => {
+		// 		this.app.updateBanner();
+		// 	});
+		// }
 	}
 	
 	// setHotwordDetected(hotword) {

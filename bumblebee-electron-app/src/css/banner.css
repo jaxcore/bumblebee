@@ -106,9 +106,9 @@
     position: absolute;
     z-index: 3;
     left: 50%;
-    margin-left: -80px;
+    margin-left: -60px;
     top: 24px;
-    width: 160px;
+    width: 120px;
     height: 60px;
     background-image: linear-gradient(to right, rgba(34,34,34,0.0) 0%, rgba(34,34,34,1) 30%, rgba(34,34,34,1) 70%, rgba(34,34,34,0.0) 100% );
     text-align: center;

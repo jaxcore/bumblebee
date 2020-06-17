@@ -36,7 +36,7 @@ class App extends Component {
 			// microphoneColor: '#eee',
 			soundPlaying: false,
 			soundTheme: 'startrek1',
-			hotword: 'ANY',
+			// hotword: 'ANY',
 			microphoneVolume: 1,
 			sayVolume: 1,
 			recognitionOutput: [],
@@ -50,7 +50,7 @@ class App extends Component {
 			sayPlaying: false,
 			
 			activeAssistant: null,
-			activeAssistantApp: null
+			activeAssistantsApp: null
 		};
 		
 		this.console = _console.bind(this);
@@ -65,20 +65,29 @@ class App extends Component {
 		this.logosPath = "images/logos/";
 
 		this.images = {
+			mainmenu: this.logosPath + '/honeycomb.png',
 			bumblebee: {
-				default: this.logosPath + '/logo-autobots.png',
-				hotword: this.logosPath + '/logo-autobots-hotword.png',
-				speaking: this.logosPath + '/logo-autobots-speaking.png',
+				// default: this.logosPath + '/bumblebee/bumblebee.png',
+				// hotword: this.logosPath + '/bumblebee/bumblebee-hotword.png',
+				// speaking: this.logosPath + '/bumblebee/bumblebee-speaking.png',
+				default: this.logosPath + '/bumblebee/bee-default.png',
+				hotword: this.logosPath + '/bumblebee/bee-hotword.png',
+				speaking: this.logosPath + '/bumblebee/bee-speaking.png',
+			},
+			hey_edison: {
+				default: this.logosPath + '/hey_edison/hey_edison.png',
+				hotword: this.logosPath + '/hey_edison/hey_edison-hotword.png',
+				speaking: this.logosPath + '/hey_edison/hey_edison-speaking.png',
 			}
 			// mainMenu: this.logosPath + '/logo-decepticons.png',
 		};
 		
-		this.logos = {
-			// mainMenu: this.logosPath + '/logo-decepticons.png',
-			default: this.logosPath + '/logo-autobots.png',
-			hotword: this.logosPath + '/logo-autobots-hotword.png',
-			speaking: this.logosPath + '/logo-autobots-speaking.png',
-		};
+		// this.logos = {
+		// 	// mainMenu: this.logosPath + '/logo-decepticons.png',
+		// 	default: this.logosPath + '/logo-autobots.png',
+		// 	hotword: this.logosPath + '/logo-autobots-hotword.png',
+		// 	speaking: this.logosPath + '/logo-autobots-speaking.png',
+		// };
 		
 		this.colors = {
 			micAssistantMainColor: '#d6bc22',
@@ -114,16 +123,19 @@ class App extends Component {
 	}
 	
 	updateBanner() {
+		// logo: hotword ? this.app.logos.hotword : this.app.logos.default
 		
-		if (this.state.activeAssistant) {
-			const isMain = this.state.activeAssistantApp==='main'
+		if (this.state.config.activeAssistant) {
+			const isMain = this.state.config.activeAssistantsApp==='main'
 			let logo;
 			
+			let logos = this.images[this.state.config.activeAssistant];
+			
 			if (this.state.sayPlaying) {
-				logo = this.logos.speaking
+				logo = logos.speaking
 			}
 			else {
-				logo = isMain? this.logos.hotword : this.logos.default
+				logo = isMain? logos.hotword : logos.default
 			}
 			
 			this.setState({
@@ -259,7 +271,8 @@ class App extends Component {
 		
 		let logoImage;
 		if (this.state.logo) logoImage = (<img src={this.state.logo}/>);
-		else logoImage = (<AppsIcon />);
+		else logoImage = (<img src={this.images.mainmenu}/>);
+			//logoImage = (<AppsIcon />);
 		
 		return (<div className="App">
 			
@@ -303,16 +316,19 @@ class App extends Component {
 	renderAppBar() {
 		let name;
 		let clss = '';
-		
-		if (this.state.activeAssistant) {
-			if (this.state.activeAssistantApp) {
-				if (this.state.activeAssistantApp === 'main') {
-					name = this.state.activeAssistantName;
+
+		const hotword = this.state.config.activeAssistant;
+
+		if (hotword && this.state.config.assistants) {
+			const assistantName = this.state.config.assistants[hotword].name;
+			if (this.state.config.activeAssistantsApp) {
+				if (this.state.config.activeAssistantsApp === 'main') {
+					name = assistantName;
 					clss = 'assistant-main';
 				}
-				else name = this.state.activeAssistantApp;
+				else name = this.state.config.activeAssistantsApp;
 			}
-			else name = '[none]';
+			else name = assistantName;
 		}
 		else name = 'Main Menu';
 		
@@ -434,8 +450,8 @@ class App extends Component {
 	
 	addSpeechOutput(data) {
 		const {recognitionOutput} = this.state;
-		data.activeAsszistant = this.bumblebee.activeAssistant;
-		data.activeAsszistantApp = this.bumblebee.activeAsszistantApp;
+		data.activeAssistant = this.bumblebee.activeAssistant;
+		data.activeAssistantsApp = this.bumblebee.activeAssistantsApp;
 		recognitionOutput.push(data);
 		// if (recognitionOutput.length > 100) recognitionOutput.length = 100;
 		this.setState({recognitionOutput}, () => {

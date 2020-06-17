@@ -1,28 +1,34 @@
 const ipcRenderer = window.ipcRenderer;
 
 const colors = {
+	accept: '#44f',
+	alarm: 'purple',
 	cancel: 'orange',
 	click: 'green',
+	deny: 'red',
 	down: '#77f',
 	error: 'red',
 	hail: 'green',
 	off: '#f7f',
-	okay: '#7f7',
 	on: '#7ff',
-	up: '#f77'
+	up: '#f77',
+	warn: 'yellow'
 };
 
 const themes = {
 	startrek1: {
+		accept: new Audio('sounds/startrek1/accept.wav'),
+		alarm: new Audio('sounds/startrek1/alarm.wav'),
 		cancel: new Audio('sounds/startrek1/cancel.wav'),
 		click: new Audio('sounds/startrek1/click.wav'),
+		deny: new Audio('sounds/startrek1/deny.wav'),
 		down: new Audio('sounds/startrek1/down.wav'),
 		error: new Audio('sounds/startrek1/error.wav'),
 		hail: new Audio('sounds/startrek1/hail.wav'),
 		off: new Audio('sounds/startrek1/off.wav'),
-		okay: new Audio('sounds/startrek1/okay.wav'),
 		on: new Audio('sounds/startrek1/on.wav'),
-		up: new Audio('sounds/startrek1/up.wav')
+		up: new Audio('sounds/startrek1/up.wav'),
+		warn: new Audio('sounds/startrek1/warn.wav')
 	}
 };
 
@@ -54,7 +60,10 @@ function connectPlaySound(bumblebee, app) {
 					app.setState({
 						soundPlaying : false
 					});
-					if (bumblebee.analyser) bumblebee.analyser.setLineColor(app.state.microphoneLineColor);
+					app.updateBanner();
+					if (bumblebee.analyser) {
+						// bumblebee.analyser.setLineColor(app.state.microphoneLineColor);
+					}
 					resolve(true);
 				};
 				themes[theme][name].play();

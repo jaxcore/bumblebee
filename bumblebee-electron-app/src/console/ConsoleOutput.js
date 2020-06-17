@@ -23,11 +23,12 @@ export default function ConsoleOutput(props) {
 				assistant = data.assistant;
 			}
 			
-			if (assistant === 'bumblebee') {
-				logoImage = (<img src={props.bumblebee.app.images.bumblebee.default}/>);
+			if (assistant === 'bumblebee' || assistant === 'hey_edison') {
+				logoImage = (<img src={props.bumblebee.app.images[assistant].hotword}/>);
 			}
-			else logoImage = (<AppsIcon />);
-			
+			else logoImage = (<img src={props.bumblebee.app.images.mainmenu}/>);
+				//logoImage = (<AppsIcon />);
+
 			// if (props.bumblebee.app.state.logo) logoImage = (<img src={props.bumblebee.app.state.logo}/>);
 			// if (props.bumblebee.app.state.activeAssistant === 'bumblebee') {
 			// 	logoImage = (<img src={props.bumblebee.app.images.bumblebee.default}/>);
@@ -66,7 +67,11 @@ export default function ConsoleOutput(props) {
 			}
 			else if (data.type === 'hotcommand') {
 				// text = 'COMMAND: ' + data.text;
-				return (<div key={index} className='command'>{data.text}</div>);
+				icon = (<MicIcon />);
+				return (<div key={index} className="command">
+					{icon}
+					{data.text}
+				</div>);
 			}
 			else if (data.type === 'hotword') {
 				// text = 'HOTWORD: ' + data.hotword;

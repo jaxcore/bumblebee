@@ -119,18 +119,33 @@ class BumblebeeWebsocketClient extends Client {
 			this.emit('command', text, stats);
 		});
 		
-		socket.on('assistant-active', (active) => {
+		socket.on('assistant-active', (active, id) => {
+			console.log('assistant-active', active);
+			console.log('assistant-active', active);
+			console.log('assistant-active', active);
+			console.log('assistant-active', active);
+			console.log('assistant-active', active);
 			console.log('assistant-active', active);
 			// console.log('wasAutoStarted', wasAutoStarted);
 			const wasActive = this.state.assistantActive;
 			
 			this.setState({
-				assistantActive: true
+				assistantActive: active
 			});
 			
-			if (!wasActive) {
-				this.main();
-				// this.setActiveApp('Bumblebee');
+			if (id) {
+				socket.once('assistant-active-confirm-'+id, () => {
+					console.log('confirmed', id, 'wasActive', wasActive);
+					if (!wasActive) {
+						this.main();
+						// this.setActiveApp('Bumblebee');
+					}
+					else {
+						console.log('cannot run main(), already active?');
+						process.exit();
+					}
+				});
+				socket.emit('assistant-active-'+id);
 			}
 		});
 		
@@ -160,6 +175,7 @@ class BumblebeeWebsocketClient extends Client {
 	}
 	
 	setActiveApp(appName) {
+		console.log('setActiveApp', appName);
 		this.setState({
 			appName
 		});

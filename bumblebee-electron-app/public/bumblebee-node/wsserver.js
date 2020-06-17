@@ -1,5 +1,9 @@
 const ipcMain = require('electron').ipcMain;
 
+function getId() {
+	return Math.random().toString().substring(2);
+}
+
 module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword, callback) {
 	
 	// const deepspeech = app.deepspeech;
@@ -67,7 +71,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			const socketId = assistant.socketId;
 			return bumblebee.bbWebsocketServer.sockets[socketId];
 		}
-
 	}
 	
 	function setActiveAssistantApp(appName) {
@@ -83,6 +86,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			let activeAssistantSocket = getActiveAssistantSocket();
 			if (activeAssistantSocket) {
 				// debugger;
+				console.log('emit assistant-active', false);
 				activeAssistantSocket.emit('assistant-active', false);
 			}
 			
@@ -104,21 +108,30 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 					
 					app.execFunction('hotwordAssistant', [hotword, assistantName, appName]);
 					// debugger;
-					console.log('emit assistant-active', true);
-					socket.emit('assistant-active', true);
+					
+					let id = getId();
+					
+					console.log('emit assistant-active', true, id);
+					
+					socket.once('assistant-active-'+id, function() {
+						console.log('confirmed assistant-active', id);
+						socket.emit('assistant-active-confirm-'+id);
+					})
+					socket.emit('assistant-active', true,id);
 				}
 			}
 			else {
+
 				let activeAssistantSocket = getActiveAssistantSocket();
 				if (activeAssistantSocket) {
 					debugger;
 					activeAssistantSocket.emit('assistant-active', false);
 				}
 				
-				// debugger;
+				debugger;
 				app.setState({
 					activeAssistant: null,
-					activeAssistantsMainMenu: false
+					activeAssistantsApp: null
 				});
 				app.execFunction('hotwordAssistant', [null, null, null]);
 			}
@@ -167,6 +180,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 					activeAssistant: null,
 					activeAssistantsApp: null
 				});
+				debugger;
 			}
 			console.log('unregisterAssistant', app.state);
 			// debugger;
