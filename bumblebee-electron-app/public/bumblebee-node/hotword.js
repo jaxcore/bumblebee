@@ -16,30 +16,6 @@ module.exports = function connecthotword(bumblebee, bumblebeeElectron) {
 		console.log('BUMBLEBEE READY');
 	});
 	
-	// ipcMain.on('hotword-select', (event, hotword) => {
-	// 	if (hotword === 'OFF') {
-	// 		hotword = null;
-	// 		hotword.setEnabled(false);
-	// 	}
-	// 	else {
-	// 		if (hotword === 'ANY') {
-	// 			hotword = null;
-	// 		}
-	// 		hotword.setEnabled(true);
-	// 	}
-	// 	hotword.setHotword(hotword);
-	// });
-	//
-	// hotword.on('hotword', function (hotword) {
-	// 	console.log('');
-	// 	console.log('Hotword Detected:', hotword);
-	// 	let functionName = 'hotwordDetected';
-	// 	let args = [hotword];
-	// 	bumblebeeElectron.execFunction(functionName, args, function () {
-	// 		console.log('hotwordDetected code complete');
-	// 	});
-	// });
-	
 	ipcMain.on('microphone-muted', (event, muted) => {
 		console.log('bumblebee.setMuted', muted)
 		hotword.setMuted(muted);
@@ -52,6 +28,7 @@ module.exports = function connecthotword(bumblebee, bumblebeeElectron) {
 		});
 		hotword.start();
 	});
+	
 	ipcMain.on('recording-stop', (event) => {
 		bumblebeeElectron.setState({recording: false});
 		bumblebee.playSound('off').then(() => {

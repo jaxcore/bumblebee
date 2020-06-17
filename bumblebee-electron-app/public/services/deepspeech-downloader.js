@@ -19,13 +19,30 @@ class SpeechDownloader extends EventEmitter {
 		// this.deepSpeechScorerUrl = 'http://localhost:8000/deepspeech-0.7.3-models.scorer';
 		
 		// /Users/dstein/Library/Application\ Support/com.jaxcore.bumblebee
+		
+		const localPath = path.resolve(__dirname + '/../../deepspeech-0.7.3-models');
+		const hasLocalModels = fs.existsSync(localPath + '.pbmm') && fs.existsSync(localPath + '.scorer');
+		
+		if (hasLocalModels) {
+			this.modelsPath = localPath;
+			this.isInstalled = true;
+			this.bumblebeeElectron.setState({
+				deepspeechInstalled: true,
+				deepspeechLocalModels: true
+			});
+			console.log('deepspeech localModels');
+			return;
+		}
+		
 		this.path = path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
 		
 		this.modelsPath = path.resolve(this.path, 'deepspeech-0.7.3-models');
 		this.file1path = this.modelsPath + '.pbmm';
 		this.file2path = this.modelsPath + '.scorer';
 		
+		
 		this.isInstalled = fs.existsSync(this.file1path) && fs.existsSync(this.file2path);
+		
 		this.bumblebeeElectron.setState({
 			deepspeechInstalled: this.isInstalled
 		});

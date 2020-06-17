@@ -15,26 +15,19 @@ const schema = {
 	deepspeechInstalled: {  // set by DeepSpeechDownloader
 		type: 'boolean'
 	},
-	
 	hotwordsAvailable: {
 		type: 'array',
 		defaultValue: ['bumblebee', 'grasshopper', 'porcupine', 'terminator', 'hey_edison']
 	},
-	
 	assistants: {		// assistants[hotword] = socket.id
 		type: 'object'
 	},
-	
 	socketAssistants: {   //socketAssistants[socket.id] = hotword
 		type: 'object'
 	},
-	
 	activeAssistant: {
 		type: 'string'
-	},
-	// recording: {
-	// 	type: 'boolean'
-	// }
+	}
 };
 
 let serviceInstance;
@@ -46,6 +39,7 @@ class BumblebeeElectron extends Service {
 		this.log('create', this.state);
 		
 		this.downloader = new SpeechDownloader(this);
+		
 		this.downloader.on('deepspeech-installed', () => {
 			this.setState({
 				deepspeechInstalled: true
@@ -65,7 +59,6 @@ class BumblebeeElectron extends Service {
 		
 		this.jaxcore.startServiceProfile('Say',  (err, sayNode) => {
 			this.sayNode = sayNode;
-			
 			this.startDeepspeech((err, bumblebee) => {
 				callback(err, bumblebee);
 			});
@@ -87,8 +80,12 @@ class BumblebeeElectron extends Service {
 			});
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {
-				
-				// console.log('deepspeech', deepspeech);
+				if (err) {
+					console.log('Deepspeech could not be started');
+					console.log('err', err);
+					process.exit();
+					return;
+				}
 				
 				this.bumblebee = new BumblebeeNode(this.jaxcore, this, deepspeech, this.sayNode);
 				
@@ -96,6 +93,8 @@ class BumblebeeElectron extends Service {
 			});
 		}
 		else {
+			console.log(this.downloader);
+			
 			callback('deepspeech not installed');
 		}
 	}
@@ -126,7 +125,6 @@ class BumblebeeElectron extends Service {
 		}
 	};
 	
-	
 	destroy() {
 		this.emit('teardown');
 		debugger;
@@ -137,19 +135,14 @@ class BumblebeeElectron extends Service {
 	}
 	
 	static getOrCreateInstance(serviceStore, serviceId, serviceConfig, callback) {
-		// console.log('BumblebeeElectron getOrCreateInstance', serviceId, serviceConfig);
 		if (serviceInstance) {
 			callback(null, serviceInstance, false);
 		}
 		else {
-			// console.log('getOrCreateInstance BumblebeeElectron', serviceConfig);
 			serviceConfig = {
 				id: 'BumblebeeElectron'
 			};
 			serviceInstance = new BumblebeeElectron(serviceConfig, serviceStore);
-			
-			// console.log('CREATED serviceInstance', serviceInstance);
-			
 			callback(null, serviceInstance, true);
 		}
 	}

@@ -1,4 +1,4 @@
-const BumblebeeAPI = require('../../../api');
+const BumblebeeAPI = require('../../api');
 const BumblebeeAssistant = require('./BumblebeAssistant');
 
 BumblebeeAPI.connectAssistant({
