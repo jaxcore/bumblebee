@@ -13,6 +13,8 @@ import _console from './console/console';
 
 import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
 
+import themes from './themes';
+
 
 import Main from './Main';
 
@@ -28,6 +30,9 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		
+		this.themes = themes;
+		this.theme = this.themes['mainmenu'];
+		debugger;
 		
 		this.state = {
 			connected: false,
@@ -40,7 +45,8 @@ class App extends Component {
 			microphoneVolume: 1,
 			sayVolume: 1,
 			recognitionOutput: [],
-			logo: null,
+			// logo: null,
+			logo: this.theme.images.default,
 			controlsVisible: false,
 			useSystemMic: true,
 			showInstallDialog: false,
@@ -48,7 +54,6 @@ class App extends Component {
 			config: {},
 			appDisplay: {},
 			sayPlaying: false,
-			
 			activeAssistant: null,
 			activeAssistantsApp: null
 		};
@@ -62,39 +67,15 @@ class App extends Component {
 		this.consoleInputRef = React.createRef();
 		this.contentPanelRef = React.createRef();
 		
-		this.logosPath = "images/logos/";
-
-		this.images = {
-			mainmenu: this.logosPath + '/honeycomb.png',
-			bumblebee: {
-				// default: this.logosPath + '/bumblebee/bumblebee.png',
-				// hotword: this.logosPath + '/bumblebee/bumblebee-hotword.png',
-				// speaking: this.logosPath + '/bumblebee/bumblebee-speaking.png',
-				default: this.logosPath + '/bumblebee/bee-default.png',
-				hotword: this.logosPath + '/bumblebee/bee-hotword.png',
-				speaking: this.logosPath + '/bumblebee/bee-speaking.png',
-			},
-			hey_edison: {
-				default: this.logosPath + '/hey_edison/hey_edison.png',
-				hotword: this.logosPath + '/hey_edison/hey_edison-hotword.png',
-				speaking: this.logosPath + '/hey_edison/hey_edison-speaking.png',
-			}
-			// mainMenu: this.logosPath + '/logo-decepticons.png',
-		};
 		
-		// this.logos = {
-		// 	// mainMenu: this.logosPath + '/logo-decepticons.png',
-		// 	default: this.logosPath + '/logo-autobots.png',
-		// 	hotword: this.logosPath + '/logo-autobots-hotword.png',
-		// 	speaking: this.logosPath + '/logo-autobots-speaking.png',
-		// };
 		
-		this.colors = {
-			micAssistantMainColor: '#d6bc22',
-			micAssistantAppColor: '#fff',
-			micMainMenuColor: '#777',
-			ttsColor: '#7c9fff' //'#57f'
-		}
+		// this.colors = {
+		// 	// micAssistantMainColor: '#d6bc22',
+		// 	// micAssistantAppColor: '#fff',
+		// 	micMainMenuColor: '#777',
+		// 	ttsColor: '#fff' //'#57f'
+		// 	// ttsColor: '#7c9fff' //'#57f'
+		// }
 		
 		// this.state.logo = this.logos.mainMenu;
 		
@@ -112,45 +93,88 @@ class App extends Component {
 	// 	});
 	// }
 	
-	setMicrophoneColor(color) {
-		this.setState({microphoneColor: color});
-		if (this.bumblebee.analyser) {
-			this.bumblebee.analyser.setLineColor(color);
-		}
-		else {
-			debugger;
-		}
-	}
+	// setMicrophoneColor(color) {
+	// 	// this.setState({microphoneColor: color});
+	// 	if (this.bumblebee.analyser) {
+	// 		this.bumblebee.analyser.setLineColor(color);
+	// 	}
+	// }
 	
 	updateBanner() {
 		// logo: hotword ? this.app.logos.hotword : this.app.logos.default
 		
+		// const isMain = this.state.config.activeAssistantsApp==='main'
+		const isSayPlaying = this.state.sayPlaying;
+		const isDisabled = !this.state.recording;
+		let logo, sttColor, ttsColor, appTextColor;
+		
+		// micSTTColor: '#777',
+		// 	micTTSColor: '#fff',
+		
+		let theme;
+		
 		if (this.state.config.activeAssistant) {
-			const isMain = this.state.config.activeAssistantsApp==='main'
-			let logo;
+			theme = this.state.config.activeAssistant;
+			this.theme = this.themes[theme];
 			
-			let logos = this.images[this.state.config.activeAssistant];
-			
-			if (this.state.sayPlaying) {
-				logo = logos.speaking
+			if (isDisabled) {
+				logo = this.theme.images.default;
+				// micColor = this.theme.colors.textTTSColor;
+				appTextColor = '#777';
 			}
 			else {
-				logo = isMain? logos.hotword : logos.default
+				if (isSayPlaying) {
+					logo = this.theme.images.speaking;
+					appTextColor = this.theme.colors.textTTSColor;
+				}
+				else {
+					logo = this.theme.images.hotword;
+					appTextColor = this.theme.colors.textSTTColor;
+					// micColor = this.theme.colors.micSTTColor;
+				}
 			}
 			
-			this.setState({
-				logo
-			});
-			
-			this.setMicrophoneColor(isMain? this.colors.micAssistantMainColor : this.colors.micAssistantAppColor);
+			// let color = isMain? this.colors.micAssistantMainColor : this.colors.micAssistantAppColor
+			// this.setMicrophoneColor(micColor);
 		}
 		else {
-			this.setState({
-				logo: null //this.logos.mainMenu
-			});
-			this.setMicrophoneColor(this.colors.micMainMenuColor);
+			theme = 'mainmenu';
+			this.theme = this.themes[theme];
+			
+			logo = this.theme.images.default;
+			if (isSayPlaying) {
+				appTextColor = this.theme.colors.textTTSColor;
+			}
+			else {
+				appTextColor = this.theme.colors.textSTTColor;
+			}
+			//  micColor = this.theme.colors.micSTTColor;
+			// this.setTheme(this.themes.mainmenu);
+			// this.setState({
+			// 	logo: null //this.logos.mainMenu
+			// });
+			// this.setMicrophoneColor(this.colors.micMainMenuColor);
 		}
+		
+		// sttColor = this.theme.colors.textSTTColor;
+		// ttsColor = this.theme.colors.textTTSColor;
+		
+		this.setState({
+			logo,
+			theme,
+			// sttColor,
+			// ttsColor,
+			// appTextColor,
+		}, () => {
+			if (this.bumblebee.analyser) {
+				this.bumblebee.analyser.setLineColor(this.theme.colors.sttColor);
+			}
+		});
 	}
+	
+	// setTheme(theme) {
+	// 	this.theme = theme;
+	// }
 	
 	async main() {
 		setTimeout(function() {
@@ -271,7 +295,7 @@ class App extends Component {
 		
 		let logoImage;
 		if (this.state.logo) logoImage = (<img src={this.state.logo}/>);
-		else logoImage = (<img src={this.images.mainmenu}/>);
+		// else logoImage = (<img src={this.images.mainmenu}/>);
 			//logoImage = (<AppsIcon />);
 		
 		return (<div className="App">
@@ -287,7 +311,7 @@ class App extends Component {
 					<canvas id="speech-oscilloscope" className="oscilloscope" ref={this.speechOscilloscopeRef}/>
 					<canvas id="say-oscilloscope" className={"oscilloscope " + sayClass} ref={this.sayOscilloscopeRef}/>
 					
-					<div id="logo" onClick={e => this.toggleControls()}>
+					<div id="logo" onClick={e => this.clickLogo()}>
 						{/*<img src={"images/logos/" + this.state.logo + ".png"}/>*/}
 						{logoImage}
 					</div>
@@ -336,12 +360,18 @@ class App extends Component {
 			clss = 'tts';
 		}
 		
-		return (<div id="app-bar" className={clss}>
-			{name}
+		return (<div id="app-bar" style={{color: this.state.appTextColor}}>
+			{name} {this.state.appTextColor}
 		</div>);
 	}
 	
-	toggleControls() {
+	clickLogo() {
+	
+	}
+	
+	openDevTools() {
+		console.log('toggleControls')
+		ipcRenderer.send('dev-tools');
 		// this.setState({
 		// 	controlsVisible: !this.state.controlsVisible
 		// });
@@ -445,6 +475,7 @@ class App extends Component {
 	}
 	
 	showSettings() {
+		this.openDevTools();
 		// load Settings
 	}
 	

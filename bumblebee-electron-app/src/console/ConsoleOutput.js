@@ -16,6 +16,7 @@ export default function ConsoleOutput(props) {
 			// if (data.type === 'text') {
 			// 	if (data.assistant) assistant = data.assistant;
 			// }
+			
 			if (data.type === 'tts' && data.options && data.options.assistant) {
 				assistant = data.options.assistant;
 			}
@@ -23,10 +24,13 @@ export default function ConsoleOutput(props) {
 				assistant = data.assistant;
 			}
 			
-			if (assistant === 'bumblebee' || assistant === 'hey_edison') {
-				logoImage = (<img src={props.bumblebee.app.images[assistant].hotword}/>);
+			// logoImage = (<img src={props.bumblebee.app.state.logo}/>);
+			
+			if (assistant) { //} === 'bumblebee' || assistant === 'hey_edison') {
+				logoImage = (<img src={props.bumblebee.app.themes[assistant].images.hotword}/>);
 			}
-			else logoImage = (<img src={props.bumblebee.app.images.mainmenu}/>);
+			else logoImage = (<img src={props.bumblebee.app.themes.mainmenu.images.default}/>);
+			
 				//logoImage = (<AppsIcon />);
 
 			// if (props.bumblebee.app.state.logo) logoImage = (<img src={props.bumblebee.app.state.logo}/>);

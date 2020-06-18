@@ -97,7 +97,8 @@ class SayQueue extends EventEmitter {
 				canvas.height = 100;
 				this.analyser = new SpectrumAnalyser(analyser, canvas);
 				// this.analyser.setLineColor('#7c9fff');
-				this.analyser.setLineColor(this.app.colors.ttsColor);
+			
+				this.analyser.setLineColor(this.app.theme.colors.ttsColor);
 				
 				this.analyser.setBackgroundColor('#222');
 				this.analyser.start();

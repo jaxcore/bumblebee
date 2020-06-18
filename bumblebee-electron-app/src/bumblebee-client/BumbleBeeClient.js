@@ -69,6 +69,9 @@ class BumblebeeClient extends EventEmitter {
 			drawVADCanvas(app.vadStatusRef.current, status);
 		};
 
+		window.updateClientConfig = (config) => {
+			this.app.setElectronConfig(config);
+		}
 		window.deepspeechResults = (text, stats) => {
 			// debugger;
 			

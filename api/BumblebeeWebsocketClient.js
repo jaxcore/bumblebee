@@ -39,7 +39,6 @@ class BumblebeeWebsocketClient extends Client {
 		super(schema, store, defaults);
 		this.log = createLogger('BumblebeeWebsocketClient ' + (_instance++));
 		this.log('create', defaults);
-		clients[this.state.id] = this;
 	}
 	
 	init(jaxcore) {
@@ -124,6 +123,11 @@ class BumblebeeWebsocketClient extends Client {
 				socket.once('assistant-active-confirm-'+id, () => {
 					this.log('confirmed', id, 'wasActive', wasActive);
 					if (!wasActive) {
+						this.setState({
+							appName: 'main'
+						});
+						this.socketEmit('active-app', 'main');
+						
 						this.main();
 					}
 					else {
@@ -156,7 +160,8 @@ class BumblebeeWebsocketClient extends Client {
 	
 	async main() {
 		this.log('start main', this.state.hotword, this.state.assistantName);
-		this.setActiveApp('main');
+		// this.setActiveApp('main');
+		this.emit('main');
 	}
 	
 	setActiveApp(appName) {
@@ -171,6 +176,35 @@ class BumblebeeWebsocketClient extends Client {
 	socketEmit() {
 		let args = Array.prototype.slice.call(arguments);
 		if (this.socket) this.socket.emit.apply(this.socket, args);
+	}
+	
+	async recognize(options) {
+		// console.log('await recognize', options);
+		if (!options) options = {};
+		return new Promise((resolve, reject) => {
+			let timedOut = false;
+			
+			if (options.timeout) {
+				let timer = setTimeout(function () {
+					timedOut = true;
+					reject({
+						error: {
+							timedOut: true
+						}
+					});
+				}, options.timeout);
+				
+				this.once('recognize', function (text, stats) {
+					clearTimeout(timer);
+					if (!timedOut) resolve({text, stats});
+				});
+			}
+			else {
+				this.once('recognize', function (text, stats) {
+					resolve({text, stats});
+				});
+			}
+		});
 	}
 	
 	async registerAssistant(hotword, assistantName, AssistantClass, assistantOptions) {
@@ -201,6 +235,15 @@ class BumblebeeWebsocketClient extends Client {
 		});
 	}
 	
+	returnError(e) {
+		console.log('emit assistant-return-error', e);
+		this.socketEmit('assistant-return-error', e);
+	}
+	returnValue(r) {
+		console.log('emit assistant-return-value', r);
+		this.socketEmit('assistant-return-value', r);
+	}
+	
 	destroy() {
 		if (this.socket) this.socket.destroy();
 		delete this.socket;
@@ -216,16 +259,16 @@ class BumblebeeWebsocketClient extends Client {
 			callback(null, clients[serviceId], false);
 		}
 		else {
-			var instance = BumblebeeWebsocketClient.create(serviceConfig, serviceStore);
+			const client = BumblebeeWebsocketClient.create(serviceConfig, serviceStore);
+			clients[client.state.id] = client;
 			callback(null, clients[serviceId], true);
 		}
 	}
 	
 	static create(config, serviceStore) {
-		var id = BumblebeeWebsocketClient.id(config);
+		const id = BumblebeeWebsocketClient.id(config);
 		config.id = id;
-		let client = new BumblebeeWebsocketClient(config, serviceStore);
-		return client;
+		return new BumblebeeWebsocketClient(config, serviceStore);
 	}
 }
 

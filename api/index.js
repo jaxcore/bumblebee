@@ -1,7 +1,7 @@
 const Jaxcore = require('jaxcore');
 const BumblebeeWebSocketPlugin = {
 	services: {
-		bbWebsocketClient: {
+		bumblebee: {
 			service: require('./BumblebeeWebsocketClient'),
 			storeType: 'client'
 		}
@@ -10,7 +10,7 @@ const BumblebeeWebSocketPlugin = {
 
 const App = require('./App');
 const Assistant = require('./Assistant');
-const BumblebeeDevice = require('./BumblebeeDevice');
+// const BumblebeeDevice = require('./BumblebeeDevice');
 
 function connect(options) {
 	if (!options) options = {};
@@ -28,7 +28,7 @@ function connect(options) {
 	return new Promise(function (resolve, reject) {
 		const jaxcore = new Jaxcore();
 		jaxcore.addPlugin(BumblebeeWebSocketPlugin);
-		jaxcore.addDevice('bumblebee', BumblebeeDevice, 'client');
+		// jaxcore.addDevice('bumblebee', BumblebeeDevice, 'client');
 		
 		function connectSocket(options) {
 			let wOptions = {
@@ -41,7 +41,7 @@ function connect(options) {
 			
 			let serviceProfileName = 'websocket:'+websocketOptions.host+':'+websocketOptions.port;
 			
-			jaxcore.defineService(serviceProfileName, 'bbWebsocketClient', wOptions);
+			jaxcore.defineService(serviceProfileName, 'bumblebee', wOptions);
 			// debugger;
 			
 			let didConnect = false;
@@ -98,7 +98,7 @@ function connect(options) {
 					console.log('bbWebsocketClient', typeof bbWebsocketClient);
 					const api = {
 						jaxcore,
-						bbWebsocketClient,
+						bumblebee: bbWebsocketClient,
 						launchApp,
 						launchAssistant
 					};
@@ -111,7 +111,7 @@ function connect(options) {
 		
 		jaxcore.on('service-disconnected', (type, device) => {
 			console.log('service-disconnected', type, device);
-			if (type === 'bbWebsocketClient') {
+			if (type === 'bumblebee') {
 				console.log('websocket service-disconnected', type, device.id);
 				console.log('reconnecting', device.id, '...');
 				process.exit();
@@ -135,21 +135,6 @@ const BumblebeeAPI = {
 };
 
 function connectAssistant(options) {
-	// {
-	// 	hotword: 'bumblebee',
-	// 		name: 'Bumblebee',
-	// 	assistant: BumblebeeAssistant,
-	// 	autoStart: true
-	// }
-	// const {hotword, name, assistant, autoStart} = options;
-	
-	// console.log('options', options);
-
-	// return;
-	// const assistantOptions = {
-	// 	autoStart
-	// };
-	
 	async function _connect() {
 		try {
 			const api = await BumblebeeAPI.connect({
@@ -159,7 +144,7 @@ function connectAssistant(options) {
 			console.log('assistant', assistant);
 			
 			api.enableReconnect = function(callback) {
-				api.bbWebsocketClient.on('disconnect', function() {
+				api.bumblebee.on('disconnect', function() {
 					console.log('reconnecting...');
 					callback();
 				})

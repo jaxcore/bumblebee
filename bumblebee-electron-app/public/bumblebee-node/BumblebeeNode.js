@@ -41,6 +41,7 @@ class BumblebeeNode extends EventEmitter {
 	
 	}
 	
+	
 	async playSoundNode(name, theme) {
 		if (!theme) theme = 'startrek1';
 		let file = this.soundThemesPath + '/' + theme + '/' + name + '.wav';

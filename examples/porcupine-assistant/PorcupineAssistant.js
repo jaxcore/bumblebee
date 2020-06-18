@@ -1,6 +1,6 @@
 const BumblebeeAPI = require('../../api');
 
-class BumblebeeAssistant extends BumblebeeAPI.Assistant {
+class PorcupineAssistant extends BumblebeeAPI.Assistant {
 	constructor() {
 		// constructor is called when the websocket has connected
 		// each time the socket is started or stopped, a new instance of the assistant will be created
@@ -12,8 +12,8 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		// main is called once when the assistant is started or called upon using the hotword
 		console.log('main()');
 		
-		this.bumblebee.console('Bumblebee Main Menu');
-		await this.bumblebee.say('Bumblebee Ready');
+		this.bumblebee.console('Porcupine Main Menu');
+		await this.bumblebee.say('Porcupine Ready');
 		
 		return this.loop();
 	}
@@ -40,4 +40,4 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 	}
 }
 
-module.exports = BumblebeeAssistant;
+module.exports = PorcupineAssistant;

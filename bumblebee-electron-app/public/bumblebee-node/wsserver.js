@@ -61,6 +61,10 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 		}
 	});
 	
+	function getActiveAssistant() {
+		return app.state.activeAssistant;
+	}
+	
 	function getActiveAssistantSocket() {
 		return getAssistantSocket(app.state.activeAssistant);
 	}
@@ -119,9 +123,11 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 					})
 					socket.emit('assistant-active', true,id);
 				}
+				else {
+					console.log('the assistant was not found');
+				}
 			}
 			else {
-
 				let activeAssistantSocket = getActiveAssistantSocket();
 				if (activeAssistantSocket) {
 					debugger;
@@ -283,6 +289,34 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 				socket.emit('say-end-'+id);
 			});
 		});
+		
+		socket.on('assistant-return-error', (e) => {
+			console.log('assistant-return-error', e);
+		});
+		
+		socket.on('assistant-return-value', (value) => {
+			console.log('assistant-return-value', value);
+			
+			const hotword = app.state.socketAssistants[socket.id];
+			if (hotword) {
+				
+				if (hotword === getActiveAssistant()) {
+					console.log('this socket is the active assistant')
+					setActiveAssistant();
+				}
+				else {
+					console.log('this socket is NOT the active assistant');
+					debugger;
+				}
+				
+				bumblebee.console('assistant '+hotword+' returned '+JSON.stringify(value));
+				
+				bumblebee.say('the '+hotword+' assistant has exited').then(() => {
+				
+				});
+			}
+		});
+		
 	}
 	
 	function onSocketDisconnect(socket) {

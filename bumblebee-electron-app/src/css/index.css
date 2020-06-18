@@ -36,12 +36,12 @@ code {
   width: 100%;
 }
 
-#app-bar.assistant-main {
-  color: #d6bc22;
-}
-#app-bar.tts {
-  color: #7c9fff;
-}
+/*#app-bar.assistant-main {*/
+/*  color: #d6bc22;*/
+/*}*/
+/*#app-bar.tts {*/
+/*  color: #7c9fff;*/
+/*}*/
 
 #app-bar {
   position: absolute;

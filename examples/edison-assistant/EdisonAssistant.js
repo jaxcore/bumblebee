@@ -1,77 +1,43 @@
-// const BumblebeeAPI = require('../../api');
-//
-// class BumblebeeAssistant extends BumblebeeAPI.Assistant {
-// 	constructor() {
-// 		debugger;
-// 		super(...arguments);
-// 		debugger;
-// 	}
-// }
-//
-// module.exports = BumblebeeAssistant;
+const BumblebeeAPI = require('../../api');
 
-const Jaxcore = require('jaxcore');
-
-class Edison extends Jaxcore.Adapter {
+class EdisonAssistant extends BumblebeeAPI.Assistant {
 	constructor() {
-		debugger;
+		// constructor is called when the websocket has connected
+		// each time the socket is started or stopped, a new instance of the assistant will be created
 		super(...arguments);
-		
-		console.log('services', this.services);
-		
-		const bumblebee = this.services.bbWebsocketClient;
-		
-		this.addEvents(bumblebee, {
-			activeApp: function(appName) {
-				console.log('activeApp', appName);
-				debugger;
-				if (appName === 'main') {
-					let r = this.main();
-					console.log('main r', r);
-					return;
-				}
-				else {
-					process.exit();
-				}
-			},
-			hotword: function(hotword) {
-				this.log('bumblebee hotword:', hotword);
-				bumblebee.console('hotword detected');
-			},
-			command: function(text, stats) {
-				this.log('bumblebee command:', text, stats);
-				bumblebee.console({
-					type: 'command',
-					text,
-					stats
-				});
-			},
-			recognize: function(text, stats) {
-				this.log('bumblebee recognize:', text, stats);
-				bumblebee.console({
-					type: 'stt',
-					text,
-					stats
-				});
-			}
-		});
-		
-		this.on('teardown', function() {
-			debugger;
-		})
+		console.log('constructor()');
 	}
 	
 	async main(args) {
-		const bumblebee = this.services.bbWebsocketClient;
-		// bumblebee.setActiveApp('main');
+		// main is called once when the assistant is started or called upon using the hotword
+		console.log('main()');
 		
-		console.log('main');
+		this.bumblebee.console('Edison Main Menu');
+		await this.bumblebee.say('Edison Ready');
 		
-		// const r = await bumblebee.recognizeAny();
-		bumblebee.console('Edison Main Menu');
-		bumblebee.say('Edison Ready');
+		return this.loop();
+	}
+	
+	async loop() {
+		console.log('loop()');
 		
+		let recognition = await this.bumblebee.recognize();
+		if (recognition) {
+			// received DeepSpeech recognition
+			console.log('recognition:', recognition);
+			this.bumblebee.console(recognition);
+			await this.bumblebee.say('You said: ' + recognition.text);
+			
+			// say "exit" to shut down the assistant
+			if (recognition.text === 'exit') {
+				await this.bumblebee.say('exiting');
+				return true; // return out of the loop to shut down the assistant
+			}
+		}
+		
+		// if nothing was recognized, call this.loop() again to wait for the next recognition
+		return this.loop();
 	}
 }
 
-module.exports = Edison;
+module.exports = EdisonAssistant;

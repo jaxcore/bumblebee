@@ -37,6 +37,7 @@ function createWindow() {
 	});
 	
 	ipcMain.on('dev-tools', (event, arg) => {
+		console.log('open dev tools');
 		mainWindow.webContents.openDevTools();
 	});
 	

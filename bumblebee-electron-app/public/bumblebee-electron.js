@@ -116,6 +116,10 @@ class BumblebeeElectron extends Service {
 		});
 	}
 	
+	updateClientConfig() {
+		this.execFunction('updateClientConfig', this.state);
+	}
+	
 	connect() {
 		if (!this.state.connected) {
 			this.setState({
