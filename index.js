@@ -1,16 +1,16 @@
 const Jaxcore = require('jaxcore');
+const BumblebeeWebsocketClient = require('./lib/BumblebeeWebsocketClient');
 const BumblebeeWebSocketPlugin = {
 	services: {
 		bumblebee: {
-			service: require('./BumblebeeWebsocketClient'),
+			service: BumblebeeWebsocketClient,
 			storeType: 'client'
 		}
 	}
 };
 
-const App = require('./App');
-const Assistant = require('./Assistant');
-// const BumblebeeDevice = require('./BumblebeeDevice');
+const App = require('./lib/App');
+const Assistant = require('./lib/Assistant');
 
 function connect(options) {
 	if (!options) options = {};
@@ -28,7 +28,6 @@ function connect(options) {
 	return new Promise(function (resolve, reject) {
 		const jaxcore = new Jaxcore();
 		jaxcore.addPlugin(BumblebeeWebSocketPlugin);
-		// jaxcore.addDevice('bumblebee', BumblebeeDevice, 'client');
 		
 		function connectSocket(options) {
 			let wOptions = {
@@ -42,7 +41,6 @@ function connect(options) {
 			let serviceProfileName = 'websocket:'+websocketOptions.host+':'+websocketOptions.port;
 			
 			jaxcore.defineService(serviceProfileName, 'bumblebee', wOptions);
-			// debugger;
 			
 			let didConnect = false;
 			jaxcore.startServiceProfile(serviceProfileName,(err, bbWebsocketClient) => {
@@ -52,12 +50,6 @@ function connect(options) {
 				else {
 					didConnect = true;
 					
-					// bbWebsocketClient.on('disconnect', function() {
-					// 	console.log('disconnected', bbWebsocketClient.id);
-					// 	// process.exit();
-					// })
-					
-					// debugger;
 					bbWebsocketClient.init(jaxcore);
 					
 					async function launchApp(AppAdapterClass) {
@@ -76,9 +68,8 @@ function connect(options) {
 							serviceProfiles: [serviceProfileName]
 						});
 						
-						debugger;
 						jaxcore.connectAdapter(null, adapterProfileName, function(err, adapter) {
-							debugger;
+						
 						});
 					}
 					
@@ -96,8 +87,6 @@ function connect(options) {
 						launchApp,
 						launchAssistant
 					};
-					global.api = api;
-					global.jaxcore = api.jaxcore;
 					resolve(api);
 				}
 			});
@@ -128,14 +117,15 @@ const BumblebeeAPI = {
 	Assistant
 };
 
-function connectAssistant(hotword, assistantClass, options) {
+function connectAssistant(hotword, assistantClass, options, callback) {
 	async function _connect() {
 		try {
 			const api = await BumblebeeAPI.connect({
 				// enableReconnect: connect
 			});
+			
 			const assistant = await api.launchAssistant(hotword, assistantClass, options);
-			console.log('assistant', assistant);
+			if (callback) callback(assistant);
 			
 			api.enableReconnect = function(callback) {
 				api.bumblebee.on('disconnect', function() {
@@ -144,7 +134,6 @@ function connectAssistant(hotword, assistantClass, options) {
 				})
 			}
 			api.enableReconnect(_connect);
-			
 		}
 		catch(e) {
 			console.error('error:', e);
