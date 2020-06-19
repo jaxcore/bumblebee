@@ -1,11 +1,11 @@
-![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/logo.png)
+![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/assets/logo.png)
 # Bumblebee
 
 ### JavaScript Voice Application Platform
 
 Write your own voice apps and assistants with an easy-to-learn JavaScript API!
 
-![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/screenshot.jpg)
+![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/assets/screenshot.jpg)
 
 ## About Bumblebee
 
