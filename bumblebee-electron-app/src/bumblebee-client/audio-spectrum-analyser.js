@@ -99,4 +99,4 @@ class SpectrumAnalyzer {
 	}
 }
 
-module.exports = SpectrumAnalyzer;
+export default SpectrumAnalyzer;

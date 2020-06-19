@@ -50,5 +50,6 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 }
 
 BumblebeeAPI.connectAssistant('bumblebee', BumblebeeAssistant, {
-	autoStart: true
+	autoStart: true,
+	timeout: 3000
 });

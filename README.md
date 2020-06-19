@@ -1,51 +1,53 @@
 ![screenshot](logo.png)
 # Bumblebee
 
-## JavaScript Voice Application Server
+### JavaScript Voice Application Operating System
 
-Write your own voice apps using JavaScript!
+Write your own voice apps and assistants with an easy-to-learn JavaScript API!
 
 ![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/screenshot.jpg)
-
 
 ## About Bumblebee
 
 Bumblebee is not just a voice assistant, it is a set of libraries, tools, and methodologies that
-enables JavaScript developers a new way to write their own interactive voice assistants in either
+enables JavaScript developers a new way to write their own conversational voice assistants in either
 NodeJS or on the web.
 
-The core technologies that Bumblebee utilizes are:
+The core technologies that Bumblebee uses are:
 
-- [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) - Tensorflow/JavaScript speech-to-text processing
+- [NodeJS](https://nodejs.org/en/) - V8 JavaScript engine
+- [ElectronJS](https://www.electronjs.org/) - JavaScript desktop application framework
+- [Mozilla DeepSpeech](https://github.com/mozilla/DeepSpeech) - Tensorflow-based speech-to-text processing
+- [Picovoice Porcupine](https://github.com/Picovoice/porcupine) - JavaScript hotword detection
 - [meSpeak](https://www.masswerk.at/mespeak/) - JavaScript text-to-speech library
-- [Picovoice Porcupine](https://github.com/Picovoice/porcupine) - JavaScript wake word (hotword) detection
 
-Bumblebee builds upon these by making them easier to use and tying them
+Bumblebee builds upon these technologies by making them easier to use and tying them
 together into an integrated voice application API.  Because these systems
 run locally without any cloud services, stand-alone privacy-focused always-on voice applications can
 finally be realized.
 
-The Bumblebee project includes a voice app server console ([bumblebee-electron-app](bumblebee-electron-app)), which
-automatically installs and sets up DeepSpeech, and runs the bumblebee websocket service that
+The Bumblebee project includes a voice app server console ([bumblebee-electron-app](bumblebee-electron-app)),
+which automatically installs and sets up DeepSpeech, and runs the bumblebee websocket service that
 voice applications can connect to. The applications run independently of the bumblebee server,
-and use a websocket client API to connect and communicate by receiving speech-to-text results
+and use a websocket API to connect and communicate by receiving speech-to-text results
 and hotword commands, or issuing text-to-speech instructions.
 
 There are limitless ways to expand Bumblebee's capabilities by writing new applications that control
 devices or services on a home network, retrieve data from the internet, and anything else you can think of.
 And as you will see, they are both ***EASIER*** and ***MORE FUN*** to write than you think.
 
-Bumblebee voice apps are small, simple, single file scripts, that can be shared easily between
-systems.  By associating a voice app with a hotword, it becomes a voice assistant that can be called
-upon at any time.
+Bumblebee voice apps are small, simple, single file scripts. They can be shared easily between
+systems and build upon eachother to build larger and smarter voice applications, and
+by associating a voice app with a hotword, your app becomes a voice assistant
+that can be called upon at any time.
 
 ## Install
 
-It's time to get started.
+It's time to get started using Bumblebee to write your first voice application.
 
 #### 1. Install NodeJS
 
-Although the Bumblebee app is an Electron App which supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
+Although Bumblebee supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
 
 Download and install [NodeJS](https://nodejs.org/en/) (v13 or higher).
 
@@ -60,10 +62,10 @@ npm install
 npm run rebuild
 ```
 
-#### 3. Run the bumblebee assistant
+#### 3. Start bumblebee
 
 ```
-npm run bumblebee-assistant
+npm run bumblebee-dev
 ```
 
 The console as pictured above should load it up.
