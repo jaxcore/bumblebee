@@ -1,6 +1,6 @@
 {
   "name": "bumblebee-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Bumblebee voice application server API",
   "main": "index.js",
   "scripts": {

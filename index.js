@@ -1,3 +1,4 @@
+
 const Jaxcore = require('jaxcore');
 const BumblebeeWebsocketClient = require('./lib/BumblebeeWebsocketClient');
 const BumblebeeWebSocketPlugin = {
@@ -13,6 +14,7 @@ const App = require('./lib/App');
 const Assistant = require('./lib/Assistant');
 
 function connect(options) {
+	
 	if (!options) options = {};
 	
 	let websocketOptions = {
@@ -22,7 +24,7 @@ function connect(options) {
 		options: {
 			reconnection: false
 		},
-		serviceTimeout: 10000
+		serviceTimeout: options.timeout || 10000
 	};
 	
 	return new Promise(function (resolve, reject) {
@@ -37,6 +39,8 @@ function connect(options) {
 				if (options.host) wOptions.host = options.host;
 				if (options.port) wOptions.port = options.port;
 			}
+			
+			console.log('connecting:', wOptions);
 			
 			let serviceProfileName = 'websocket:'+websocketOptions.host+':'+websocketOptions.port;
 			
@@ -120,11 +124,18 @@ const BumblebeeAPI = {
 function connectAssistant(hotword, assistantClass, options, callback) {
 	async function _connect() {
 		try {
-			const api = await BumblebeeAPI.connect({
-				// enableReconnect: connect
-			});
+			options = options || {};
 			
-			const assistant = await api.launchAssistant(hotword, assistantClass, options);
+			const connectOptions = {
+				timeout: options.timeout
+			};
+			
+			const assistantOptions = {
+				autoStart: options.autoStart
+			};
+			
+			const api = await BumblebeeAPI.connect(connectOptions);
+			const assistant = await api.launchAssistant(hotword, assistantClass, assistantOptions);
 			if (callback) callback(assistant);
 			
 			api.enableReconnect = function(callback) {
