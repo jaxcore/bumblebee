@@ -66,7 +66,8 @@ export default function ConsoleOutput(props) {
 			}
 			else if (data.type === 'text') {
 				text = data.text;
-				// icon = logoImage;
+				// if (data.assistant)
+				icon = logoImage;
 				clss = 'text';
 			}
 			else if (data.type === 'tts') {

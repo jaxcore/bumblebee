@@ -34,12 +34,12 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 	
 	// fornt-end calls the back-end to retrieve the TTS audio buffer
 	ipcMain.handle('say-data', async (event, text, options) => {
-		if (options && options.profile) {
-			debugger;
-		}
-		else {
-			debugger;
-		}
+		// if (options && options.profile) {
+		// 	debugger;
+		// }
+		// else {
+		// 	debugger;
+		// }
 		const result = await sayNode.getAudioData(text, options);
 		return result;
 	});

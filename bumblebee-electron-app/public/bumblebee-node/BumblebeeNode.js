@@ -8,26 +8,30 @@ const connectWSServer = require('./wsserver');
 
 const ipcMain = require('electron').ipcMain;
 
-class BumblebeeNode extends EventEmitter {
-	constructor(jaxcore, bumblebeeElectron, deepspeech, sayNode) {
+class BumblebeeNode extends EventEmitter {	// todo: refactor into an adapter
+	constructor(app) {
 		super();
 		
 		global.bumblebee = this;
 		
 		this.recording = false;
 		
-		this.jaxcore = jaxcore;
-		this.app = bumblebeeElectron;
+		this.app = app;
+		this.jaxcore = app.jaxcore;
 		
-		this.hotword = connectHotword(this, this.app, deepspeech);
-		this.deepspeech = connectSTT(this, this.app, deepspeech, this.hotword);
-		this.say = connectTTS(this, this.app, sayNode);
+		this.hotword = connectHotword(this, this.app, this.app.deepspeech);
+		this.deepspeech = connectSTT(this, this.app, this.app.deepspeech, this.hotword);
+		this.say = connectTTS(this, this.app, this.app.sayNode);
+		this.bbWebsocketServer = connectWSServer(this, this.app, this.app.deepspeech, this.hotword, this.app.bbWebsocketServer);
 		
-		connectWSServer(this, this.app, deepspeech, this.hotword, (bbWebsocketServer) => {
-			this.bbWebsocketServer = bbWebsocketServer;
-			
-			this.startMainMenu();
-		});
+		// onSocketDisconnect
+		// debugger;
+		
+		// connectWSServer(this, this.app, this.app.deepspeech, this.hotword, (bbWebsocketServer) => {
+		// 	this.bbWebsocketServer = bbWebsocketServer;
+		//
+		// 	this.startMainMenu();
+		// });
 		
 		this.soundThemesPath = __dirname + '/../sounds';
 		
@@ -36,11 +40,6 @@ class BumblebeeNode extends EventEmitter {
 			return result;
 		});
 	}
-	
-	startMainMenu() {
-	
-	}
-	
 	
 	async playSoundNode(name, theme) {
 		if (!theme) theme = 'startrek1';

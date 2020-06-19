@@ -6,7 +6,10 @@ export default function(data) {
 		});
 	}
 	else if (typeof data === 'object') {
-		if (data.type === 'error') {
+		if (data.type === 'text' && data.text) {
+			this.addSpeechOutput(data);
+		}
+		else if (data.type === 'error') {
 			let t = 'Error: '+data.text;
 			if (data.assistant) t =  data.assistant + ' ' + t;
 			this.addSpeechOutput({

@@ -5,12 +5,29 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 	// every time the assistant connects to the server, a new instance of the assistant will be created
 	constructor() {
 		super(...arguments);
+		
+		this.doIntro = false;
+		this.addEvents(this.bumblebee, {
+			systemMessage: function (message) {
+				if (message.startBumblebeeIntro === true) {
+					this.doIntro = true;
+					//this.bumblebee.say('It looks like this is your first time using Bumblebee');
+				}
+			}
+		});
 	}
 	
 	// onStart is called once when the assistant called upon using a hotword or activated automatically
 	async onStart() {
 		this.bumblebee.console('Bumblebee Main Menu');
-		await this.bumblebee.say('Bumblebee Ready');
+		if (this.doIntro) {
+			// await this.bumblebee.say('Yes first time');
+			await this.bumblebee.say('It looks like this is your first time using Bumblebee');
+			await this.bumblebee.say('Try saying something into your microphone now');
+		}
+		else {
+			await this.bumblebee.say('Bumblebee Ready');
+		}
 	}
 	
 	// onHotword is called immediately when the hotword is detected
@@ -39,8 +56,20 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 			return true; // return out of the loop to shut down the assistant
 		}
 		
-		// respond with a text-to-speech instruction
-		await this.bumblebee.say('You said: ' + recognition.text);
+		if (this.doIntro) {
+			this.doIntro = false;
+			await this.bumblebee.say('You said: ' + recognition.text);
+			await this.bumblebee.say('Okay, that\'s terrific');
+			await this.bumblebee.say('It looks like everything is working');
+			await this.bumblebee.say('For information about how to use Bumblebeee, visit the following web page');
+			await this.bumblebee.console('https://github.com/jaxcore/bumblebee');
+		}
+		else {
+			// respond with a text-to-speech instruction
+			await this.bumblebee.console('TEXT You said: ' + recognition.text);
+			await this.bumblebee.say('You said: ' + recognition.text);
+		}
+		
 	}
 	
 	// onStop is called after this.loop() returns, or if this.abort() was called

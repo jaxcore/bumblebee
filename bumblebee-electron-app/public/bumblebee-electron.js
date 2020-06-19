@@ -53,26 +53,72 @@ class BumblebeeElectron extends Service {
 			this.setState({
 				deepspeechInstalled: true
 			});
-			this.startDeepspeech(function() {
-				console.log('done');
-			});
+			// this.startDeepspeech(function() {
+			// 	console.log('done');
+			// });
+			// debugger;
 		});
 		
 		global.app = this;
 	}
 	
-	init(jaxcore, callback) {
+	init(jaxcore, mainWindow) {
 		this.jaxcore = jaxcore;
-		
-		this.jaxcore.defineService('Say', 'sayNode', {});
-		
-		this.jaxcore.startServiceProfile('Say',  (err, sayNode) => {
-			this.sayNode = sayNode;
-			this.startDeepspeech((err, bumblebee) => {
-				callback(err, bumblebee);
+		this.setWindow(mainWindow);
+	}
+	
+	async initServer() {
+		if (this.bumblebee) {
+			debugger;
+			return true;
+		}
+		return this.startServices();
+	}
+	async startServices() {
+		return new Promise((resolve, reject) => {
+			// debugger;
+			
+			this.jaxcore.startServiceProfile('Say', (err, sayNode) => {
+				if (err) {
+					reject(err);
+					return;
+				}
+				
+				// debugger;
+				
+				this.sayNode = sayNode;
+				// this.startDeepspeech((err, bumblebee) => {
+				// 	callback(err, bumblebee);
+				// });
+				
+				this.startDeepspeech((err, deepspeech) => {
+					if (err) {
+						reject(err);
+						return;
+					}
+					
+					this.deepspeech = deepspeech;
+					// debugger;
+					
+					this.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						this.bbWebsocketServer = bbWebsocketServer;
+						
+						// debugger;
+						const bumblebee = new BumblebeeNode(this);
+						this.bumblebee = bumblebee;
+						
+						resolve(true);
+					});
+					
+					// bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
+					// callback(err, deepspeech);
+				});
 			});
 		});
-		
 	}
 	
 	startDeepspeech(callback) {
@@ -85,7 +131,7 @@ class BumblebeeElectron extends Service {
 				modelPath: modelsPath,
 				silenceThreshold: 300,
 				vadMode: 'VERY_AGGRESSIVE',
-				debug: false
+				debug: true
 			});
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {
@@ -96,9 +142,10 @@ class BumblebeeElectron extends Service {
 					return;
 				}
 				
-				this.bumblebee = new BumblebeeNode(this.jaxcore, this, deepspeech, this.sayNode);
+				// this.bumblebee = new BumblebeeNode(this.jaxcore, this, deepspeech, this.sayNode);
 				
-				callback(null, this.bumblebee);
+				// callback(null, this.bumblebee);
+				callback(null, deepspeech);
 			});
 		}
 		else {
@@ -108,8 +155,34 @@ class BumblebeeElectron extends Service {
 		}
 	}
 	
+	startServer(callback) {
+		// return new Promise(function(resolve, reject) {
+			this.jaxcore.startServiceProfile('Bumblebee Assistant Server', callback);
+			// this.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
+			//
+			// 	if (err) {
+			// 		debugger;
+			// 		reject(err);
+			// 	}
+			// 	else {
+			// 		debugger;
+			//
+			// 		// bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
+			//
+			// 		// bumblebee.bbWebsocketServer = bbWebsocketServer;
+			// 		// bumblebee.say('okay, starting server...');
+			//
+			// 		// callback(bbWebsocketServer);
+			//
+			// 		resolve(bbWebsocketServer);
+			// 	}
+			// 	// bbWebsocketServer
+			// })
+		// })
+	}
+	
 	setWindow(mainWindow) {
-		this.mainWindow = mainWindow;
+		// this.mainWindow = mainWindow;
 		
 		this.execFunction = function(functionName, args, callback) {
 			executeFunction(mainWindow, functionName, args, callback);
@@ -122,6 +195,24 @@ class BumblebeeElectron extends Service {
 		ipcMain.on('client-ready', (event, arg) => {
 			console.log('client-ready');
 			event.reply('electron-ready', this.state);
+		});
+		
+		ipcMain.handle('bumblebee-start-server', async (event) => {
+			const r = await this.initServer();
+			// debugger;
+			return r;
+			// console.log('bumblebee-start-service', hotword, command);
+			// try {
+			// 	const server = await startServer();
+			// 	console.log('server', server.state);
+			// 	debugger;
+			// 	return true;
+			// }
+			// catch(e) {
+			// 	return {
+			// 		error: e.toString()
+			// 	}
+			// }
 		});
 	}
 	

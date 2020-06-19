@@ -287,13 +287,19 @@ class BumblebeeClient extends EventEmitter {
 			this.app.showInstall(true);
 			return;
 		}
+		if (this.app.state.recording) {
+			console.log('already recording')
+			debugger;
+		}
 		if (!this.app.state.recording) {
 			if (this.app.state.useSystemMic) {
+				// debugger;
 				ipcRenderer.send('recording-start');
 			}
 			this.app.setState({
 				recording: true
 			}, () => {
+				// debugger;
 				this.microphone.start();
 			});
 		}

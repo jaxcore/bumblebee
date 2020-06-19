@@ -25,13 +25,16 @@ class Microphone extends EventEmitter {
 				for (let i=0;i<data.length;i++) {
 					data[i] = 0;
 				}
+				console.log('muted');
 				// return;
 			}
+			// else console.log('recording', data.length);
 			
 			if (this.options.ipcRenderer && this.options.ipcStreamEvent) {
 				this.options.ipcRenderer.send(this.options.ipcStreamEvent, data, sampleRate);
 			}
 			else {
+				// debugger;
 				this.emit('data', data, sampleRate);
 			}
 		};
@@ -77,11 +80,13 @@ class Microphone extends EventEmitter {
 			
 			this.emit('analyser', this.audioAnalyser);
 			
+			// debugger;
 			// audioContextCallback(audioAnalyser, gainNode);
 		};
 		
 		const fail = (e) => {
 			console.error('recording failure', e);
+			debugger;
 		};
 		
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {

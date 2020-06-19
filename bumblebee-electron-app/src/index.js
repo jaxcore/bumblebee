@@ -1,5 +1,5 @@
 /*
-    Bumblebee - JavaScript Voice Application Server
+    qBumblebee - JavaScript Voice Application Platform
     Copyright (C) 2020 Jaxcore Software Inc.
 
     This program is free software: you can redistribute it and/or modify

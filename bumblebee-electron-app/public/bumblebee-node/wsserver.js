@@ -12,11 +12,13 @@ const hotwordSubstitutions = {
 	porcupine: []
 }
 
-module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword, callback) {
+module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword, bbWebsocketServer) {
 	
 	// const deepspeech = app.deepspeech;
 	// const bumblebeeHowtord = app.bumblebeeHotword;
 	// const say = app.say;
+	
+	let doBumblebeeIntro = false;
 	
 	bbHotword.on('hotword', function (hotword) {
 		console.log('Hotword Detected:', hotword);
@@ -260,6 +262,12 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			
 			socket.emit('register-assistant-response', r);
 			
+			if (doBumblebeeIntro) {
+				socket.emit('system-message', {
+					startBumblebeeIntro: true
+				});
+				doBumblebeeIntro = false;
+			}
 			
 			if (assistantOptions) {
 				if (assistantOptions.autoStart === true) {
@@ -272,6 +280,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			// socket.bbAssistant = hotword;
 		}
 		else {
+			debugger;
 			socket.emit('register-assistant-response', {
 				success: false,
 				hotwordsAvailable: app.state.hotwordsAvailable
@@ -280,6 +289,9 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 	}
 	
 	function onSocketConnect(socket) {
+		
+		// debugger;
+		
 		socket.on('register-assistant', (hotword, assistantName, assistantOptions) => {
 			registerAssistant(socket, hotword, assistantName, assistantOptions);
 		});
@@ -398,22 +410,57 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 	
 	function onSocketDisconnect(socket) {
 		console.log('onSocketDisconnect', socket.id);
-		debugger;
+		// debugger;
 		unregisterAssistant(socket);
 	}
 	
-	ipcMain.once('bumblebee-start-server', (event, hotword, command) => {
-		console.log('bumblebee-start-service', hotword, command);
-		app.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
-			bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
-			
-			bumblebee.bbWebsocketServer = bbWebsocketServer;
-			
-			// debugger;
-			// bumblebee.say('okay, starting server...');
-			
-			callback(bbWebsocketServer);
-			// bbWebsocketServer
-		})
+	bbWebsocketServer.onSocketConnect = onSocketConnect;
+	bbWebsocketServer.onSocketDisconnect = onSocketDisconnect;
+	
+	ipcMain.on('start-bumblebee-intro', function(event) {
+		// debugger;
+		doBumblebeeIntro = true;
+		// debugger;
 	});
+	
+	// async function startServer() {
+	// 	return new Promise(function(resolve, reject) {
+	// 		app.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
+	// 			if (err) {
+	// 				debugger;
+	// 				reject(err);
+	// 			}
+	// 			else {
+	// 				debugger;
+	//
+	// 				bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
+	//
+	// 				bumblebee.bbWebsocketServer = bbWebsocketServer;
+	// 				// bumblebee.say('okay, starting server...');
+	//
+	// 				// callback(bbWebsocketServer);
+	//
+	// 				resolve(bbWebsocketServer);
+	// 			}
+	// 			// bbWebsocketServer
+	// 		})
+	// 	})
+	// }
+	
+	// ipcMain.on('bumblebee-start-server', async (event, hotword, command) => {
+	// 	console.log('bumblebee-start-service', hotword, command);
+	// 	try {
+	// 		const server = await startServer();
+	// 		console.log('server', server.state);
+	// 		debugger;
+	// 		return true;
+	// 	}
+	// 	catch(e) {
+	// 		return {
+	// 			error: e.toString()
+	// 		}
+	// 	}
+	// });
+	
+	return bbWebsocketServer;
 }

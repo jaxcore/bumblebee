@@ -1,5 +1,5 @@
 /*
-    Bumblebee - JavaScript Voice Application Server
+    qBumblebee - JavaScript Voice Application Platform
     Copyright (C) 2020 Jaxcore Software Inc.
 
     This program is free software: you can redistribute it and/or modify
@@ -29,12 +29,12 @@ import BumblebeeClient from './bumblebee-client/BumblebeeClient';
 import ConsoleOutput from './console/ConsoleOutput';
 import _console from './console/console';
 
-import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
+// import DeepSpeechInstalled from './apps/DeepSpeechInstalled';
 
 import themes from './themes';
 
 
-import Main from './Main';
+// import Main from './Main';
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -193,29 +193,29 @@ class App extends Component {
 	// 	this.theme = theme;
 	// }
 	
-	async main() {
-		setTimeout(function() {
-			// debugger;
-			ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
-		},100);
-		
-		// this.bumblebee.console('main()');
-		//
-		// try {
-		// 	await Main(this.bumblebee);
-		// }
-		// catch(e) {
-		// 	this.addSpeechOutput({
-		// 		text: e.toString()
-		// 	});
-		// 	debugger;
-		// 	await this.bumblebee.say('the main application encountered an error');
-		// }
-		//
-		// await this.bumblebee.say('restarting main');
-		//
-		// return this.main();
-	}
+	// async main() {
+	// 	setTimeout(function() {
+	// 		// debugger;
+	// 		ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
+	// 	},100);
+	//
+	// 	// this.bumblebee.console('main()');
+	// 	//
+	// 	// try {
+	// 	// 	await Main(this.bumblebee);
+	// 	// }
+	// 	// catch(e) {
+	// 	// 	this.addSpeechOutput({
+	// 	// 		text: e.toString()
+	// 	// 	});
+	// 	// 	debugger;
+	// 	// 	await this.bumblebee.say('the main application encountered an error');
+	// 	// }
+	// 	//
+	// 	// await this.bumblebee.say('restarting main');
+	// 	//
+	// 	// return this.main();
+	// }
 	
 	resize() {
 		let contentPanelRef = this.contentPanelRef.current;
@@ -235,9 +235,11 @@ class App extends Component {
 			this.bumblebee = new BumblebeeClient(this);
 			
 			if (this.state.config.deepspeechInstalled) {
-				this.bumblebee.startRecording();
+				debugger;
+				this.startServer();
+				// this.bumblebee.startRecording();
 				// this.launch('MainMenu');
-				this.main();
+				// this.main();
 				// this.bumblebee.simulateSTT('main menu');
 			}
 			else {
@@ -278,26 +280,58 @@ class App extends Component {
 	}
 	
 	deepspeechInstalled() {
+		// debugger;
 		this.setState({
 			showInstallDialog: false,
 		});
 		this.updateConfig();
 		// this.startIntro();
-		debugger;
+		// debugger;
+		this.startServer().then(() => {
+			// debugger;
+			ipcRenderer.send('start-bumblebee-intro');
+		});
 		
-		let r = DeepSpeechInstalled(this.bumblebee);
-		this.main();
+		//
+		// let r = DeepSpeechInstalled(this.bumblebee);
+		// this.main();
+		
+		// ipcRenderer.send('bumblebee-start-server', 'bumblebee', 'help');
 	}
 	
-	startIntro() {
-		// customize(this)
-		// .then(r => {
-		// 	debugger;
-		// })
-		// .catch(e => {
-		// 	debugger;
+	async startServer() {
+		const response = await ipcRenderer.invoke('bumblebee-start-server');
+		if (response === true) {
+			this.bumblebee.startRecording();
+			return true;
+		}
+		else {
+			throw response;
+			// debugger;
+			// return false;
+		}
+		// ipcRenderer.invoke('bumblebee-start-server').then((response) => {
+		// 	if (response === true) {
+		// 		console.log(response);
+		// 		debugger;
+		// 		this.bumblebee.startRecording();
+		// 	}
+		// 	else {
+		// 		debugger;
+		// 	}
 		// });
 	}
+	
+	//
+	// startIntro() {
+	// 	// customize(this)
+	// 	// .then(r => {
+	// 	// 	debugger;
+	// 	// })
+	// 	// .catch(e => {
+	// 	// 	debugger;
+	// 	// });
+	// }
 	
 	showInstall(show) {
 		this.setState({

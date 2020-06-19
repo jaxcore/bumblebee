@@ -63,6 +63,7 @@ class BumblebeeWebsocketServer extends Client {
 		this.bumblebee = bumblebee;
 		this.onSocketConnect = onSocketConnect;
 		this.onSocketDisconnect = onSocketDisconnect;
+		
 		// console.log('init', typeof app, typeof bumblebee);
 		// bumblebee.connectWebsocketServer();
 		// bumblebee.on('hotword', (hotword) => {

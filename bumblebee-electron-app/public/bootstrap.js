@@ -16,6 +16,8 @@ const createJaxcore = function(callback) {
 	
 	jaxcore.defineService('Bumblebee Electron', 'bumblebee-electron', {});
 	
+	jaxcore.defineService('Say', 'sayNode', {});
+	
 	jaxcore.addPlugin(websocketPlugin);
 	jaxcore.addPlugin(BumblebeeDeepSpeech);
 	
@@ -44,16 +46,20 @@ const startBumblebeeElectron = function(callback) {
 	jaxcore.startServiceProfile('Bumblebee Electron',  function(err, bumblebeeElectron) {
 		console.log('bumblebeeElectron');
 		
-		bumblebeeElectron.init(jaxcore, (err, bumblebee) => {
-			if (err) {
-				console.log('init err: ', err);
-			}
-			else {
-				const mainWindow = windowManager(jaxcore);
-				bumblebeeElectron.setWindow(mainWindow);
-				callback(bumblebeeElectron);
-			}
-		});
+		// bumblebeeElectron.init(jaxcore, (err, bumblebee) => {
+		// 	if (err) {
+		// 		console.log('init err: ', err);
+		// 	}
+		// 	else {
+		// 		const mainWindow = windowManager(jaxcore);
+		// 		bumblebeeElectron.setWindow(mainWindow);
+		// 		callback(bumblebeeElectron);
+		// 	}
+		// });
+		const mainWindow = windowManager(jaxcore);
+		bumblebeeElectron.init(jaxcore, mainWindow);
+		// bumblebeeElectron.setWindow(mainWindow);
+		// callback(bumblebeeElectron);
 	});
 }
 

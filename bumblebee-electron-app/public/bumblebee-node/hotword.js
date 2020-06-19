@@ -22,6 +22,8 @@ module.exports = function connecthotword(bumblebee, bumblebeeElectron) {
 	});
 	
 	ipcMain.on('recording-start', (event) => {
+		console.log('recording-start');
+		debugger;
 		bumblebeeElectron.setState({recording: true});
 		bumblebee.playSound('on').then(() => {
 			console.log('recording-start on DONE');

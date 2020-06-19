@@ -31,7 +31,15 @@
     "bumblebee-build": "react-scripts build",
     "bumblebee": "electron ./build",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
-    "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75"
+    "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.jaxcore.bumblebee",
+    "mac": {
+      "category": "speech recognition"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
