@@ -45,11 +45,13 @@ that can be called upon at any time.
 
 It's time to get started using Bumblebee to write your first voice application.
 
-#### 1. Install NodeJS
+#### 1. Install NodeJS and Yarn
 
 Although Bumblebee supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
 
-Download and install [NodeJS](https://nodejs.org/en/) (v13 or higher).
+Install [NodeJS](https://nodejs.org/en/), v13 or higher.
+
+Install the [Yarn](https://classic.yarnpkg.com/en/docs/install) package manager, v1.12.3 or higher.
 
 #### 2. Clone this repository
 
@@ -58,14 +60,14 @@ Clone the bumblebee repo and follow these instructions:
 ```
 git clone https://github.com/jaxcore/bumblebee
 cd bumblebee/bumblebee-electron-app
-npm install
-npm run rebuild
+yarn install
+yarn run rebuild
 ```
 
 #### 3. Start bumblebee
 
 ```
-npm run bumblebee-dev
+yarn run bumblebee-dev
 ```
 
 The console as pictured above should load it up.
