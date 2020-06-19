@@ -1,3 +1,21 @@
+/*
+    Bumblebee - JavaScript Voice Application Server
+    Copyright (C) 2020 Jaxcore Software Inc.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import React, {Component} from 'react';
 
 import AppsIcon from '@material-ui/icons/Apps';
@@ -32,7 +50,6 @@ class App extends Component {
 		
 		this.themes = themes;
 		this.theme = this.themes['mainmenu'];
-		debugger;
 		
 		this.state = {
 			connected: false,
@@ -475,8 +492,7 @@ class App extends Component {
 	}
 	
 	showSettings() {
-		this.openDevTools();
-		// load Settings
+		this.bumblebee.simulateHotword('bumblebee settings');
 	}
 	
 	addSpeechOutput(data) {

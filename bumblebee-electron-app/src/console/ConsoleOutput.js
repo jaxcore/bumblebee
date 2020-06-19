@@ -3,6 +3,14 @@ import Choose from "./Choose";
 import AppsIcon from '@material-ui/icons/Apps';
 import MicIcon from '@material-ui/icons/Mic';
 
+const hotwordNames = {
+	'bumblebee': 'Bumblebee',
+	'grasshopper': 'Grasshopper',
+	'porcupine': 'Porcupine',
+	'terminator': 'Terminator',
+	'hey_edison': 'Edison'
+};
+
 export default function ConsoleOutput(props) {
 	return (<div id="recognition-output" className="recognition-output">
 		{props.recognitionOutput.map((data, index) => {
@@ -69,17 +77,21 @@ export default function ConsoleOutput(props) {
 				text = data.text;
 				icon = (<MicIcon />);
 			}
-			else if (data.type === 'hotcommand') {
+			else if (data.type === 'command') {
 				// text = 'COMMAND: ' + data.text;
 				icon = (<MicIcon />);
-				return (<div key={index} className="command">
+				return (<div key={index} style={{color: props.bumblebee.app.themes[data.hotword].colors.sttColor}}>
 					{icon}
 					{data.text}
 				</div>);
 			}
 			else if (data.type === 'hotword') {
+				// debugger;
 				// text = 'HOTWORD: ' + data.hotword;
-				return (<div key={index} className='hotword'>{data.hotword}</div>);
+				return (<div key={index} style={{color: props.bumblebee.app.themes[data.hotword].colors.sttColor}}>
+					<img src={props.bumblebee.app.themes[data.hotword].images.hotword}/>
+					{hotwordNames[data.hotword]}
+				</div>);
 			}
 				// else if (data.type === 'text') {
 				// 	text = data.component;

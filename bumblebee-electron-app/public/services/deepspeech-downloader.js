@@ -6,21 +6,24 @@ const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const request = require('request');
 
+const DEEPSPEECH_VERSION = '0.7.4';
+
 class SpeechDownloader extends EventEmitter {
 	constructor(bumblebeeElectron) {
 		super();
 		
 		this.bumblebeeElectron = bumblebeeElectron;
 		
-		this.deepSpeechModelUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.pbmm';
-		this.deepSpeechScorerUrl = 'https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.scorer';
+		const url = 'https://github.com/mozilla/DeepSpeech/releases/download/v'+DEEPSPEECH_VERSION;
+		this.deepSpeechModelUrl = url + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.pbmm';
+		this.deepSpeechScorerUrl = url +'/deepspeech-'+DEEPSPEECH_VERSION+'-models.scorer';
 		
-		// this.deepSpeechModelUrl = 'http://localhost:8000/deepspeech-0.7.3-models.pbmm';
-		// this.deepSpeechScorerUrl = 'http://localhost:8000/deepspeech-0.7.3-models.scorer';
+		// this.deepSpeechModelUrl = 'http://localhost:8000/deepspeech-0.7.4-models.pbmm';
+		// this.deepSpeechScorerUrl = 'http://localhost:8000/deepspeech-0.7.4-models.scorer';
 		
 		// /Users/dstein/Library/Application\ Support/com.jaxcore.bumblebee
 		
-		const localPath = path.resolve(__dirname + '/../../deepspeech-0.7.3-models');
+		const localPath = path.resolve(__dirname + '/../../deepspeech-'+DEEPSPEECH_VERSION+'-models');
 		const hasLocalModels = fs.existsSync(localPath + '.pbmm') && fs.existsSync(localPath + '.scorer');
 		
 		if (hasLocalModels) {
@@ -36,7 +39,7 @@ class SpeechDownloader extends EventEmitter {
 		
 		this.path = path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
 		
-		this.modelsPath = path.resolve(this.path, 'deepspeech-0.7.3-models');
+		this.modelsPath = path.resolve(this.path, 'deepspeech-'+DEEPSPEECH_VERSION+'-models');
 		this.file1path = this.modelsPath + '.pbmm';
 		this.file2path = this.modelsPath + '.scorer';
 		

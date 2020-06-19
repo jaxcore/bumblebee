@@ -6,10 +6,12 @@ export default function(data) {
 		});
 	}
 	else if (typeof data === 'object') {
-		if (data.type === 'text') {
+		if (data.type === 'error') {
+			let t = 'Error: '+data.text;
+			if (data.assistant) t =  data.assistant + ' ' + t;
 			this.addSpeechOutput({
-				text: data.text,
-				options: data.options,
+				text: t,
+				assistant: data.assistant,
 				type: 'text'
 			});
 		}
@@ -23,12 +25,19 @@ export default function(data) {
 				type: 'tts'
 			});
 		}
+		else if (data.type === 'hotword') {
+			this.addSpeechOutput({
+				hotword: data.hotword,
+				type: 'hotword'
+			});
+		}
 		else if (data.text && data.stats) {
 			if (data.type === 'command' || data.stats.hotword) {
 				this.addSpeechOutput({
 					text: data.text,
-					options: data.stats,
-					type: 'hotcommand'
+					// options: data.stats,
+					hotword: data.hotword || data.stats.hotword,
+					type: 'command'
 				});
 			}
 			else {

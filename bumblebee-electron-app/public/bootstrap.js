@@ -2,7 +2,7 @@ const Jaxcore = require('jaxcore');
 const Speaker = require('speaker');
 const sayPlugin = require('jaxcore-say-node');
 const websocketPlugin = require('./services/websocket');
-const deepspeechPlugin = require('jaxcore-deepspeech-plugin');
+const BumblebeeDeepSpeech = require('bumblebee-deepspeech');
 const windowManager = require('./window-manager');
 const BumblebeeElectron = require('./bumblebee-electron');
 const BumblebeeWebsocketPlugin = require('./services/websocket')
@@ -17,7 +17,7 @@ const createJaxcore = function(callback) {
 	jaxcore.defineService('Bumblebee Electron', 'bumblebee-electron', {});
 	
 	jaxcore.addPlugin(websocketPlugin);
-	jaxcore.addPlugin(deepspeechPlugin);
+	jaxcore.addPlugin(BumblebeeDeepSpeech);
 	
 	sayPlugin.speaker = Speaker;
 	jaxcore.addPlugin(sayPlugin);
@@ -46,7 +46,7 @@ const startBumblebeeElectron = function(callback) {
 		
 		bumblebeeElectron.init(jaxcore, (err, bumblebee) => {
 			if (err) {
-				console.log('init: ', err);
+				console.log('init err: ', err);
 			}
 			else {
 				const mainWindow = windowManager(jaxcore);

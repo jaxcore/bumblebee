@@ -1,0 +1,17 @@
+{
+  "name": "edison-assistant",
+  "version": "0.0.1",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bumblebee-api": "0.0.1",
+    "jaxcore": "0.0.3",
+    "play-sound-file": "0.0.1",
+    "speaker": "^0.5.1"
+  }
+}

@@ -38,6 +38,15 @@ class BumblebeeElectron extends Service {
 		this.log = createLogger('BumblebeeElectron');
 		this.log('create', this.state);
 		
+		this.allHotwords = ['bumblebee', 'grasshopper', 'porcupine', 'terminator', 'hey_edison'];
+		this.assistantNames = {
+			'bumblebee': 'Bumblebee',
+			'grasshopper': 'Grasshopper',
+			'porcupine': 'Porcupine',
+			'terminator': 'Terminator',
+			'hey_edison': 'Edison'
+		};
+		
 		this.downloader = new SpeechDownloader(this);
 		
 		this.downloader.on('deepspeech-installed', () => {
@@ -93,9 +102,9 @@ class BumblebeeElectron extends Service {
 			});
 		}
 		else {
-			console.log(this.downloader);
+			console.log('deepspeech not installed', this.downloader);
 			
-			callback('deepspeech not installed');
+			callback();
 		}
 	}
 	

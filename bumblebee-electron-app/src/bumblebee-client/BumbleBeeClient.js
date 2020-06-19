@@ -48,7 +48,7 @@ class BumblebeeClient extends EventEmitter {
 				this.app.addSpeechOutput({
 					text: '---',
 					stats,
-					type: 'hotcommand'
+					type: 'command'
 				});
 			}
 			else {
@@ -56,7 +56,7 @@ class BumblebeeClient extends EventEmitter {
 				this.app.addSpeechOutput({
 					text,
 					stats,
-					type: 'hotcommand'
+					type: 'command'
 				});
 			}
 			this.emit('hotwordCommand', text, stats);
@@ -237,11 +237,12 @@ class BumblebeeClient extends EventEmitter {
 	
 	simulateHotword(text) {
 		// debugger;
-		let hotword = this.app.state.activeAssistant;
-		if (hotword) ipcRenderer.send('simulate-hotword', text, hotword);
-		else {
-			console.log('no assistant');
-		}
+		ipcRenderer.send('simulate-hotword', text);
+		// let hotword = this.app.state.activeAssistant;
+		// if (hotword) ipcRenderer.send('simulate-hotword', text, hotword);
+		// else {
+		// 	console.log('no assistant');
+		// }
 		
 		// this.app.setMuted(true);
 		// setTimeout(() => {

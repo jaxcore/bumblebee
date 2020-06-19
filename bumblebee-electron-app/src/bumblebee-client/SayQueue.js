@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import {SpectrumAnalyser} from "bumblebee-hotword";
+import SpectrumAnalyser from "./audio-spectrum-analyser";
 
 const ipcRenderer = window.ipcRenderer;
 

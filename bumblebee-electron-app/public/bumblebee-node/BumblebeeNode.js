@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const playsound = require('./playsound');
+// const playsound = require('./playsound');
 const connectHotword = require('./hotword');
 const connectTTS = require('./tts');
 const connectSTT = require('./stt');
@@ -46,7 +46,7 @@ class BumblebeeNode extends EventEmitter {
 		if (!theme) theme = 'startrek1';
 		let file = this.soundThemesPath + '/' + theme + '/' + name + '.wav';
 		console.log('playSoundNode:', file);
-		return playsound(file, 1);
+		// return playsound(file, 1);
 	}
 	
 	async playSound(name, theme) {
