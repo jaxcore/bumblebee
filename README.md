@@ -1,7 +1,7 @@
-![screenshot](logo.png)
+![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/logo.png)
 # Bumblebee
 
-### JavaScript Voice Application Operating System
+### JavaScript Voice Application Platform
 
 Write your own voice apps and assistants with an easy-to-learn JavaScript API!
 
@@ -9,8 +9,8 @@ Write your own voice apps and assistants with an easy-to-learn JavaScript API!
 
 ## About Bumblebee
 
-Bumblebee is not just a voice assistant, it is a set of libraries, tools, and methodologies that
-enables JavaScript developers a new way to write their own conversational voice assistants in either
+Bumblebee is a set of libraries, tools, and methodologies that enables JavaScript developers
+a simple way to write their own conversational voice assistants in either
 NodeJS or on the web.
 
 The core technologies that Bumblebee uses are:
@@ -37,8 +37,8 @@ devices or services on a home network, retrieve data from the internet, and anyt
 And as you will see, they are both ***EASIER*** and ***MORE FUN*** to write than you think.
 
 Bumblebee voice apps are small, simple, single file scripts. They can be shared easily between
-systems and build upon eachother to build larger and smarter voice applications, and
-by associating a voice app with a hotword, your app becomes a voice assistant
+systems and build upon eachother to create larger and smarter voice applications.
+By associating a voice app with a hotword, your app becomes a voice assistant
 that can be called upon at any time.
 
 ## Install
@@ -73,8 +73,14 @@ Make sure to turn your speakers and microphone on and follow the
 instructions to install DeepSpeech.  After installation it will confirm
 that speech-to-text processing is working.
 
-If you already have [DeepSpeech 0.7.3](https://github.com/mozilla/DeepSpeech/releases/tag/v0.7.3) installed, you can copy or softlink [deepspeech-0.7.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.pbmm) and [deepspeech-0.7.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.3/deepspeech-0.7.3-models.scorer) to the root of the `bumblebee-electron-app` directory to skip the DeepSpeech install procedure.  This can also be used to change or test different DeepSpeech models.
-
+If you already have
+[DeepSpeech 0.7.4](https://github.com/mozilla/DeepSpeech/releases/tag/v0.7.4) installed,
+you can copy or softlink
+[deepspeech-0.7.4-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.pbmm)
+and
+[deepspeech-0.7.4-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.scorer)
+to the root of the `bumblebee-electron-app` directory to skip the DeepSpeech install procedure.
+This can also be used to change or test different DeepSpeech models.
 
 ## Hello World
 
