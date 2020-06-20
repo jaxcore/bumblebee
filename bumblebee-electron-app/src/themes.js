@@ -1,28 +1,28 @@
 export default {
 	mainmenu: {
 		colors: {
-			sttText: '#777',
+			sttText: '#888',
 			ttsText: '#fff',
-			sttColor: '#777',
+			sttColor: '#666',
 			ttsColor: '#fff',
 		},
 		images: {
-			default: 'images/mainmenu/honeycomb.png',
+			default: 'images/mainmenu/honeycomb-default.png',
 			hotword: 'images/mainmenu/honeycomb.png',
 			speaking: 'images/mainmenu/honeycomb.png',
 		}
 	},
 	bumblebee: {
 		colors: {
-			sttText: '#d6bc22',
-			ttsText: '#7c9fff',
-			sttColor: '#d6bc22',
-			ttsColor: '#7c9fff',
+			sttText: '#fff',
+			ttsText: '#ffba07',
+			sttColor: '#ffba07',
+			ttsColor: '#6995fd',
 		},
 		images: {
-			default: 'images/bumblebee/bee-default.png',
-			hotword: 'images/bumblebee/bee-hotword.png',
-			speaking: 'images/bumblebee/bee-speaking.png',
+			default: 'images/mainmenu/honeycomb-default.png',
+			hotword: 'images/mainmenu/honeycomb-color.png',
+			speaking: 'images/mainmenu/honeycomb-speaking.png',
 		}
 	},
 	hey_edison: {

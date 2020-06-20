@@ -7,14 +7,14 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		super(...arguments);
 		
 		this.doIntro = false;
-		this.addEvents(this.bumblebee, {
-			systemMessage: function (message) {
-				if (message.startBumblebeeIntro === true) {
-					this.doIntro = true;
-					//this.bumblebee.say('It looks like this is your first time using Bumblebee');
-				}
-			}
-		});
+	}
+	
+	// onSystemMessage is a command message from the server (eg. kill, reload etc)
+	async onSystemMessage(message) {
+		if (message.startBumblebeeIntro === true) {
+			this.doIntro = true;
+			//this.bumblebee.say('It looks like this is your first time using Bumblebee');
+		}
 	}
 	
 	// onHotword is called immediately when the hotword is detected
@@ -63,7 +63,7 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		
 		// say "exit" to shut down the assistant
 		if (recognition.text === 'exit') {
-			return true; // return out of the loop to shut down the assistant
+			return false; // return out of the loop to shut down the assistant
 		}
 		
 		if (this.doIntro) {
@@ -76,7 +76,7 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		}
 		else {
 			// respond with a text-to-speech instruction
-			await this.bumblebee.console('TEXT You said: ' + recognition.text);
+			await this.bumblebee.console('You said: ' + recognition.text);
 			await this.bumblebee.say('You said: ' + recognition.text);
 		}
 		

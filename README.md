@@ -1,5 +1,4 @@
-![screenshot](https://raw.githubusercontent.com/jaxcore/bumblebee/master/assets/logo.png)
-# Bumblebee
+![screenshot](assets/honeycomb-color.png)
 
 ### JavaScript Voice Application Platform
 

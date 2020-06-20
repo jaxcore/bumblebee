@@ -5,8 +5,10 @@ const ipcMain = require('electron').ipcMain;
 module.exports = function connectTTS(bumblebee, app, sayNode) {
 	
 	// this promise issues a call to the front-end to perform a TTS operation
-	async function tts(text, options, onBegin, onEnd) {
+	async function say(text, options, onBegin, onEnd) {
 		return new Promise((resolve, reject) => {
+			
+			console.log('bumblebeeNode say', text, options);
 			
 			// send the text to the front end
 			// the front end code then calls 'say-data' to retrieve the audio data
@@ -40,6 +42,9 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 		// else {
 		// 	debugger;
 		// }
+		
+		debugger;
+		console.log('say-data', text, 'options', options);
 		const result = await sayNode.getAudioData(text, options);
 		return result;
 	});
@@ -54,5 +59,5 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 		});
 	});
 	
-	return tts;
+	return say;
 }

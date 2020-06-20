@@ -288,6 +288,8 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 		}
 	}
 	
+	// todo: there is a bug where in some cases the assistant can connect multiple times and create duplicate instances
+	
 	function onSocketConnect(socket) {
 		
 		// debugger;
@@ -326,14 +328,17 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 			}
 			const hotword = app.state.socketAssistants[socket.id];
 			data.assistant = hotword;
+			debugger;
 			bumblebee.console(data);
 		});
 		
 		socket.on('say', (text, options, id) => {
-			console.log('say', text);
 			const hotword = app.state.socketAssistants[socket.id];
 			if (!options) options = {};
 			options.assistant = hotword;
+			
+			console.log('socket say', text, options);
+			
 			bumblebee.say(text, options).then(() => {
 				console.log('emit say-end-'+id);
 				socket.emit('say-end-'+id);

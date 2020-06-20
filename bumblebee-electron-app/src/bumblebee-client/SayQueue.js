@@ -145,14 +145,14 @@ class SayQueue extends EventEmitter {
 		if (!options) options = {};
 		return new Promise((resolve, reject) => {
 			
-			const sayOptions = {
-				profile: options.profile
-			}
-			if (!sayOptions.profile && this.profile) sayOptions.profile = this.profile;
+			// const sayOptions = {
+			// 	profile: options.profile
+			// }
+			// if (!sayOptions.profile && this.profile) sayOptions.profile = this.profile;
 			
 			// if ('console' in options) delete options.console;
 			
-			ipcRenderer.invoke('say-data', text, sayOptions).then((data) => {
+			ipcRenderer.invoke('say-data', text, options).then((data) => {
 				this.queue(text, options, data, onBegin, onEnd, resolve);
 			});
 		});

@@ -8,11 +8,19 @@ class GrasshopperAssistant extends BumblebeeAPI.Assistant {
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		await this.bumblebee.say('Hi');
-		await this.bumblebee.say('I\'m a grasshopper');
+		await this.bumblebee.say('Hi', {
+			profile: 'Xenu'
+		});
+		await this.bumblebee.say('I\'m a grasshopper', {
+			profile: 'Xenu'
+		});
 		await this.bumblebee.delay(1500);
-		await this.bumblebee.say('Alright...');
-		await this.bumblebee.say('This has been fun');
+		await this.bumblebee.say('Well...', {
+			profile: 'Xenu'
+		});
+		await this.bumblebee.say('This has been fun', {
+			profile: 'Xenu'
+		});
 		await this.bumblebee.delay(100);
 		// return false in onBegin() to immediatley exit
 		return false;

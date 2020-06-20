@@ -1,4 +1,6 @@
 export default function(data) {
+	console.log('render console');
+	
 	if (typeof data === 'string' || typeof data === 'boolean' || typeof data === 'number') {
 		this.addSpeechOutput({
 			text: data.toString(),
@@ -9,13 +11,36 @@ export default function(data) {
 		if (data.type === 'text' && data.text) {
 			this.addSpeechOutput(data);
 		}
+		// else if (data.type === 'text') {
+		// 	this.addSpeechOutput({
+		// 		text: data.text,
+		// 		assistant: data.assistant,
+		// 		type: 'text'
+		// 	});
+		// }
 		else if (data.type === 'error') {
 			let t = 'Error: '+data.text;
-			if (data.assistant) t =  data.assistant + ' ' + t;
+			// if (data.assistant) t =  data.assistant + ' ' + t;
 			this.addSpeechOutput({
 				text: t,
 				assistant: data.assistant,
 				type: 'text'
+			});
+		}
+		else if (data.type === 'stt' && data.text && data.options) {
+			this.addSpeechOutput({
+				text: data.text,
+				stats: data.stats,
+				assistant: data.assistant,
+				type: 'stt'
+			});
+		}
+		if (data.type === 'command') {
+			this.addSpeechOutput({
+				text: data.text,
+				// options: data.stats,
+				hotword: data.hotword || data.stats.hotword,
+				type: 'command'
 			});
 		}
 		else if (data.type === 'tts' && data.text && data.options) {
@@ -25,6 +50,7 @@ export default function(data) {
 			this.addSpeechOutput({
 				text: data.text,
 				options: data.options,
+				assistant: data.assistant,
 				type: 'tts'
 			});
 		}
@@ -35,22 +61,18 @@ export default function(data) {
 			});
 		}
 		else if (data.text && data.stats) {
-			if (data.type === 'command' || data.stats.hotword) {
-				this.addSpeechOutput({
-					text: data.text,
-					// options: data.stats,
-					hotword: data.hotword || data.stats.hotword,
-					type: 'command'
-				});
-			}
-			else {
+			// recognition
+			
+			// else {
 				this.addSpeechOutput({
 					text: data.text,
 					stats: data.stats,
+					assistant: data.assistant,
 					type: 'stt'
 				});
-			}
+			// }
 		}
+		
 		else if (data.type === 'component') {
 			this.addSpeechOutput({
 				component: data.component,

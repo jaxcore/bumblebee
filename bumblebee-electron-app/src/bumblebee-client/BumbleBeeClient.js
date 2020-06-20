@@ -222,12 +222,14 @@ class BumblebeeClient extends EventEmitter {
 		return r;
 	}
 	
-	
 	console(component) {
 		this.app.console(component);
 	}
 	
 	async say() {
+		console.log(arguments[0]);
+		console.log(arguments[1]);
+		debugger;
 		return this.sayQueue.say(...arguments);
 	}
 	

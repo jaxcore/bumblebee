@@ -35,7 +35,13 @@ export default function ConsoleOutput(props) {
 			// logoImage = (<img src={props.bumblebee.app.state.logo}/>);
 			
 			if (assistant) { //} === 'bumblebee' || assistant === 'hey_edison') {
-				logoImage = (<img src={props.bumblebee.app.themes[assistant].images.hotword}/>);
+				if (data.type === 'text') {
+					logoImage = (<img src={props.bumblebee.app.themes[assistant].images.default}/>);
+				}
+				// if (data.type === 'tts') {
+				// 	logoImage = (<img src={props.bumblebee.app.themes[assistant].images.speaking}/>);
+				// }
+				else logoImage = (<img src={props.bumblebee.app.themes[assistant].images.hotword}/>);
 			}
 			else logoImage = (<img src={props.bumblebee.app.themes.mainmenu.images.default}/>);
 			
@@ -59,12 +65,15 @@ export default function ConsoleOutput(props) {
 			// if (data.type === 'command') {
 			// 	text = 'COMMAND: ' + text;
 			// }
-
-			if (typeof data === 'string' || data.type === 'text') {
+			
+			// debugger;
+			
+			if (typeof data === 'string') {
 				text = data.text;
 				clss = 'text';
 			}
 			else if (data.type === 'text') {
+				// debugger;
 				text = data.text;
 				// if (data.assistant)
 				icon = logoImage;

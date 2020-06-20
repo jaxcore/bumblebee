@@ -37,6 +37,9 @@
 }
 
 
+.recognition-output .text img {
+    opacity: 0.5;
+}
 .recognition-output .text {
     color: #888;
 }
