@@ -6,11 +6,6 @@ class PorcupineAssistant extends BumblebeeAPI.Assistant {
 		super(...arguments);
 	}
 	
-	// onStart is called once when the assistant called upon using a hotword or activated automatically
-	async onStart() {
-		await this.bumblebee.say('Porcupine Ready');
-	}
-	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
 		this.bumblebee.console('hotword detected: ' + hotword);
@@ -19,6 +14,11 @@ class PorcupineAssistant extends BumblebeeAPI.Assistant {
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
 	async onCommand(recognition) {
 		this.bumblebee.console('command detected: ' + recognition.text);
+	}
+	
+	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
+	async onBegin() {
+		await this.bumblebee.say('Porcupine Ready');
 	}
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
@@ -30,7 +30,7 @@ class PorcupineAssistant extends BumblebeeAPI.Assistant {
 		
 		// say "exit" to shut down the assistant
 		if (recognition.text === 'exit') {
-			return true; // return out of the loop to shut down the assistant
+			return false; // return false exits the loop and temporarily shuts down the assistant
 		}
 		
 		// respond with a text-to-speech instruction

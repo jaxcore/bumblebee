@@ -17,19 +17,6 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		});
 	}
 	
-	// onStart is called once when the assistant called upon using a hotword or activated automatically
-	async onStart() {
-		this.bumblebee.console('Bumblebee Main Menu');
-		if (this.doIntro) {
-			// await this.bumblebee.say('Yes first time');
-			await this.bumblebee.say('It looks like this is your first time using Bumblebee');
-			await this.bumblebee.say('Try saying something into your microphone now');
-		}
-		else {
-			await this.bumblebee.say('Bumblebee Ready');
-		}
-	}
-	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
 		this.bumblebee.console('hotword detected: ' + hotword);
@@ -41,10 +28,33 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 		this.bumblebee.console('command detected: ' + recognition.text);
 	}
 	
+	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
+	async onBegin() {
+		this.bumblebee.console('Bumblebee Main Menu');
+		if (this.doIntro) {
+			// await this.bumblebee.say('Yes first time');
+			await this.bumblebee.say('It looks like this is your first time using Bumblebee');
+			await this.bumblebee.say('Try saying something into your microphone now');
+		}
+		else {
+			await this.bumblebee.say('Bumblebee Ready');
+		}
+		const returnValue = {
+			count: 0,
+			previous: null
+		};
+		return returnValue;
+	}
+	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
-	async loop() {
+	async loop(returnValue) {
 		let recognition = await this.bumblebee.recognize();
-		console.log('recognition:', recognition.text);
+		
+		if (returnValue.previous) {
+			console.log('pervious recognition:', recognition.text);
+		}
+		
+		console.log('recognition:', recognition.text, 'returnValue:', returnValue);
 		this.bumblebee.console(recognition);
 		
 		if (recognition.text === 'error') {
@@ -70,10 +80,16 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 			await this.bumblebee.say('You said: ' + recognition.text);
 		}
 		
+		returnValue.count++;
+		
+		// store the recognition so we can use it in the next loop
+		returnValue.previous = recognition;
+		
+		return returnValue;
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd(err, returnValue) {
 		await this.bumblebee.say('Bumblebee Exiting...');
 	}
 }

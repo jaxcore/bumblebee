@@ -7,12 +7,6 @@ class EdisonAssistant extends BumblebeeAPI.Assistant {
 		super(...arguments);
 	}
 	
-	// onStart is called once when the assistant called upon using a hotword or activated automatically
-	async onStart() {
-		await this.bumblebee.say('Hello, I am Edison');
-		await this.bumblebee.say('Ask me anything');
-	}
-	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
 		this.bumblebee.console('hotword detected: ' + hotword);
@@ -23,6 +17,12 @@ class EdisonAssistant extends BumblebeeAPI.Assistant {
 		this.bumblebee.console('command detected: ' + recognition.text);
 	}
 	
+	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
+	async onBegin() {
+		await this.bumblebee.say('Hello, I am Edison');
+		await this.bumblebee.say('Ask me anything');
+	}
+	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
 		let recognition = await this.bumblebee.recognize();
@@ -31,7 +31,7 @@ class EdisonAssistant extends BumblebeeAPI.Assistant {
 		
 		if (recognition.text === 'exit') {
 			// say "exit" to shut down the assistant
-			return true; // return out of the loop to shut down the assistant
+			return false; // return false exits the loop and temporarily shuts down the assistant
 		}
 		
 		if (/^who |what |when |where |why |how |is |are |were |was |does |will |am | should |would |if |have |had |may |could /.test(recognition.text)) {

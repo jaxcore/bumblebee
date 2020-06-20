@@ -13,12 +13,6 @@ class TerminatorAssistant extends BumblebeeAPI.Assistant {
 		super(...arguments);
 	}
 	
-	// onStart is called once when the assistant called upon using a hotword or activated automatically
-	async onStart() {
-		await playSound();
-		await this.bumblebee.say('where is sare ah connor');
-	}
-	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
 		this.bumblebee.console('hotword detected: ' + hotword);
@@ -38,10 +32,18 @@ class TerminatorAssistant extends BumblebeeAPI.Assistant {
 		}
 	}
 	
+	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
+	async onBegin() {
+		await playSound();
+		await this.bumblebee.say('where is sare ah connor');
+		return false; // skip loop
+	}
+	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
 		let recognition = await this.bumblebee.recognize();
-		console.log('recognition:', recognition.text);
+		
+		console.log('recognition:', recognition.text, 'returnValue:', returnValue);
 		this.bumblebee.console(recognition);
 		
 		if (recognition.text === 'error') {
@@ -51,7 +53,7 @@ class TerminatorAssistant extends BumblebeeAPI.Assistant {
 		
 		// say "exit" to shut down the assistant
 		if (recognition.text === 'exit') {
-			return true; // to exit the assistant from the loop just return
+			return false; // to exit the assistant from the loop just return false
 		}
 		else {
 			// respond with a text-to-speech instruction
@@ -59,8 +61,8 @@ class TerminatorAssistant extends BumblebeeAPI.Assistant {
 		}
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
 		await this.bumblebee.say('I\'ll be back');
 		await playSound(); // play the intro sound when exiting
 	}
