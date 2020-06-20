@@ -1,4 +1,5 @@
 const electron = require('electron');
+const Path = require('path');
 const app = electron.app;
 const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
@@ -20,7 +21,7 @@ function createWindow() {
 		}
 	});
 	
-	mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+	mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${Path.join(__dirname, '../build/index.html')}`);
 	
 	if (isDev) {
 		// Open the DevTools.

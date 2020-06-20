@@ -6,7 +6,7 @@
   "dependencies": {
     "bumblebee-api": "0.0.2",
     "bumblebee-deepspeech": "0.0.1",
-    "bumblebee-hotword-node": "0.0.8",
+    "bumblebee-hotword-node": "0.0.9",
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
     "electron-is-dev": "^1.1.0",
@@ -35,11 +35,17 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
+  "postinstall": "electron-builder install-app-deps",
+  "homepage": "./",
   "build": {
-    "appId": "com.jaxcore.bumblebee",
+    "appId": "Jaxcore Bumblebee",
     "mac": {
       "category": "speech recognition"
-    }
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"

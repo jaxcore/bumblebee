@@ -1,7 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-deepspeech-0.7.3-models.pbmm
-deepspeech-0.7.3-models.scorer
+deepspeech-0.*s
 /node_modules
 /.pnp
 .pnp.js
@@ -11,6 +10,7 @@ deepspeech-0.7.3-models.scorer
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
