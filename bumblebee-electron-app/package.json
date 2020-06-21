@@ -6,11 +6,11 @@
   "private": false,
   "main": "public/electron.js",
   "dependencies": {
+    "@material-ui/core": "^4.8.0",
+    "@material-ui/icons": "^4.5.1",
     "bumblebee-api": "0.0.2",
     "bumblebee-deepspeech": "0.0.1",
     "bumblebee-hotword-node": "0.0.9",
-    "@material-ui/core": "^4.8.0",
-    "@material-ui/icons": "^4.5.1",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
     "jaxcore-say-node": "0.0.8",
@@ -18,7 +18,7 @@
     "node-abi": "^2.18.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^3.4.1",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "speaker": "^0.5.1",
@@ -45,7 +45,8 @@
     "files": [
       "dist/**/*",
       "package.json"
-    ]
+    ],
+    "buildDependenciesFromSource": true
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,7 +65,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.0.0",
-    "electron": "^9.0.2",
+    "electron": "^9.0.4",
     "electron-builder": "^22.7.0",
     "electron-rebuild": "^1.11.0",
     "wait-on": "^3.3.0"

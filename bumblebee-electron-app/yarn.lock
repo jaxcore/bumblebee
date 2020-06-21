@@ -1541,9 +1541,9 @@
     defer-to-connect "^1.0.1"
 
 "@types/babel__core@^7.1.0":
-  version "7.1.8"
-  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.8.tgz#057f725aca3641f49fc11c7a87a9de5ec588a5d7"
-  integrity sha512-KXBiQG2OXvaPWFPDS1rD8yV9vO0OuWIqAEqLsbfX0oU2REN5KuoMnZ1gClWcBhO5I3n6oTVAmrMufOvRqdmFTQ==
+  version "7.1.9"
+  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.9.tgz#77e59d438522a6fb898fa43dc3455c6e72f3963d"
+  integrity sha512-sY2RsIJ5rpER1u3/aQ8OFSI7qGIy8o1NEEbgb2UaJcvOtXOMpd39ko723NBpjQFg9SIX7TXtjejZVGeIMLhoOw==
   dependencies:
     "@babel/parser" "^7.1.0"
     "@babel/types" "^7.0.0"
@@ -3075,9 +3075,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001084:
-  version "1.0.30001084"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001084.tgz#00e471931eaefbeef54f46aa2203914d3c165669"
-  integrity sha512-ftdc5oGmhEbLUuMZ/Qp3mOpzfZLCxPYKcvGv6v2dJJ+8EdqcvZRbAGOiLmkM/PV1QGta/uwBs8/nCl6sokDW6w==
+  version "1.0.30001085"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001085.tgz#bed28bd51ff7425d33ee23e730c7f3b703711db6"
+  integrity sha512-x0YRFRE0pmOD90z+9Xk7jwO58p4feVNXP+U8kWV+Uo/HADyrgESlepzIkUqPgaXkpyceZU6siM1gsK7sHgplqA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -9977,7 +9977,7 @@ react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-scripts@^3.3.0:
+react-scripts@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.4.1.tgz#f551298b5c71985cc491b9acf3c8e8c0ae3ada0a"
   integrity sha512-JpTdi/0Sfd31mZA6Ukx+lq5j1JoKItX7qqEK4OiACjVQletM1P38g49d9/D0yTxp9FrSF+xpJFStkGgKEIRjlQ==
