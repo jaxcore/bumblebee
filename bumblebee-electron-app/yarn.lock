@@ -4461,7 +4461,7 @@ electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.413:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.480.tgz#190ae45074578349a4c4f336fba29e76b20e9ef5"
   integrity sha512-wnuUfQCBMAdzu5Xe+F4FjaRK+6ToG6WvwG72s8k/3E6b+hoGVYGiQE7JD1NhiCMcqF3+wV+c2vAnaLGRSSWVqA==
 
-electron@^9.0.2:
+electron@^9.0.4:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/electron/-/electron-9.0.4.tgz#5aa72c1576c82c19f6e087311ffe1d7b74358d25"
   integrity sha512-QzkeZNAiNB7KxcdoQKSoaiVT/GQdB4Vt0/ZZOuU8tIKABAsni2I7ztiAbUzxcsnQsqEBSfChuPuDQ5A4VbbzPg==
@@ -6687,10 +6687,8 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-jaxcore-say-node@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/jaxcore-say-node/-/jaxcore-say-node-0.0.8.tgz#65bfeef9e2e4cabe63e834f64ab649129ead2f4f"
-  integrity sha512-d1iLepZJ9XuYfXskFWY8OiKKZjYAVyR50Je/n0VAju3LZQ2epSB9vVK3I806LXZ5JuWQFsKFIHBYaZXiHtqC2A==
+"jaxcore-say-node@file:../../jaxcore-say-node":
+  version "0.0.9"
   dependencies:
     async "^3.2.0"
     jaxcore "0.0.3"

@@ -24,6 +24,10 @@ class BumblebeeClient extends EventEmitter {
 		
 		this.sayQueue.setVolume(app.state.sayVolume);
 		
+		window.systemError = (error) => {
+			this.console(error);
+		}
+		
 		// receive speech recognition result by a synchronous message from public/electron.js
 		window.hotwordAssistantApp = (activeApp) => {
 			this.setActiveAssistantApp(activeApp);

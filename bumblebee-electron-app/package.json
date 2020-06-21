@@ -13,7 +13,7 @@
     "bumblebee-hotword-node": "0.0.9",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
-    "jaxcore-say-node": "0.0.8",
+    "jaxcore-say-node": "file:../../jaxcore-say-node",
     "lodash": "^4.17.15",
     "node-abi": "^2.18.0",
     "react": "^16.12.0",
@@ -32,18 +32,18 @@
     "bumblebee-dev": "concurrently \"npm run dev\" \"node bumblebee-assistant/start\"",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "pack": "yarn run build && electron-builder --dir",
+    "dist": "yarn run build && electron-builder"
   },
   "postinstall": "electron-builder install-app-deps",
   "homepage": "./",
   "build": {
-    "appId": "Jaxcore Bumblebee",
-    "mac": {
-      "category": "speech recognition"
-    },
+    "appId": "com.jaxcore.bumblebee",
     "files": [
-      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "espeak-all-workerthread.js",
+      "sam-workerthread.js",
       "package.json"
     ],
     "buildDependenciesFromSource": true

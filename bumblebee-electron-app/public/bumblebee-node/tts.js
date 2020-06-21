@@ -52,7 +52,7 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 	// when the front-end needs to issue an TTS, it calls the back-end
 	ipcMain.on('say', function(event, text, options) {
 		// the back-end then issues a command back to the front-end, which in turn calls 'say-data' to retrieve the TTS audio buffer
-		tts(text, options, function() {
+		say(text, options, function() {
 			console.log('onBegin', text);
 		}, function() {
 			console.log('onEnd', text);

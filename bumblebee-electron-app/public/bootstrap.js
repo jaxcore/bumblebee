@@ -6,6 +6,7 @@ const BumblebeeDeepSpeech = require('bumblebee-deepspeech');
 const windowManager = require('./window-manager');
 const BumblebeeElectron = require('./bumblebee-electron');
 const BumblebeeWebsocketPlugin = require('./services/websocket')
+const Path = require('path');
 
 const BUMBLEBEE_PORT = 37688;
 
@@ -16,7 +17,10 @@ const createJaxcore = function(callback) {
 	
 	jaxcore.defineService('Bumblebee Electron', 'bumblebee-electron', {});
 	
-	jaxcore.defineService('Say', 'sayNode', {});
+	// jaxcore.defineService('Say', 'sayNode', {
+	// 	workerPath: __dirname
+	// 	// workerPath: 'workerthreads'
+	// });
 	
 	jaxcore.addPlugin(websocketPlugin);
 	jaxcore.addPlugin(BumblebeeDeepSpeech);

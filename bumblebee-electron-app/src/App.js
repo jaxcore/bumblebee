@@ -231,9 +231,15 @@ class App extends Component {
 		
 		ipcRenderer.on('electron-ready', (event, config) => {
 			this.setElectronConfig(config);
+			// console.log('BBClient', BBClient);
+			console.log('BumblebeeClient', BumblebeeClient);
+			debugger;
+			//
+			// debugger;
+			// return;
 			
 			this.bumblebee = new BumblebeeClient(this);
-			
+
 			if (this.state.config.deepspeechInstalled) {
 				debugger;
 				this.startServer();
@@ -255,8 +261,8 @@ class App extends Component {
 				// 	this.showInstall(true);
 				// });
 					this.showInstall(true);
-				
-				
+
+
 				// return;
 				// this.bumblebee.launch('DeepSpeechInstall');
 			}

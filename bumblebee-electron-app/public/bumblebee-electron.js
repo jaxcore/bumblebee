@@ -4,6 +4,10 @@ const ipcMain = require('electron').ipcMain;
 const executeFunction = require('./execute-function');
 const SpeechDownloader = require('./services/deepspeech-downloader');
 const BumblebeeNode = require('./bumblebee-node/BumblebeeNode');
+const fs = require('fs');
+const Path = require('path');
+const { Worker } = require('worker_threads');
+const electron = require('electron');
 
 const schema = {
 	id: {
@@ -76,17 +80,68 @@ class BumblebeeElectron extends Service {
 	}
 	async startServices() {
 		return new Promise((resolve, reject) => {
-			// debugger;
+			
+			// const localPath = Path.resolve('.');
+			// const localPath = __dirname;
+			// const typelocalPath = typeof __static;
+			//
+			// return;
+			
+			// const localPath = Path.resolve('./');
+			const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
+			
+			this.execFunction('systemError', ['localPath = '+localPath]);
+
+			const sayWorkerPaths = {
+				espeak: localPath + '/espeak-all-workerthread.js',
+				sam: localPath + '/sam-workerthread.js'
+			}
+
+			this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
+
+			if (!fs.existsSync(sayWorkerPaths.espeak) || !fs.existsSync(sayWorkerPaths.espeak)) {
+				this.execFunction('systemError', ['worker files not found '+JSON.stringify(sayWorkerPaths)]);
+			}
+			else {
+				this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
+			}
+
+			// const workerx = new Worker(sayWorkerPaths.espeak);
+			// this.execFunction('systemError', ['workerx'+(typeof workerx)]);
+
+			// return;
+			//
+			// const worker = new Worker(sayWorkerPaths.espeak);
+			// this.execFunction('systemError', ['worker'+(typeof worker)]);
+
+			// return;
+			
+			this.jaxcore.defineService('Say', 'sayNode', {
+				workerPaths: sayWorkerPaths
+				// workerPath: 'workerthreads'
+			});
 			
 			this.jaxcore.startServiceProfile('Say', (err, sayNode) => {
 				if (err) {
-					reject(err);
+					console.log('sayNode err', err);
+					debugger;
+					this.execFunction('systemError', [err.toString()]);
+					//reject(err);
 					return;
 				}
 				
 				// debugger;
+				//
+				// this.execFunction('systemError', ['sayNode worker files '+JSON.stringify(sayNode.state.workerPaths)]);
+				//
+				// const worker = new Worker(sayWorkerPaths.espeak);
+				//
+				// console.log('worker', worker);
+				
+				// return;
 				
 				this.sayNode = sayNode;
+				
 				// this.startDeepspeech((err, bumblebee) => {
 				// 	callback(err, bumblebee);
 				// });
