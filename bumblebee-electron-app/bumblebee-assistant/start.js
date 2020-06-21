@@ -30,7 +30,7 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		this.bumblebee.console('Bumblebee Main Menu');
+		// this.bumblebee.console('Bumblebee Main Menu');
 		if (this.doIntro) {
 			// await this.bumblebee.say('Yes first time');
 			await this.bumblebee.say('It looks like this is your first time using Bumblebee');
@@ -71,7 +71,7 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 			await this.bumblebee.say('You said: ' + recognition.text);
 			await this.bumblebee.say('Okay, that\'s terrific');
 			await this.bumblebee.say('It looks like everything is working');
-			await this.bumblebee.say('For information about how to use Bumblebeee, visit the following web page');
+			await this.bumblebee.say('For information about how to use Bumblebee, visit the following web page');
 			await this.bumblebee.console('https://github.com/jaxcore/bumblebee');
 		}
 		else {
