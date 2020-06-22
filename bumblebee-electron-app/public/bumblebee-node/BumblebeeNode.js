@@ -19,10 +19,12 @@ class BumblebeeNode extends EventEmitter {	// todo: refactor into an adapter
 		this.app = app;
 		this.jaxcore = app.jaxcore;
 		
-		this.hotword = connectHotword(this, this.app, this.app.deepspeech);
-		this.deepspeech = connectSTT(this, this.app, this.app.deepspeech, this.hotword);
+		// this.hotword = connectHotword(this, this.app, this.app.deepspeech);
+		// this.deepspeech = connectSTT(this, this.app, this.app.deepspeech, this.hotword);
+		this.deepspeech = connectSTT(this, this.app, this.app.deepspeech);
 		this.say = connectTTS(this, this.app, this.app.sayNode);
-		this.bbWebsocketServer = connectWSServer(this, this.app, this.app.deepspeech, this.hotword, this.app.bbWebsocketServer);
+		// this.bbWebsocketServer = connectWSServer(this, this.app, this.app.deepspeech, this.hotword, this.app.bbWebsocketServer);
+		this.bbWebsocketServer = connectWSServer(this, this.app, this.app.deepspeech, this.app.bbWebsocketServer);
 		
 		// onSocketDisconnect
 		// debugger;

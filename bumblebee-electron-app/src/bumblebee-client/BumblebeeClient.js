@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import {connectSayQueue} from './SayQueue';
-import {connectMicrophone} from './Microphone';
+// import {connectMicrophone} from './Microphone';
+import Hotword from 'bumblebee-hotword';
 import {connectPlaySound} from './playSound';
 import drawVADCanvas, {clearVADCanvas} from './drawVADCanvas';
 
@@ -18,7 +19,38 @@ class BumblebeeClient extends EventEmitter {
 		
 		this.choose = choose;
 		
-		this.microphone = connectMicrophone(this, app);
+		// this.microphone = connectMicrophone(this, app);
+		
+		this.hotword = new Hotword();
+		this.hotword.setSensitivity(0.5);
+		
+		this.hotword.setWorkersPath('./bumblebee-workers');
+		
+		this.hotword.addHotword('bumblebee');
+		this.hotword.addHotword('grasshopper');
+		this.hotword.addHotword('hey_edison');
+		this.hotword.addHotword('porcupine');
+		this.hotword.addHotword('terminator');
+		
+		this.hotword.on('data', (intData, floatData, sampleRate, hotword) => {
+			// console.log('data', intData.length, floatData.length, sampleRate, hotword);
+			
+			if (hotword) {
+				this.app.addSpeechOutput({
+					type: 'text',
+					text: 'hotword: ' + hotword
+				});
+			}
+			ipcRenderer.send('hotword-data', intData, floatData, sampleRate, hotword);
+		});
+		// this.hotword.on('hotword', (hotword) => {
+		// 	// this.app.addSpeechOutput({
+		// 	// 	type: 'text',
+		// 	// 	text: 'hotwordDetected '+hotword
+		// 	// });
+		// 	ipcRenderer.send('hotword-detected', intData, floatData, sampleRate, hotword);
+		// });
+		
 		this.sayQueue = connectSayQueue(this, app);
 		this.playSound = connectPlaySound(this, app);
 		
@@ -305,8 +337,9 @@ class BumblebeeClient extends EventEmitter {
 			this.app.setState({
 				recording: true
 			}, () => {
-				// debugger;
-				this.microphone.start();
+				debugger;
+				// this.microphone.start();
+				this.hotword.start();
 			});
 		}
 		this.emit('recording-started');
@@ -486,7 +519,7 @@ class BumblebeeClient extends EventEmitter {
 			this.app.setState({
 				recording: false
 			}, () => {
-				this.microphone.stop();
+				// this.microphone.stop();
 				if (this.analyser) this.analyser.stop();
 				if (this.app.vadStatusRef) clearVADCanvas(this.app.vadStatusRef.current);
 			});
@@ -498,7 +531,7 @@ class BumblebeeClient extends EventEmitter {
 		this.app.setState({
 			muted
 		});
-		this.microphone.setMuted(muted);
+		// this.microphone.setMuted(muted);
 		if (this.app.state.useSystemMic) {
 			ipcRenderer.send('microphone-muted', muted);
 		}

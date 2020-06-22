@@ -96,23 +96,35 @@ class BumblebeeElectron extends Service {
 			// const localPath = Path.resolve('./');
 			//
 
-			const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
-			this.execFunction('systemError', ['localPath = '+localPath]);
-			const sayWorkerPaths = {
-				espeak: localPath + '/espeak-all-workerthread.js',
-				sam: localPath + '/sam-workerthread.js'
+			// const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
+			// this.execFunction('systemError', ['localPath = '+localPath]);
+			// const sayWorkerPaths = {
+			// 	espeak: localPath + '/espeak-all-workerthread.js',
+			// 	sam: localPath + '/sam-workerthread.js'
+			// }
+			//
+			// // this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
+			//
+			// if (!fs.existsSync(sayWorkerPaths.espeak) || !fs.existsSync(sayWorkerPaths.espeak)) {
+			// 	this.execFunction('systemError', ['worker files not found '+JSON.stringify(sayWorkerPaths)]);
+			// }
+			// else {
+			// 	// this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
+			// 	// return;
+			// }
+			
+			const workerContent = {
+				espeak: fs.readFileSync(Path.resolve(__dirname, 'say-workerthreads', 'espeak-all-workerthread.js'), { encoding: 'utf8' }),
+				sam: fs.readFileSync(Path.resolve(__dirname, 'say-workerthreads', 'sam-workerthread.js'), { encoding: 'utf8' })
 			}
-
-			// this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
-
-			if (!fs.existsSync(sayWorkerPaths.espeak) || !fs.existsSync(sayWorkerPaths.espeak)) {
-				this.execFunction('systemError', ['worker files not found '+JSON.stringify(sayWorkerPaths)]);
-			}
-			else {
-				// this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
-				// return;
-			}
-
+			
+			//
+			// const worker = new Worker(workerContent.espeak, { eval: true });
+			//
+			// console.log(worker);
+			//
+			// return;
+			
 			// const workerx = new Worker(sayWorkerPaths.espeak);
 			// this.execFunction('systemError', ['workerx'+(typeof workerx)]);
 
@@ -124,7 +136,8 @@ class BumblebeeElectron extends Service {
 			// return;
 			
 			this.jaxcore.defineService('Say', 'sayNode', {
-				workerPaths: sayWorkerPaths
+				// workerPaths: sayWorkerPaths
+				useWorkerContent: true
 				// workerPath: 'workerthreads'
 			});
 			
@@ -136,6 +149,8 @@ class BumblebeeElectron extends Service {
 					//reject(err);
 					return;
 				}
+				
+				sayNode.setWorkerContent(workerContent);
 				
 				// debugger;
 				//

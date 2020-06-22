@@ -233,7 +233,7 @@ class App extends Component {
 			this.setElectronConfig(config);
 			// console.log('BBClient', BBClient);
 			console.log('BumblebeeClient', BumblebeeClient);
-			debugger;
+			// debugger;
 			//
 			// debugger;
 			// return;
@@ -241,7 +241,7 @@ class App extends Component {
 			this.bumblebee = new BumblebeeClient(this);
 
 			if (this.state.config.deepspeechInstalled) {
-				debugger;
+				// debugger;
 				this.startServer();
 				// this.bumblebee.startRecording();
 				// this.launch('MainMenu');

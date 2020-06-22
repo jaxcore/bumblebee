@@ -12,7 +12,7 @@ const hotwordSubstitutions = {
 	porcupine: []
 }
 
-module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword, bbWebsocketServer) {
+module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocketServer) {
 	
 	// const deepspeech = app.deepspeech;
 	// const bumblebeeHowtord = app.bumblebeeHotword;
@@ -20,26 +20,78 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 	
 	let doBumblebeeIntro = false;
 	
-	bbHotword.on('hotword', function (hotword) {
-		console.log('Hotword Detected:', hotword);
-		setActiveAssistant(hotword);
-		
-		// let name = app.hotwordNames[hotword];
-		bumblebee.console({
-			type: 'hotword',
-			hotword
-		})
-		
-		if (hotword === app.state.activeAssistant) {
-			let activeAssistantSocket = getActiveAssistantSocket();
-			if (activeAssistantSocket) {
-				console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
-				// const recogId = Math.random().toString().substring(2);
-				console.log('activeAssistantSocket emit hotword', hotword);
-				activeAssistantSocket.emit('hotword', hotword);
-			}
+	// bbHotword.on('hotword', function (hotword) {
+	// 	console.log('Hotword Detected:', hotword);
+	// 	setActiveAssistant(hotword);
+	//
+	// 	// let name = app.hotwordNames[hotword];
+	// 	bumblebee.console({
+	// 		type: 'hotword',
+	// 		hotword
+	// 	})
+	//
+	// 	if (hotword === app.state.activeAssistant) {
+	// 		let activeAssistantSocket = getActiveAssistantSocket();
+	// 		if (activeAssistantSocket) {
+	// 			console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
+	// 			// const recogId = Math.random().toString().substring(2);
+	// 			console.log('activeAssistantSocket emit hotword', hotword);
+	// 			activeAssistantSocket.emit('hotword', hotword);
+	// 		}
+	// 	}
+	// });
+	
+	
+	ipcMain.on('hotword-data', function (event, intData, floatData, sampleRate, hotword) {
+		// console.log('bb', intData.length, sampleRate, hotword, floatData.length);
+		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
+		// app.execFunction('systemError', ['bbdata '+sampleRate+' '+intData.length]);
+		if (hotword) {
+			console.log('Hotword Detected:', hotword);
+			// setActiveAssistant(hotword);
+			//
+			// // let name = app.hotwordNames[hotword];
+			// bumblebee.console({
+			// 	type: 'hotword',
+			// 	hotword
+			// })
+			//
+			// if (hotword === app.state.activeAssistant) {
+			// 	let activeAssistantSocket = getActiveAssistantSocket();
+			// 	if (activeAssistantSocket) {
+			// 		console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
+			// 		// const recogId = Math.random().toString().substring(2);
+			// 		console.log('activeAssistantSocket emit hotword', hotword);
+			// 		activeAssistantSocket.emit('hotword', hotword);
+			// 	}
+			// }
 		}
+		var uint8View = new Uint8Array(intData.buffer);
+		let buffer = Buffer.from(uint8View);
+		
+		deepspeech.streamData(buffer, sampleRate, hotword, floatData);
 	});
+	
+	// bumblebee.on('hotword', function (hotword) {
+	// 	console.log('Hotword Detected:', hotword);
+	// 	setActiveAssistant(hotword);
+	//
+	// 	// let name = app.hotwordNames[hotword];
+	// 	bumblebee.console({
+	// 		type: 'hotword',
+	// 		hotword
+	// 	})
+	//
+	// 	if (hotword === app.state.activeAssistant) {
+	// 		let activeAssistantSocket = getActiveAssistantSocket();
+	// 		if (activeAssistantSocket) {
+	// 			console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
+	// 			// const recogId = Math.random().toString().substring(2);
+	// 			console.log('activeAssistantSocket emit hotword', hotword);
+	// 			activeAssistantSocket.emit('hotword', hotword);
+	// 		}
+	// 	}
+	// });
 	
 	deepspeech.on('hotword', function (hotword, text, stats) {
 		// console.log('DS hotword:'+hotword, 'text='+text, stats);
@@ -85,6 +137,8 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbHotword,
 	});
 	
 	deepspeech.on('recognize', function (text, stats) {
+		app.execFunction('systemError', ['recognize '+text]);
+		
 		let activeAssistantSocket = getActiveAssistantSocket();
 		if (activeAssistantSocket) {
 			console.log('DS Assistant recognize ('+app.state.activeAssistant+')', text, stats);

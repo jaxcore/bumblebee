@@ -16,7 +16,7 @@ function createWindow() {
 			// allow code inside this window to use use native window.open()
 			nativeWindowOpen: true,
 			nodeIntegration: true,
-			nodeIntegrationInWorker: true,
+			nodeIntegrationInWorker: false,
 			preload: __dirname + '/preload.js'
 		}
 	});
@@ -26,7 +26,7 @@ function createWindow() {
 	if (isDev) {
 		// Open the DevTools.
 		// BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-		// mainWindow.webContents.openDevTools();
+		mainWindow.webContents.openDevTools();
 	}
 	
 	mainWindow.on('closed', () => mainWindow = null);

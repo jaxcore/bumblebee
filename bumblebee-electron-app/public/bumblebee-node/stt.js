@@ -1,13 +1,22 @@
 const ipcMain = require('electron').ipcMain;
 
-module.exports = function connectSTT(bumblebee, app, deepspeech, bbHotword) {
+module.exports = function connectSTT(bumblebee, app, deepspeech) {
 	
-	bbHotword.on('data', function (intData, sampleRate, hotword, float32arr) {
-		// console.log('bb', typeof intData, sampleRate, hotword, float32arr);
-		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
-		app.execFunction('systemError', ['bbdata '+intData.length]);
-		deepspeech.streamData(intData, 16000, hotword, float32arr);
-	});
+	//
+	// ipcMain.on('hotword-data', function (event, intData, floatData, sampleRate, hotword, floatData) {
+	// 	// console.log('bb', typeof intData, sampleRate, hotword, float32arr);
+	// 	// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
+	// 	// app.execFunction('systemError', ['bbdata '+sampleRate+' '+intData.length]);
+	//
+	// 	deepspeech.streamData(intData, sampleRate, hotword, floatData);
+	// });
+	
+	// bbHotword.on('data', function (intData, sampleRate, hotword, float32arr) {
+	// 	// console.log('bb', typeof intData, sampleRate, hotword, float32arr);
+	// 	// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
+	// 	app.execFunction('systemError', ['bbdata '+intData.length]);
+	// 	deepspeech.streamData(intData, 16000, hotword, float32arr);
+	// });
 	
 	deepspeech.on('no-recognition', function (hotword) {
 		if (hotword) {
@@ -48,7 +57,10 @@ module.exports = function connectSTT(bumblebee, app, deepspeech, bbHotword) {
 		// if (hotword === 'ANY') hotword = 'bumblebee';
 		// else if (hotword === 'OFF') return;
 		
-		bbHotword.emit('hotword', hotword);
+		// todo: ipc to front end?
+		// bbHotword.emit('hotword', hotword);
+		bumblebee.emit('hotword', hotword);
+		
 		// bumblebee.emit('hotword', hotword);
 		
 		deepspeech.setState({hotword});
