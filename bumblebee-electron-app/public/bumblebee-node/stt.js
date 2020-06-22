@@ -5,6 +5,7 @@ module.exports = function connectSTT(bumblebee, app, deepspeech, bbHotword) {
 	bbHotword.on('data', function (intData, sampleRate, hotword, float32arr) {
 		// console.log('bb', typeof intData, sampleRate, hotword, float32arr);
 		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
+		app.execFunction('systemError', ['bbdata '+intData.length]);
 		deepspeech.streamData(intData, 16000, hotword, float32arr);
 	});
 	

@@ -16,6 +16,9 @@ const schema = {
 	connected: {
 		type: 'boolean'
 	},
+	servicesStarted: {
+		type: 'boolean'
+	},
 	deepspeechInstalled: {  // set by DeepSpeechDownloader
 		type: 'boolean'
 	},
@@ -79,6 +82,9 @@ class BumblebeeElectron extends Service {
 		return this.startServices();
 	}
 	async startServices() {
+		if (this.state.servicesStarted) {
+			return true;
+		}
 		return new Promise((resolve, reject) => {
 			
 			// const localPath = Path.resolve('.');
@@ -88,22 +94,23 @@ class BumblebeeElectron extends Service {
 			// return;
 			
 			// const localPath = Path.resolve('./');
-			const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
-			
-			this.execFunction('systemError', ['localPath = '+localPath]);
+			//
 
+			const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
+			this.execFunction('systemError', ['localPath = '+localPath]);
 			const sayWorkerPaths = {
 				espeak: localPath + '/espeak-all-workerthread.js',
 				sam: localPath + '/sam-workerthread.js'
 			}
 
-			this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
+			// this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
 
 			if (!fs.existsSync(sayWorkerPaths.espeak) || !fs.existsSync(sayWorkerPaths.espeak)) {
 				this.execFunction('systemError', ['worker files not found '+JSON.stringify(sayWorkerPaths)]);
 			}
 			else {
-				this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
+				// this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
+				// return;
 			}
 
 			// const workerx = new Worker(sayWorkerPaths.espeak);
@@ -152,6 +159,13 @@ class BumblebeeElectron extends Service {
 						return;
 					}
 					
+					this.execFunction('systemError', ['deepspeech '+JSON.stringify(deepspeech.state)]);
+					
+					deepspeech.on('heartbeat', (count) => {
+						this.execFunction('systemError', ['heartbeat '+count]);
+					});
+					
+					// return;
 					this.deepspeech = deepspeech;
 					// debugger;
 					
@@ -165,6 +179,8 @@ class BumblebeeElectron extends Service {
 						// debugger;
 						const bumblebee = new BumblebeeNode(this);
 						this.bumblebee = bumblebee;
+						
+						this.setState({servicesStarted: true});
 						
 						resolve(true);
 					});

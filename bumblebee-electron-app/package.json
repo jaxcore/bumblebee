@@ -10,6 +10,7 @@
     "@material-ui/icons": "^4.5.1",
     "bumblebee-api": "0.0.2",
     "bumblebee-deepspeech": "0.0.1",
+    "bumblebee-hotword": "0.0.7",
     "bumblebee-hotword-node": "0.0.9",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
