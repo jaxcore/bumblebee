@@ -2921,8 +2921,10 @@ bumblebee-hotword-node@0.0.8:
     node-audiorecorder "^1.4.2"
     pcm-convert "^1.6.5"
 
-"bumblebee-hotword@file:../../bumblebee-hotword":
+bumblebee-hotword@0.0.7:
   version "0.0.7"
+  resolved "https://registry.yarnpkg.com/bumblebee-hotword/-/bumblebee-hotword-0.0.7.tgz#7ee7b446e36aa5a0be0cd0b8fd8aa511daf1b7ae"
+  integrity sha512-UPwuQTN/w7VD5577J7/zhhTL90U7aJBRtf/XTpbYUWXGEWlV2KSCJs60EuWHTi9takTmCfMyrtZZKx81z7PZCA==
 
 bytes@3.0.0:
   version "3.0.0"
@@ -6682,8 +6684,10 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-"jaxcore-say-node@file:../../jaxcore-say-node":
+jaxcore-say-node@0.0.9:
   version "0.0.9"
+  resolved "https://registry.yarnpkg.com/jaxcore-say-node/-/jaxcore-say-node-0.0.9.tgz#1474c5679876b23dc580a60d98fba78d43901d43"
+  integrity sha512-ZLjCkDlWWNfj+TVmFWjzRAhapygWNDDc27xk9dI1XT5DqdapX7AlfTNcj2D8aGoGjsG5hNZc/mHt/QmYO3U7Eg==
   dependencies:
     async "^3.2.0"
     jaxcore "0.0.3"
