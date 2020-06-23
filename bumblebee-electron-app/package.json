@@ -1,7 +1,7 @@
 {
   "name": "com.jaxcore.bumblebee",
   "description": "Bumblebee - JavaScript voice application desktop server",
-  "author": "com.jaxcore.bumblebee",
+  "author": "Jaxcore Software Inc.",
   "version": "0.0.1",
   "private": false,
   "main": "public/electron.js",
@@ -10,7 +10,7 @@
     "@material-ui/icons": "^4.5.1",
     "bumblebee-api": "0.0.2",
     "bumblebee-deepspeech": "0.0.1",
-    "bumblebee-hotword": "0.0.7",
+    "bumblebee-hotword": "0.0.8",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
     "jaxcore-say-node": "0.0.9",
@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "bumblebee-dev": "concurrently \"npm run dev\" \"node bumblebee-assistant/start\"",
+    "bumblebee-assistant": "node ./public/bumblebee-assistant/start",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
     "pack": "yarn run build && electron-builder --dir",
@@ -39,12 +39,70 @@
   "homepage": "./",
   "build": {
     "appId": "com.jaxcore.bumblebee",
+    "productName": "Jaxcore Bumblebee",
     "files": [
       "build/**/*",
       "node_modules/**/*",
       "package.json"
     ],
-    "buildDependenciesFromSource": true
+    "buildDependenciesFromSource": true,
+    "artifactName": "${productName}-${version}.${ext}",
+    "dmg": {
+      "icon": "./icon.icns",
+      "title": "${productName}"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./icon.icns",
+      "identity": null
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "./dist/project-name/assets/icons/ico/web_hi_res_512_256x256.ico"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "./dist/project-name/assets/icons/png/mipmap-mdpi/ic_launcher.png",
+      "synopsis": "Project Synopsis",
+      "category": "Utility"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -6,6 +6,7 @@ import {connectPlaySound} from './playSound';
 import drawVADCanvas, {clearVADCanvas} from './drawVADCanvas';
 
 import choose from './choose';
+import SpectrumAnalyser from "./audio-spectrum-analyser";
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -22,6 +23,7 @@ class BumblebeeClient extends EventEmitter {
 		// this.microphone = connectMicrophone(this, app);
 		
 		this.hotword = new Hotword();
+		this.hotword.bufferSize = 512;
 		this.hotword.setSensitivity(0.5);
 		
 		this.hotword.setWorkersPath('./bumblebee-workers');
@@ -43,6 +45,17 @@ class BumblebeeClient extends EventEmitter {
 			}
 			ipcRenderer.send('hotword-data', intData, floatData, sampleRate, hotword);
 		});
+		
+		this.hotword.on('analyser', (analyser) => {
+			var canvas = app.speechOscilloscopeRef.current;
+			canvas.width = window.innerWidth;
+			canvas.height = 100;
+			this.analyser = new SpectrumAnalyser(analyser, canvas);
+			this.analyser.setLineColor(app.theme.colors.sttColor);
+			this.analyser.setBackgroundColor('#222');
+			this.analyser.start();
+		});
+		
 		// this.hotword.on('hotword', (hotword) => {
 		// 	// this.app.addSpeechOutput({
 		// 	// 	type: 'text',
@@ -263,9 +276,6 @@ class BumblebeeClient extends EventEmitter {
 	}
 	
 	async say() {
-		console.log(arguments[0]);
-		console.log(arguments[1]);
-		debugger;
 		return this.sayQueue.say(...arguments);
 	}
 	
@@ -337,9 +347,10 @@ class BumblebeeClient extends EventEmitter {
 			this.app.setState({
 				recording: true
 			}, () => {
-				debugger;
+				// debugger;
 				// this.microphone.start();
 				this.hotword.start();
+				this.playSound('on');
 			});
 		}
 		this.emit('recording-started');
@@ -520,8 +531,10 @@ class BumblebeeClient extends EventEmitter {
 				recording: false
 			}, () => {
 				// this.microphone.stop();
+				this.hotword.stop();
 				if (this.analyser) this.analyser.stop();
 				if (this.app.vadStatusRef) clearVADCanvas(this.app.vadStatusRef.current);
+				this.playSound('off');
 			});
 		}
 		this.emit('recording-stopped');

@@ -6,8 +6,11 @@ const SpeechDownloader = require('./services/deepspeech-downloader');
 const BumblebeeNode = require('./bumblebee-node/BumblebeeNode');
 const fs = require('fs');
 const Path = require('path');
-const { Worker } = require('worker_threads');
-const electron = require('electron');
+// const { Worker } = require('worker_threads');
+// const electron = require('electron');
+const BumblebeeAPI = require('bumblebee-api');
+const BumblebeeAssistant = require('./bumblebee-assistant/BumblebeeAssistant');
+const isDev = require('electron-is-dev');
 
 const schema = {
 	id: {
@@ -79,8 +82,20 @@ class BumblebeeElectron extends Service {
 			debugger;
 			return true;
 		}
-		return this.startServices();
+		await this.startServices();
+		if (!isDev) {
+			this.startBumblebeeAssistant();
+		}
+		return true;
 	}
+	
+	startBumblebeeAssistant() {
+		BumblebeeAPI.connectAssistant('bumblebee', BumblebeeAssistant, {
+			autoStart: true,
+			timeout: 3000
+		});
+	}
+	
 	async startServices() {
 		if (this.state.servicesStarted) {
 			return true;

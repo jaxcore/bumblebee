@@ -2921,10 +2921,10 @@ bumblebee-hotword-node@0.0.8:
     node-audiorecorder "^1.4.2"
     pcm-convert "^1.6.5"
 
-bumblebee-hotword@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/bumblebee-hotword/-/bumblebee-hotword-0.0.7.tgz#7ee7b446e36aa5a0be0cd0b8fd8aa511daf1b7ae"
-  integrity sha512-UPwuQTN/w7VD5577J7/zhhTL90U7aJBRtf/XTpbYUWXGEWlV2KSCJs60EuWHTi9takTmCfMyrtZZKx81z7PZCA==
+bumblebee-hotword@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/bumblebee-hotword/-/bumblebee-hotword-0.0.8.tgz#ee645d44e0356fe722a94cb52351c81845383a53"
+  integrity sha512-vS7n13nj7AOYO48Xor8CpiCMj/CcDm5mKUjmgCch9UGNQASDj2oPWFU9+oUoIhP23UvD8VteG2P/5yd7zAoTyg==
 
 bytes@3.0.0:
   version "3.0.0"

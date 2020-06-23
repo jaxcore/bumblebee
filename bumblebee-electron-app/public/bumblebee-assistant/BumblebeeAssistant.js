@@ -94,7 +94,4 @@ class BumblebeeAssistant extends BumblebeeAPI.Assistant {
 	}
 }
 
-BumblebeeAPI.connectAssistant('bumblebee', BumblebeeAssistant, {
-	autoStart: true,
-	timeout: 3000
-});
+module.exports = BumblebeeAssistant;
