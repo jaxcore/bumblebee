@@ -8,7 +8,6 @@ For more information about Bumblebee, the Bumblebee API, examples, and tutorials
 
 - [https://github.com/jaxcore/bumblebee-api](https://github.com/jaxcore/bumblebee-api)
 
-
 ### Latest Release
 
 It is recommended to use the packaged release version.

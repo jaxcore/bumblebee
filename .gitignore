@@ -1,5 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+deepspeech-0.*s
 /node_modules
-.idea/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+
 # misc
 .DS_Store
 .env.local

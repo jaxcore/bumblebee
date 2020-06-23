@@ -16,7 +16,7 @@ Clone the bumblebee repo and follow these instructions:
 
 ```
 git clone https://github.com/jaxcore/bumblebee-electron-app
-cd bumblebee/bumblebee-electron-app
+cd bumblebee-electron-app
 yarn install
 yarn run rebuild
 ```
@@ -42,30 +42,18 @@ The console like this should load it up.
 
 ![screenshot](assets/dev-screenshot.jpg)
 
-  Make sure to turn your speakers and microphone on and follow the
-instructions to install DeepSpeech.  After installation it will confirm
-that speech-to-text processing is working.
-
-The app will start at the bare system main menu with no assistants loaded by default.
+The app will start at the main menu with no assistants running by default.
 
 #### 4. Start an assistant
 
 If you are developing an assistant you can run it now.
 
-If you would like to run the development version of the Bumblebee Assistant, it runs in a separate process
-and can be started and stopped at any time:
+If you would like to run the development version of the Bumblebee Assistant,
+it runs in a separate process and can be started and stopped at any time:
 
 ```
 yarn run bumblebee-assistant
 ```
-
-Alternatively, you can run both the app and the assistant at the same time using:
-
-```
-yarn run bumblebee-dev
-```
-
-This is similar to how the application runs in a production build.
 
 #### 5. (Optional) Production Build
 
