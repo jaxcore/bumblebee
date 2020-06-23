@@ -1,6 +1,6 @@
 {
   "name": "com.jaxcore.bumblebee",
-  "description": "Bumblebee - JavaScript voice application desktop server",
+  "description": "Bumblebee - JavaScript voice application server",
   "author": "Jaxcore Software Inc.",
   "version": "0.0.1",
   "private": false,
@@ -20,9 +20,7 @@
     "react-dom": "^16.12.0",
     "react-scripts": "^3.4.1",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0",
-    "speaker": "^0.5.1",
-    "wav": "^1.0.2"
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -99,8 +97,8 @@
           ]
         }
       ],
-      "icon": "./dist/project-name/assets/icons/png/mipmap-mdpi/ic_launcher.png",
-      "synopsis": "Project Synopsis",
+      "icon": "./assets/icon-1024x1024",
+      "synopsis": "Bumblebee - JavaScript voice application server",
       "category": "Utility"
     }
   },

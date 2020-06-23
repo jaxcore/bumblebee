@@ -8,6 +8,7 @@
     </content>
     <content url="file://$MODULE_DIR$/../bumblebee-api" />
     <content url="file://$MODULE_DIR$/../bumblebee-deepspeech" />
+    <content url="file://$MODULE_DIR$/../bumblebee-docs" />
     <content url="file://$MODULE_DIR$/../bumblebee-hotword" />
     <content url="file://$MODULE_DIR$/../bumblebee-hotword-node" />
     <content url="file://$MODULE_DIR$/../deepspeech-plugin" />

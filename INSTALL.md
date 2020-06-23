@@ -2,13 +2,15 @@
 
 ## Developer Installation
 
-#### 1. Install NodeJS and Yarn
+#### 1. Install NodeJS and Yarn and dependencies
 
-Although Bumblebee Electron App its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
+Although Bumblebee Electron App supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
 
-- Install [NodeJS](https://nodejs.org/en/), v13 or higher.
+- Install [NodeJS](https://nodejs.org/en/), v13 or higher
 
-- Install [Yarn](https://classic.yarnpkg.com/en/docs/install) package manager, v1.12.3 or higher.
+- Install [Yarn](https://classic.yarnpkg.com/en/docs/install) package manager, v1.12.3 or higher
+
+- for Ubuntu Linux [see here](https://gist.github.com/dsteinman/cbe926e8ac787ca0b8f84f9c4bd7f07c) for additional dependencies
 
 #### 2. Clone this repository
 
