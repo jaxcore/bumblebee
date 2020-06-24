@@ -1,4 +1,5 @@
 const Jaxcore = require('jaxcore');
+const {logger} = Jaxcore;
 const Speaker = require('speaker');
 const sayPlugin = require('jaxcore-say-node');
 const websocketPlugin = require('./services/websocket');
@@ -7,6 +8,8 @@ const windowManager = require('./window-manager');
 const BumblebeeElectron = require('./bumblebee-electron');
 const BumblebeeWebsocketPlugin = require('./services/websocket')
 const Path = require('path');
+
+logger.quiet(true);
 
 const BUMBLEBEE_PORT = 37688;
 

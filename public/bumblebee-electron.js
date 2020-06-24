@@ -8,7 +8,7 @@ const fs = require('fs');
 const Path = require('path');
 // const { Worker } = require('worker_threads');
 // const electron = require('electron');
-const BumblebeeAPI = require('bumblebee-api');
+const Bumblebee = require('@jaxcore/bumblebee');
 const BumblebeeAssistant = require('./bumblebee-assistant/BumblebeeAssistant');
 const isDev = require('electron-is-dev');
 
@@ -90,7 +90,7 @@ class BumblebeeElectron extends Service {
 	}
 	
 	startBumblebeeAssistant() {
-		BumblebeeAPI.connectAssistant('bumblebee', BumblebeeAssistant, {
+		Bumblebee.connectAssistant('bumblebee', BumblebeeAssistant, {
 			autoStart: true,
 			timeout: 3000
 		});
@@ -102,86 +102,26 @@ class BumblebeeElectron extends Service {
 		}
 		return new Promise((resolve, reject) => {
 			
-			// const localPath = Path.resolve('.');
-			// const localPath = __dirname;
-			// const typelocalPath = typeof __static;
-			//
-			// return;
-			
-			// const localPath = Path.resolve('./');
-			//
-
-			// const localPath = Path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
-			// this.execFunction('systemError', ['localPath = '+localPath]);
-			// const sayWorkerPaths = {
-			// 	espeak: localPath + '/espeak-all-workerthread.js',
-			// 	sam: localPath + '/sam-workerthread.js'
-			// }
-			//
-			// // this.execFunction('systemError', ['worker files: '+JSON.stringify(sayWorkerPaths)]);
-			//
-			// if (!fs.existsSync(sayWorkerPaths.espeak) || !fs.existsSync(sayWorkerPaths.espeak)) {
-			// 	this.execFunction('systemError', ['worker files not found '+JSON.stringify(sayWorkerPaths)]);
-			// }
-			// else {
-			// 	// this.execFunction('systemError', ['worker files FOUND '+JSON.stringify(sayWorkerPaths)]);
-			// 	// return;
-			// }
-			
 			const workerContent = {
 				espeak: fs.readFileSync(Path.resolve(__dirname, 'say-workerthreads', 'espeak-all-workerthread.js'), { encoding: 'utf8' }),
 				sam: fs.readFileSync(Path.resolve(__dirname, 'say-workerthreads', 'sam-workerthread.js'), { encoding: 'utf8' })
 			}
 			
-			//
-			// const worker = new Worker(workerContent.espeak, { eval: true });
-			//
-			// console.log(worker);
-			//
-			// return;
-			
-			// const workerx = new Worker(sayWorkerPaths.espeak);
-			// this.execFunction('systemError', ['workerx'+(typeof workerx)]);
-
-			// return;
-			//
-			// const worker = new Worker(sayWorkerPaths.espeak);
-			// this.execFunction('systemError', ['worker'+(typeof worker)]);
-
-			// return;
-			
-			this.jaxcore.defineService('Say', 'sayNode', {
-				// workerPaths: sayWorkerPaths
-				useWorkerContent: true
-				// workerPath: 'workerthreads'
-			});
+			this.jaxcore.defineService('Say', 'sayNode', {});
 			
 			this.jaxcore.startServiceProfile('Say', (err, sayNode) => {
 				if (err) {
 					console.log('sayNode err', err);
-					debugger;
-					this.execFunction('systemError', [err.toString()]);
+					
+					// debugger;
+					// this.execFunction('systemError', [err.toString()]);
 					//reject(err);
 					return;
 				}
 				
 				sayNode.setWorkerContent(workerContent);
 				
-				// debugger;
-				//
-				// this.execFunction('systemError', ['sayNode worker files '+JSON.stringify(sayNode.state.workerPaths)]);
-				//
-				// const worker = new Worker(sayWorkerPaths.espeak);
-				//
-				// console.log('worker', worker);
-				
-				// return;
-				
 				this.sayNode = sayNode;
-				
-				// this.startDeepspeech((err, bumblebee) => {
-				// 	callback(err, bumblebee);
-				// });
 				
 				this.startDeepspeech((err, deepspeech) => {
 					if (err) {
@@ -189,15 +129,9 @@ class BumblebeeElectron extends Service {
 						return;
 					}
 					
-					this.execFunction('systemError', ['deepspeech '+JSON.stringify(deepspeech.state)]);
+					// this.execFunction('systemError', ['deepspeech '+JSON.stringify(deepspeech.state)]);
 					
-					deepspeech.on('heartbeat', (count) => {
-						this.execFunction('systemError', ['heartbeat '+count]);
-					});
-					
-					// return;
 					this.deepspeech = deepspeech;
-					// debugger;
 					
 					this.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
 						if (err) {
@@ -206,7 +140,6 @@ class BumblebeeElectron extends Service {
 						}
 						this.bbWebsocketServer = bbWebsocketServer;
 						
-						// debugger;
 						const bumblebee = new BumblebeeNode(this);
 						this.bumblebee = bumblebee;
 						
@@ -232,7 +165,7 @@ class BumblebeeElectron extends Service {
 				modelPath: modelsPath,
 				silenceThreshold: 300,
 				vadMode: 'VERY_AGGRESSIVE',
-				debug: true
+				debug: false
 			});
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {

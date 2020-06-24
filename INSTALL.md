@@ -42,7 +42,7 @@ yarn run dev
 
 The console like this should load it up.
 
-![screenshot](assets/dev-screenshot.jpg)
+![screenshot](assets/dev-screenshot.png)
 
 The app will start at the main menu with no assistants running by default.
 

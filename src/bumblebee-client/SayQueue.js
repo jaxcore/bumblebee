@@ -14,7 +14,6 @@ function getAudioContext() {
 	}
 	else {
 		throw new Error('no AudioContext');
-		return;
 	}
 	return audioContext;
 }
@@ -31,7 +30,7 @@ function playAudio(data, volume, analyzerCallback) {
 		audioContext.decodeAudioData(data, (buffer) => {
 			source.buffer = buffer;
 			
-			var gainNode = audioContext.createGain();
+			const gainNode = audioContext.createGain();
 			gainNode.gain.setValueAtTime(volume, 0);
 			// gainNode.gain.setValueAtTime(1, audioBuffer.duration-0.5);
 			// gainNode.gain.linearRampToValueAtTime(0.0001, audioBuffer.duration - 0.2);
@@ -76,10 +75,6 @@ class SayQueue extends EventEmitter {
 
 	queue(text, options, data, onBegin, onEnd, callback) {
 		if (!options) options = {};
-		if (!options.profile && this.profile) {
-			// options.profile = this.profile;
-			// debugger;
-		}
 		this._audio.push({
 			text, options, data, onBegin, onEnd, callback
 		});
@@ -91,18 +86,13 @@ class SayQueue extends EventEmitter {
 	play(text, options, data, callback) {
 		this.emit('play', text, options, data);
 		const getAnalyzer = (analyser) => {
-			// if (this.sayOscilloscopeRef) {
-				var canvas = this.app.sayOscilloscopeRef.current;
-				canvas.width = window.innerWidth;
-				canvas.height = 100;
-				this.analyser = new SpectrumAnalyser(analyser, canvas);
-				// this.analyser.setLineColor('#7c9fff');
-			
-				this.analyser.setLineColor(this.app.theme.colors.ttsColor);
-				
-				this.analyser.setBackgroundColor('#222');
-				this.analyser.start();
-			// }
+			const canvas = this.app.sayOscilloscopeRef.current;
+			canvas.width = window.innerWidth;
+			canvas.height = 100;
+			this.analyser = new SpectrumAnalyser(analyser, canvas);
+			this.analyser.setLineColor(this.app.theme.colors.ttsColor);
+			this.analyser.setBackgroundColor('#222');
+			this.analyser.start();
 		};
 
 		playAudio(data, this.volume, getAnalyzer).then(() => {
@@ -122,10 +112,6 @@ class SayQueue extends EventEmitter {
 			this.emit('say-begin', nextAudio);
 			if (nextAudio.onBegin) nextAudio.onBegin();
 
-			// if (nextAudio.options.console) {
-			// 	this.emit('console', nextAudio.options.console);
-			// }
-
 			this.play(nextAudio.text, nextAudio.options, nextAudio.data, () => {
 				this.emit('say-end', nextAudio);
 				if (nextAudio.onEnd) nextAudio.onEnd();
@@ -139,19 +125,8 @@ class SayQueue extends EventEmitter {
 	}
 	
 	async say(text, options, onBegin, onEnd) {
-		if (options && options.profile) {
-			// debugger;
-		}
 		if (!options) options = {};
 		return new Promise((resolve, reject) => {
-			
-			// const sayOptions = {
-			// 	profile: options.profile
-			// }
-			// if (!sayOptions.profile && this.profile) sayOptions.profile = this.profile;
-			
-			// if ('console' in options) delete options.console;
-			
 			ipcRenderer.invoke('say-data', text, options).then((data) => {
 				this.queue(text, options, data, onBegin, onEnd, resolve);
 			});
@@ -174,7 +149,6 @@ const connectSayQueue = function(bumblebee, app) {
 	};
 
 	sayQueue.sayOscilloscopeRef = bumblebee.sayOscilloscopeRef;
-	// sayQueue.lineColor = '#57f'; // '#5d5dff'; //'#4c4cd5'; //'#55e';
 
 	sayQueue.on('say-begin', (utterance) => {
 		if (utterance.options.consoleOutput === false) return;
@@ -185,19 +159,25 @@ const connectSayQueue = function(bumblebee, app) {
 		});
 		
 	});
+	
+	sayQueue.setVolume(app.state.sayVolume);
+	
 	sayQueue.on('playing', () => {
 		bumblebee.setMuted(true);
-		bumblebee.app.setState({
+		app.setState({
 			sayPlaying: true,
-			// logo: bumblebee.app.logos.speaking
-		}, bumblebee.app.updateBanner);
+		}, () => {
+			app.updateBanner();
+		});
 	});
+	
 	sayQueue.on('stopped', () => {
 		bumblebee.setMuted(false);
-		bumblebee.app.setState({
+		app.setState({
 			sayPlaying: false,
-			// logo: bumblebee.app.logos.default
-		}, bumblebee.app.updateBanner);
+		}, () => {
+			app.updateBanner();
+		});
 	});
 	
 	return sayQueue;

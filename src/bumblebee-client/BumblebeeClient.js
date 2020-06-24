@@ -14,6 +14,8 @@ class BumblebeeClient extends EventEmitter {
 	constructor(app) {
 		super();
 		
+		window.bumblebee = this;
+		
 		this.app = app;
 		this.apps = {};
 		this.assistants = {};
@@ -66,8 +68,6 @@ class BumblebeeClient extends EventEmitter {
 		
 		this.sayQueue = connectSayQueue(this, app);
 		this.playSound = connectPlaySound(this, app);
-		
-		this.sayQueue.setVolume(app.state.sayVolume);
 		
 		window.systemError = (error) => {
 			this.console(error);
@@ -545,6 +545,7 @@ class BumblebeeClient extends EventEmitter {
 			muted
 		});
 		// this.microphone.setMuted(muted);
+		this.hotword.setMuted(muted);
 		if (this.app.state.useSystemMic) {
 			ipcRenderer.send('microphone-muted', muted);
 		}
