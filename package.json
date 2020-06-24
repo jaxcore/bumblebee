@@ -44,9 +44,9 @@
       "package.json"
     ],
     "buildDependenciesFromSource": true,
-    "artifactName": "${productName}-${version}.${ext}",
+    "artifactName": "Jaxcore-Bumblebee-${version}-${os}.${ext}",
     "dmg": {
-      "icon": "./icon.icns",
+      "icon": "./assets/icon.icns",
       "title": "${productName}"
     },
     "mac": {
@@ -65,7 +65,7 @@
           ]
         }
       ],
-      "icon": "./icon.icns",
+      "icon": "./assets/icon.icns",
       "identity": null
     },
     "win": {
@@ -90,11 +90,7 @@
     "linux": {
       "target": [
         {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "target": "AppImage"
         }
       ],
       "icon": "./assets/icon-1024x1024",
