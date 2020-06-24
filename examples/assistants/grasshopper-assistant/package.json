@@ -9,9 +9,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "bumblebee-api": "0.0.2",
+    "jaxcore-bumblebee": "0.0.1",
     "jaxcore": "0.0.3",
-    "play-sound-file": "0.0.1",
+    "play-sound-file": "0.0.2",
     "speaker": "^0.5.1"
   }
 }

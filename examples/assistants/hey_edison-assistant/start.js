@@ -1,6 +1,6 @@
 const Bumblebee = require('@jaxcore/bumblebee');
 
-class EdisonAssistant extends Bumblebee.Assistant {
+class HeyEdisonAssistant extends Bumblebee.Assistant {
 	
 	// every time the assistant connects to the server, a new instance of the assistant will be created
 	constructor() {
@@ -46,6 +46,6 @@ class EdisonAssistant extends Bumblebee.Assistant {
 	}
 }
 
-Bumblebee.connectAssistant('hey_edison', EdisonAssistant, {
+Bumblebee.connectAssistant('hey_edison', HeyEdisonAssistant, {
 	autoStart: true
 });

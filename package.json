@@ -1,6 +1,7 @@
 {
-  "name": "@jaxcore/bumblebee",
+  "name": "jaxcore-bumblebee",
   "version": "0.0.1",
+  "private": false,
   "description": "Bumblebee - JavaScript Voice Platform API",
   "main": "index.js",
   "scripts": {

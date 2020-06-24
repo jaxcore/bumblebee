@@ -3,7 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="e34f5113-f94a-4da5-95c3-8008a85b82d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/bumblebee.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/hey_edison-assistant/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/hey_edison-assistant/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/hey_edison-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/hey_edison-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +35,9 @@
     <dismissed value="$PROJECT_DIR$/../bumblebee-hotword-node/examples/full-example/package.json" />
     <dismissed value="$PROJECT_DIR$/../bumblebee-hotword/examples/basic-example/package.json" />
     <dismissed value="$PROJECT_DIR$/../bumblebee-hotword/examples/full-example/package.json" />
-    <dismissed value="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" />
+    <dismissed value="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/package.json" />
+    <dismissed value="$PROJECT_DIR$/examples/assistants/hey_edison-assistant/package.json" />
+    <dismissed value="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" />
     <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/node-microphone/package.json" />
     <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/node-wakeword/package.json" />
     <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/not_working/electron-example/package.json" />
@@ -43,7 +60,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../bumblebee-hotword/hotwords" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/examples/assistants/edison-assistant" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
@@ -57,11 +74,11 @@
       <recent name="$PROJECT_DIR$/bumblebee-electron-app" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/examples/assistants/edison-assistant" />
+      <recent name="$PROJECT_DIR$/examples/assistants/grasshopper-assistant" />
+      <recent name="$PROJECT_DIR$/examples/assistants/porcupine-assistant" />
       <recent name="$PROJECT_DIR$/../bumblebee-hotword/hotwords" />
       <recent name="$PROJECT_DIR$/assets" />
-      <recent name="$PROJECT_DIR$/public/assets" />
-      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public/assets" />
-      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -75,7 +92,7 @@
       <option name="presentableId" value="Default" />
       <updated>1592226486344</updated>
       <workItem from="1592226488600" duration="33681000" />
-      <workItem from="1592308896890" duration="216285000" />
+      <workItem from="1592308896890" duration="216981000" />
     </task>
     <servers />
   </component>
@@ -114,10 +131,10 @@
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="709" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1592247323102" />
-    <state x="245" y="23" width="946" height="829" key="find.popup" timestamp="1592851369020">
+    <state x="245" y="23" width="946" height="829" key="find.popup" timestamp="1593013381498">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
-    <state x="245" y="23" width="946" height="829" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1592851369020" />
+    <state x="245" y="23" width="946" height="829" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1593013381498" />
     <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup" timestamp="1592951525392">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
