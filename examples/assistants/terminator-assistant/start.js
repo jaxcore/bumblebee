@@ -1,9 +1,9 @@
-const BumblebeeAPI = require('bumblebee-api');
+const Bumblebee = require('@jaxcore/bumblebee');
 
 const playSoundFile = require('play-sound-file');
 const {loopSoundFile} = playSoundFile;
 
-class TerminatorAssistant extends BumblebeeAPI.Assistant {
+class TerminatorAssistant extends Bumblebee.Assistant {
 	
 	// every time the assistant connects to the server, a new instance of the assistant will be created
 	constructor() {
@@ -121,6 +121,6 @@ class TerminatorAssistant extends BumblebeeAPI.Assistant {
 	}
 }
 
-BumblebeeAPI.connectAssistant('terminator', TerminatorAssistant, {
+Bumblebee.connectAssistant('terminator', TerminatorAssistant, {
 	autoStart: true
 });

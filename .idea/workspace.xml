@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e34f5113-f94a-4da5-95c3-8008a85b82d1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/assets/screenshot.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/xscreenshot.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/edison-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="INCOMING_CHECK_STRATEGY" value="Never" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/../bumblebee-deepspeech/package.json" />
+    <dismissed value="$PROJECT_DIR$/../bumblebee-electron-app/package.json" />
+    <dismissed value="$PROJECT_DIR$/../bumblebee-hotword-node/examples/full-example/package.json" />
+    <dismissed value="$PROJECT_DIR$/../bumblebee-hotword/examples/basic-example/package.json" />
+    <dismissed value="$PROJECT_DIR$/../bumblebee-hotword/examples/full-example/package.json" />
+    <dismissed value="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/node-microphone/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/node-wakeword/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/not_working/electron-example/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/not_working/jaxcore-deepspeech-adapter/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/not_working/web-hotword-example/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/examples/voice-assistant-toolbox/package.json" />
+    <dismissed value="$PROJECT_DIR$/../deepspeech-plugin/package.json" />
+  </component>
+  <component name="ProjectId" id="1dMEJ3iXp0Jt0LxqmlMhHwRA1FO" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../bumblebee-hotword/hotwords" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public/assets" />
+      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public" />
+      <recent name="$PROJECT_DIR$/bumblebee-electron-app" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../bumblebee-hotword/hotwords" />
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$/public/assets" />
+      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public/assets" />
+      <recent name="$PROJECT_DIR$/bumblebee-electron-app/public" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>$USER_HOME$/.subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e34f5113-f94a-4da5-95c3-8008a85b82d1" name="Default Changelist" comment="" />
+      <created>1592226486344</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1592226486344</updated>
+      <workItem from="1592226488600" duration="33681000" />
+      <workItem from="1592308896890" duration="215803000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="673" y="325" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1592767867817">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="673" y="325" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1592767867817" />
+    <state x="706" y="241" key="FileChooserDialogImpl" timestamp="1592763149177">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="706" y="241" key="FileChooserDialogImpl/0.23.1680.1027@0.23.1680.1027" timestamp="1592763149177" />
+    <state x="355" y="88" key="SettingsEditor" timestamp="1592995252560">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="355" y="88" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1592995252560" />
+    <state x="871" y="439" key="VCS.ChangelistChooser" timestamp="1592346240885">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="871" y="439" key="VCS.ChangelistChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1592346240885" />
+    <state x="490" y="123" width="1081" height="827" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1592362977264">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="490" y="123" width="1081" height="827" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1592362977264" />
+    <state x="653" y="67" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1592858317324">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="653" y="67" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1592858317324" />
+    <state x="709" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1592247323102">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="709" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1592247323102" />
+    <state x="245" y="23" width="946" height="829" key="find.popup" timestamp="1592851369020">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="245" y="23" width="946" height="829" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1592851369020" />
+    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup" timestamp="1592951525392">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1592951525392" />
+  </component>
+</project>

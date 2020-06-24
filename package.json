@@ -1,15 +1,19 @@
 {
-  "name": "bumblebee-api",
-  "version": "0.0.2",
-  "description": "Bumblebee voice application server API",
+  "name": "@jaxcore/bumblebee",
+  "version": "0.0.1",
+  "description": "Bumblebee - JavaScript Voice Platform API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jaxcore Software Inc",
   "license": "MIT",
   "dependencies": {
     "jaxcore": "0.0.3",
     "socket.io-client": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaxcore/bumblebee"
   }
 }

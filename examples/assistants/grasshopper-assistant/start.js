@@ -1,6 +1,6 @@
-const BumblebeeAPI = require('bumblebee-api');
+const Bumblebee = require('@jaxcore/bumblebee');
 
-class GrasshopperAssistant extends BumblebeeAPI.Assistant {
+class GrasshopperAssistant extends Bumblebee.Assistant {
 	constructor() {
 		// every time the socket is started or stopped, a new instance of the assistant will be created
 		super(...arguments);
@@ -38,6 +38,6 @@ class GrasshopperAssistant extends BumblebeeAPI.Assistant {
 	}
 }
 
-BumblebeeAPI.connectAssistant('grasshopper', GrasshopperAssistant, {
+Bumblebee.connectAssistant('grasshopper', GrasshopperAssistant, {
 	autoStart: true
 });
