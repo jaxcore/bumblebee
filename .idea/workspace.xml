@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e34f5113-f94a-4da5-95c3-8008a85b82d1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/assets/screenshot.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/xscreenshot.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/edison-assistant/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/edison-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/edison-assistant/start.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/grasshopper-assistant/start.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/porcupine-assistant/start.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1592226486344</updated>
       <workItem from="1592226488600" duration="33681000" />
-      <workItem from="1592308896890" duration="215803000" />
+      <workItem from="1592308896890" duration="216285000" />
     </task>
     <servers />
   </component>
