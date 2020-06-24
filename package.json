@@ -8,9 +8,8 @@
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
-    "@jaxcore/bumblebee": "0.0.1",
     "bumblebee-deepspeech": "0.0.1",
-    "bumblebee-hotword": "0.0.8",
+    "bumblebee-hotword": "0.0.9",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
     "jaxcore-say-node": "0.0.9",

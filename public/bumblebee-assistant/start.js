@@ -1,7 +1,7 @@
-const BumblebeeAPI = require('bumblebee-api');
+const Bumblebee = require('@jaxcore/bumblebee');
 const BumblebeeAssistant = require('./BumblebeeAssistant');
 
-BumblebeeAPI.connectAssistant('bumblebee', BumblebeeAssistant, {
+Bumblebee.connectAssistant('bumblebee', BumblebeeAssistant, {
 	autoStart: true,
 	timeout: 3000
 });
