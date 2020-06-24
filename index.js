@@ -109,7 +109,7 @@ function connect(options) {
 	});
 }
 
-const BumblebeeAPI = {
+const Bumblebee = {
 	Jaxcore,
 	Adapter: Jaxcore.Adapter,
 	Client: Jaxcore.Client,
@@ -134,7 +134,7 @@ function connectAssistant(hotword, assistantClass, options, callback) {
 				autoStart: options.autoStart
 			};
 			
-			const api = await BumblebeeAPI.connect(connectOptions);
+			const api = await Bumblebee.connect(connectOptions);
 			const assistant = await api.launchAssistant(hotword, assistantClass, assistantOptions);
 			if (callback) callback(assistant);
 			
@@ -155,4 +155,4 @@ function connectAssistant(hotword, assistantClass, options, callback) {
 	_connect();
 }
 
-module.exports = BumblebeeAPI;
+module.exports = Bumblebee;

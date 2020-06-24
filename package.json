@@ -1,5 +1,5 @@
 {
-  "name": "bumblebee-api",
+  "name": "jaxcore-bumblebee",
   "version": "0.0.2",
   "description": "Bumblebee voice application server API",
   "main": "index.js",
