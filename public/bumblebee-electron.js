@@ -8,7 +8,7 @@ const fs = require('fs');
 const Path = require('path');
 // const { Worker } = require('worker_threads');
 // const electron = require('electron');
-const Bumblebee = require('@jaxcore/bumblebee');
+const Bumblebee = require('jaxcore-bumblebee');
 const BumblebeeAssistant = require('./bumblebee-assistant/BumblebeeAssistant');
 const isDev = require('electron-is-dev');
 

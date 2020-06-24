@@ -1,4 +1,4 @@
-const Bumblebee = require('@jaxcore/bumblebee');
+const Bumblebee = require('jaxcore-bumblebee');
 
 class BumblebeeAssistant extends Bumblebee.Assistant {
 	
