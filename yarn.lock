@@ -6681,6 +6681,14 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
+jaxcore-bumblebee@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/jaxcore-bumblebee/-/jaxcore-bumblebee-0.0.2.tgz#8eb0e33afbc18068aac0bd4edfed7a7190af848f"
+  integrity sha512-iJVX6JPVEAF9fc/6mTxplxam3K7Junzn84pLahOOJmY9J09WdXS5oWopMQBsgjz1mF5uJSxruiLeRLv94/0XSw==
+  dependencies:
+    jaxcore "0.0.3"
+    socket.io-client "^2.3.0"
+
 jaxcore-say-node@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/jaxcore-say-node/-/jaxcore-say-node-0.0.9.tgz#1474c5679876b23dc580a60d98fba78d43901d43"

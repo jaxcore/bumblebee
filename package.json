@@ -12,6 +12,7 @@
     "bumblebee-hotword": "0.0.9",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.3",
+    "jaxcore-bumblebee": "0.0.2",
     "jaxcore-say-node": "0.0.9",
     "lodash": "^4.17.15",
     "node-abi": "^2.18.0",
