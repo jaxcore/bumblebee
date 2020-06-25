@@ -2796,14 +2796,14 @@ browserslist@4.10.0:
     pkg-up "^3.1.0"
 
 browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.6.2, browserslist@^4.6.4, browserslist@^4.8.5, browserslist@^4.9.1:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.12.0.tgz#06c6d5715a1ede6c51fc39ff67fd647f740b656d"
-  integrity sha512-UH2GkcEDSI0k/lRkuDSzFl9ZZ87skSy9w2XAn1MsZnL+4c4rqbBd3e82UWHbYDpztABrPBhZsTEeuxVfHppqDg==
+  version "4.12.1"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.12.1.tgz#6d08bef149b70d153930780ba762644e0f329122"
+  integrity sha512-WMjXwFtPskSW1pQUDJRxvRKRkeCr7usN0O/Za76N+F4oadaTdQHotSGcX9jT/Hs7mSKPkyMFNvqawB/1HzYDKQ==
   dependencies:
-    caniuse-lite "^1.0.30001043"
-    electron-to-chromium "^1.3.413"
-    node-releases "^1.1.53"
-    pkg-up "^2.0.0"
+    caniuse-lite "^1.0.30001088"
+    electron-to-chromium "^1.3.481"
+    escalade "^3.0.1"
+    node-releases "^1.1.58"
 
 bser@2.1.1:
   version "2.1.1"
@@ -2892,26 +2892,14 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-bumblebee-deepspeech@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/bumblebee-deepspeech/-/bumblebee-deepspeech-0.0.1.tgz#b05015e029f54b0479a9ecdc64795c9fc8ed04d1"
-  integrity sha512-W/L4Sl3aw61b3F5nVJ5moF3mQoqH8gjGPTNSZ3Z7XgHwpjMk7Wea467eIuFy4NRtEqks4rKl81E6S7QtfoV0jg==
+bumblebee-deepspeech@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/bumblebee-deepspeech/-/bumblebee-deepspeech-0.0.2.tgz#318b4f78d0e6f3a2247409a4e0395e8b9ff6cb36"
+  integrity sha512-362uP6P7YHL09ZBOIn7SE71O41WqxKAuE9VM98gdJziIdKTluSwTz8aNPppL1gWn/AZV+2VaX0vpMl7Kr4F+2g==
   dependencies:
-    bumblebee-hotword-node "0.0.8"
     deepspeech "^0.7.4"
     jaxcore "0.0.3"
     node-vad "^1.1.4"
-    pcm-convert "^1.6.5"
-    play-sound-file "0.0.1"
-    speaker "^0.5.1"
-
-bumblebee-hotword-node@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/bumblebee-hotword-node/-/bumblebee-hotword-node-0.0.8.tgz#951830272783a3d5a50396614c3db42062dbe239"
-  integrity sha512-tZ1NfBU2VwW3v6XlUZV3fOLwaScjxFJEZa559waVGpcsEOlzDhmwyuTM1b3Wo0Yz0g1UjDRf9yhkNSCzz4Nrgg==
-  dependencies:
-    node-audiorecorder "^1.4.2"
-    pcm-convert "^1.6.5"
 
 bumblebee-hotword@0.0.9:
   version "0.0.9"
@@ -3063,7 +3051,7 @@ caniuse-api@^3.0.0:
     lodash.memoize "^4.1.2"
     lodash.uniq "^4.5.0"
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001087:
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001087, caniuse-lite@^1.0.30001088:
   version "1.0.30001088"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001088.tgz#23a6b9e192106107458528858f2c0e0dba0d9073"
   integrity sha512-6eYUrlShRYveyqKG58HcyOfPgh3zb2xqs7NvT2VVtP3hEUeeWvc3lqhpeMTxYWBBeeaT9A4bKsrtjATm66BTHg==
@@ -3989,7 +3977,7 @@ date-fns@^2.0.1:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.14.0.tgz#359a87a265bb34ef2e38f93ecf63ac453f9bc7ba"
   integrity sha512-1zD+68jhFgDIM0rF05rcwYO8cExdNqxjq4xP1QKM60Q45mnO6zaMWB4tOzrIr4M4GSLntsKeE4c9Bdl2jhL/yw==
 
-debug@2, debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.5.1, debug@^2.6.0, debug@^2.6.9:
+debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.5.1, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
@@ -4450,10 +4438,10 @@ electron-rebuild@^1.11.0:
     spawn-rx "^3.0.0"
     yargs "^14.2.0"
 
-electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.413:
-  version "1.3.481"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.481.tgz#0d59e72a0aaeb876b43fb1d6e84bf0dfc99617e8"
-  integrity sha512-q2PeCP2PQXSYadDo9uNY+uHXjdB9PcsUpCVoGlY8TZOPHGlXdevlqW9PkKeqCxn2QBkGB8b6AcMO++gh8X82bA==
+electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.481:
+  version "1.3.483"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.483.tgz#9269e7cfc1c8e72709824da171cbe47ca5e3ca9e"
+  integrity sha512-+05RF8S9rk8S0G8eBCqBRBaRq7+UN3lDs2DAvnG8SBSgQO3hjy0+qt4CmRk5eiuGbTcaicgXfPmBi31a+BD3lg==
 
 electron@^9.0.4:
   version "9.0.5"
@@ -4643,6 +4631,11 @@ es6-symbol@^3.1.1, es6-symbol@~3.1.3:
   dependencies:
     d "^1.0.1"
     ext "^1.1.2"
+
+escalade@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.0.1.tgz#52568a77443f6927cd0ab9c73129137533c965ed"
+  integrity sha512-DR6NO3h9niOT+MZs7bjxlj2a1k+POu5RN8CLTPX2+i78bRi9eLe7+0zXgUHMnGXWybYcL61E9hGhPKqedy8tQA==
 
 escape-goat@^2.0.0:
   version "2.1.1"
@@ -8071,11 +8064,6 @@ node-abi@^2.11.0, node-abi@^2.18.0:
   dependencies:
     semver "^5.4.1"
 
-node-audiorecorder@^1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/node-audiorecorder/-/node-audiorecorder-1.4.2.tgz#cfd178175b04bd7f8c97d6974d47232f025249fc"
-  integrity sha512-Yu6Tyzn6LaKjqXe0lI832OF9CnAEzrgfNz3ofL/zhoHcnAs2DXlDK8GifQTAEA1bA4mMciSsi8nvn8Jye6XCMQ==
-
 node-forge@0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.0.tgz#d624050edbb44874adca12bb9a52ec63cb782579"
@@ -8164,7 +8152,7 @@ node-pre-gyp@0.15.x:
     semver "^5.3.0"
     tar "^4.4.2"
 
-node-releases@^1.1.52, node-releases@^1.1.53:
+node-releases@^1.1.52, node-releases@^1.1.58:
   version "1.1.58"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.58.tgz#8ee20eef30fa60e52755fcc0942def5a734fe935"
   integrity sha512-NxBudgVKiRh/2aPWMgPR7bPTX0VPmGx5QBwCtdHitnqFE5/O8DeBXuIMH1nwNnw/aMo6AjOrpsHzfY3UbUJ7yg==
@@ -8949,22 +8937,6 @@ pkg-up@3.1.0, pkg-up@^3.1.0:
   integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
   dependencies:
     find-up "^3.0.0"
-
-pkg-up@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pkg-up/-/pkg-up-2.0.0.tgz#c819ac728059a461cab1c3889a2be3c49a004d7f"
-  integrity sha1-yBmscoBZpGHKscOImivjxJoATX8=
-  dependencies:
-    find-up "^2.1.0"
-
-play-sound-file@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/play-sound-file/-/play-sound-file-0.0.1.tgz#dcb49e3a86e09e309da9af21f2ed2bcf11d3dedd"
-  integrity sha512-Z5bkal4gNf9SXP0EF9OMgc6fnBZ9fTTO+Lk/KpkterMlA0HIVFxIyJcPaKc6nkbHmZiRpCfA48qSSZA8hWzOrg==
-  dependencies:
-    pcm-volume "^1.0.0"
-    speaker "^0.5.1"
-    wav "^1.0.2"
 
 pn@^1.1.0:
   version "1.1.0"
@@ -10120,16 +10092,6 @@ read-pkg@^4.0.1:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^1.1.14:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
-  integrity sha1-fPTFTvZI44EwhMY23SB54WbAgdk=
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "0.0.1"
-    string_decoder "~0.10.x"
-
 readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
@@ -11232,13 +11194,6 @@ stream-http@^2.7.2:
     to-arraybuffer "^1.0.0"
     xtend "^4.0.0"
 
-stream-parser@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/stream-parser/-/stream-parser-0.3.1.tgz#1618548694420021a1182ff0af1911c129761773"
-  integrity sha1-FhhUhpRCACGhGC/wrxkRwSl2F3M=
-  dependencies:
-    debug "2"
-
 stream-shift@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.1.tgz#d7088281559ab2778424279b0877da3c392d5a3d"
@@ -12146,17 +12101,6 @@ watchpack@^1.6.0:
   optionalDependencies:
     chokidar "^3.4.0"
     watchpack-chokidar2 "^2.0.0"
-
-wav@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/wav/-/wav-1.0.2.tgz#bdbf3fa0d9b4519e9dfd2f603299ead0a2f22060"
-  integrity sha512-viHtz3cDd/Tcr/HbNqzQCofKdF6kWUymH9LGDdskfWFoIy/HJ+RTihgjEcHfnsy1PO4e9B+y4HwgTwMrByquhg==
-  dependencies:
-    buffer-alloc "^1.1.0"
-    buffer-from "^1.0.0"
-    debug "^2.2.0"
-    readable-stream "^1.1.14"
-    stream-parser "^0.3.1"
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"

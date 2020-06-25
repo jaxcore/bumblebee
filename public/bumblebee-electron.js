@@ -165,7 +165,9 @@ class BumblebeeElectron extends Service {
 				modelPath: modelsPath,
 				silenceThreshold: 300,
 				vadMode: 'VERY_AGGRESSIVE',
-				debug: false
+				debug: false,
+				debugProcess: false,
+				bufferSize: 16 //  (8192 bytes / 512 byte chunk size)
 			});
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {
