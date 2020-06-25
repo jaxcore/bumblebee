@@ -29,9 +29,11 @@
     "eject": "react-scripts eject",
     "bumblebee-assistant": "node ./public/bumblebee-assistant/start",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
+    "dev-win": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
     "pack": "yarn run build && electron-builder --dir",
-    "dist": "yarn run build && electron-builder"
+    "dist": "yarn run build && electron-builder",
+    "dist-win": "yarn run build && electron-builder --x64"
   },
   "postinstall": "electron-builder install-app-deps",
   "homepage": "./",
@@ -44,7 +46,7 @@
       "package.json"
     ],
     "buildDependenciesFromSource": true,
-    "artifactName": "Jaxcore-Bumblebee-${version}-${os}.${ext}",
+    "artifactName": "Jaxcore-Bumblebee-${version}-${os}-${arch}.${ext}",
     "dmg": {
       "icon": "./assets/icon.icns",
       "title": "${productName}"
@@ -69,23 +71,9 @@
       "identity": null
     },
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "icon": "./dist/project-name/assets/icons/ico/web_hi_res_512_256x256.ico"
+      "target": "nsis",
+      "icon": "./assets/icon-512.ico",
+      "artifactName": "Jaxcore-Bumblebee-${version}-${os}-${arch}.${ext}"
     },
     "linux": {
       "target": [
