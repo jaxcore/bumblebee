@@ -121,6 +121,7 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	}
 }
 
-Bumblebee.connectAssistant('terminator', TerminatorAssistant, {
+Bumblebee.connectAssistant(TerminatorAssistant, {
+	hotword: 'terminator',
 	autoStart: true
 });

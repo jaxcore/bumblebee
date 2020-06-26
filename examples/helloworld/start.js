@@ -1,4 +1,5 @@
-const Bumblebee = require('jaxcore-bumblebee');
+// const Bumblebee = require('jaxcore-bumblebee');
+const Bumblebee = require('../../');
 
 class HelloWorldApp extends Bumblebee.Application {
 	constructor() {
@@ -13,17 +14,15 @@ class HelloWorldApp extends Bumblebee.Application {
 	}
 }
 
-const config = {
-	// application: HelloWorldApp,
+let application = Bumblebee.connectApplication(HelloWorldApp, {
 	name: "Hello World",
 	autoStart: true,
 	args: {
 		text: 'hi galaxy'
-	}
-};
-
-Bumblebee.connectApp(HelloWorldApp, config);
-
-// module.exports = {
-// 	bumblebee: config
-// }
+	},
+	launchCommands: [
+		'start hello world',
+		'launch hello world'
+	]
+});
+console.log('application', application);

@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e34f5113-f94a-4da5-95c3-8008a85b82d1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/examples/helloworld/start.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/Application.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/App.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Assistant.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Assistant.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/assistants/terminator-assistant/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/helloworld/start.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/helloworld/start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/BumblebeeWebsocketClient.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/BumblebeeWebsocketClient.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +81,7 @@
       <updated>1592226486344</updated>
       <workItem from="1592226488600" duration="33681000" />
       <workItem from="1592308896890" duration="219112000" />
-      <workItem from="1593083064170" duration="4971000" />
+      <workItem from="1593083064170" duration="18323000" />
     </task>
     <servers />
   </component>
@@ -125,9 +124,9 @@
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="245" y="23" width="946" height="829" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1593089741741" />
-    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup" timestamp="1593084583017">
+    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup" timestamp="1593123406724">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
-    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1593084583017" />
+    <state x="564" y="23" width="838" height="1027" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1593123406724" />
   </component>
 </project>
