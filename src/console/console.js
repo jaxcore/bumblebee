@@ -11,13 +11,13 @@ export default function(data) {
 		if (data.type === 'text' && data.text) {
 			this.addSpeechOutput(data);
 		}
-		// else if (data.type === 'text') {
-		// 	this.addSpeechOutput({
-		// 		text: data.text,
-		// 		assistant: data.assistant,
-		// 		type: 'text'
-		// 	});
-		// }
+		else if (data.type === 'text') {
+			this.addSpeechOutput({
+				text: data.text,
+				assistant: data.assistant,
+				type: 'text'
+			});
+		}
 		else if (data.type === 'error') {
 			let t = 'Error: '+data.text;
 			// if (data.assistant) t =  data.assistant + ' ' + t;
@@ -35,7 +35,7 @@ export default function(data) {
 				type: 'stt'
 			});
 		}
-		if (data.type === 'command') {
+		else if (data.type === 'command') {
 			this.addSpeechOutput({
 				text: data.text,
 				// options: data.stats,

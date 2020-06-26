@@ -37,7 +37,10 @@ const schema = {
 	},
 	activeAssistant: {
 		type: 'string'
-	}
+	},
+	applications: {		// applications[hotword][appId] = socket.id
+		type: 'object'
+	},
 };
 
 let serviceInstance;

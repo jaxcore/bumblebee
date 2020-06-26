@@ -170,6 +170,13 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		}
 	}
 	
+	function getApplicationSocket(hotword, appId) {
+		const assistant = app.state.assistants[hotword];
+		if (assistant && app.state.applications[hotword][appId]) {
+			const socketId = app.state.applications[hotword][appId].applicationSocket;
+			return bumblebee.bbWebsocketServer.sockets[socketId];
+		}
+	}
 	
 	function setActiveAssistantApp(appName) {
 		console.log('setActiveAssistantApp', appName);
@@ -262,6 +269,9 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			let hotwordsAvailable = app.state.hotwordsAvailable;
 			
 			const hotword = socketAssistants[socket.id];
+			
+			closeAssistantApps(hotword);
+			
 			delete assistants[hotword];
 			delete socketAssistants[socket.id];
 			hotwordsAvailable.push(hotword);
@@ -288,12 +298,124 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		}
 	}
 	
-	function registerAssistant(socket, hotword, assistantOptions) {
-		app.log('register-assistant', hotword, assistantOptions);
+	function closeAssistantApps(hotword) {
+		for (let appId in app.state.applications[hotword]) {
+			removeApp(hotword, appId);
+		}
+	}
+	
+	
+	function unregisterApplication(hotword, appId) {
+		let assistantSocket = getAssistantSocket(hotword);
+		if (assistantSocket) {
+			assistantSocket.emit('remove-application', appId);
+		}
+	}
+	
+	function removeApp(hotword, appId) {
+		console.log('removeApp', hotword, appId);
+		
+		let appSocket = getApplicationSocket(hotword, appId);
+		if (appSocket) {
+			console.log('DISCONNECTING..');
+			appSocket.disconnect();
+		}
+		const applications = {...app.state.applications};
+		delete applications[hotword][appId];
+		app.setState({applications});
+	}
+	
+	function assistantRequestAddApplication(assistantSocket, applicationSocket, applicationOptions, appInfo) {
+		debugger;
+		assistantSocket.once('application-added-'+applicationOptions.id, function(response) {
+			if (response === true) {
+				// applicationOptions.autoStart
+				const applications = {
+					...app.state.applications
+				}
+				if (!applications[applicationOptions.hotword]) {
+					applications[applicationOptions.hotword] = {};
+				}
+				if (applications[applicationOptions.hotword][applicationOptions.id]) {
+					applicationSocket.emit('register-application-response', {
+						success: false,
+						error: 'application id already registered: '+applicationOptions.id
+					});
+					return;
+				}
+				
+				applicationSocket.once('disconnect', function() {
+					unregisterApplication(applicationOptions.hotword, applicationOptions.id);
+					removeApp(applicationOptions.hotword, applicationOptions.id);
+				});
+				
+				applications[applicationOptions.hotword][applicationOptions.id] = {
+					applicationSocket: applicationSocket.id,
+					assistantSocket: assistantSocket.id,
+					id: applicationOptions.id,
+					name: applicationOptions.name,
+					options: applicationOptions
+				};
+				
+				app.setState({applications});
+				
+				debugger;
+				
+				applicationSocket.emit('register-application-response', {
+					success: true
+					//
+				});
+				
+				if (applicationOptions.autoStart) {
+					debugger;
+				}
+			}
+		})
+		debugger;
+		assistantSocket.emit('request-add-application', applicationOptions, appInfo);
+	}
+	
+	function registerApplication(socket, applicationOptions) {
+		app.log('register-application', applicationOptions);
+		bumblebee.console('application '+JSON.stringify(applicationOptions));
+		if (!applicationOptions.hotword) applicationOptions.hotword = 'bumblebee';
+		if (!applicationOptions.id) applicationOptions.id = applicationOptions.name;
+		if (!applicationOptions.name) {
+			socket.emit('register-application-response', {
+				success: false,
+				error: 'no name'
+			});
+			return;
+		}
+		
+		// todo: notify app
+		
+		const assistantSocket = getAssistantSocket(applicationOptions.hotword);
+		if (!assistantSocket) {
+			socket.emit('register-application-response', {
+				success: false,
+				error: 'assistant not active: '+applicationOptions.hotword
+			});
+			return;
+		}
+		
+		assistantRequestAddApplication(assistantSocket, socket, applicationOptions, {
+			socketId: socket.id,
+			removeAddress: socket.conn.remoteAddress
+		});
+		
+		// return;
+		
+		// debugger;
+	}
+	
+	function registerAssistant(socket, assistantOptions) {
+		app.log('register-assistant', assistantOptions);
+		const hotword = assistantOptions.hotword;
 		if (app.state.hotwordsAvailable.indexOf(hotword) > -1) {
 			
-			let assistants = app.state.assistants;
-			let socketAssistants = app.state.socketAssistants;
+			let assistants = {...app.state.assistants};
+			let socketAssistants = {...app.state.socketAssistants};
 			let hotwordsAvailable = app.state.hotwordsAvailable;
 			
 			assistants[hotword] = {
@@ -348,8 +470,12 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		
 		// debugger;
 		
-		socket.on('register-assistant', (hotword, assistantName, assistantOptions) => {
-			registerAssistant(socket, hotword, assistantName, assistantOptions);
+		socket.on('register-assistant', (assistantOptions) => {
+			registerAssistant(socket, assistantOptions);
+		});
+		
+		socket.on('register-application', (applicatioonOptions) => {
+			registerApplication(socket, applicatioonOptions);
 		});
 		
 		socket.on('jaxcore-handshake', (handshake) => {

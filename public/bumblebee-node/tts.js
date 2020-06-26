@@ -42,8 +42,7 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 		// else {
 		// 	debugger;
 		// }
-		
-		debugger;
+		// debugger;
 		console.log('say-data', text, 'options', options);
 		const result = await sayNode.getAudioData(text, options);
 		return result;

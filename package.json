@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "bumblebee-assistant": "node ./public/bumblebee-assistant/start",
+    "bumblebee-assistant": "node --inspect=9222 ./public/bumblebee-assistant/start.js",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "dev-win": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "rebuild": "npm rebuild --runtime=electron --target=9.0.2 --disturl=https://atom.io/download/atom-shell --abi=75",
