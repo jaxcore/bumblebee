@@ -41,6 +41,9 @@ const schema = {
 	applications: {		// applications[hotword][appId] = socket.id
 		type: 'object'
 	},
+	socketApplications: {   //socketApplications[socket.id] = {appId, hotword}
+		type: 'object'
+	},
 };
 
 let serviceInstance;

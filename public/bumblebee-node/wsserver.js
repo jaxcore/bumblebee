@@ -170,10 +170,16 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		}
 	}
 	
+	// function getApplicationSocket(socketId) {
+		// appOptions.applicationSocketId
+		// app.state.socketApplications[socketId]
+		//: {   //socketApplications[socket.id] = {appId, hotword}
+	// }
+	
 	function getApplicationSocket(hotword, appId) {
 		const assistant = app.state.assistants[hotword];
 		if (assistant && app.state.applications[hotword][appId]) {
-			const socketId = app.state.applications[hotword][appId].applicationSocket;
+			const socketId = app.state.applications[hotword][appId].applicationSocketId;
 			return bumblebee.bbWebsocketServer.sockets[socketId];
 		}
 	}
@@ -315,14 +321,24 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	function removeApp(hotword, appId) {
 		console.log('removeApp', hotword, appId);
 		
-		let appSocket = getApplicationSocket(hotword, appId);
-		if (appSocket) {
-			console.log('DISCONNECTING..');
-			appSocket.disconnect();
+		try {
+			let appSocket = getApplicationSocket(hotword, appId);
+			if (appSocket) {
+				console.log('DISCONNECTING..');
+				appSocket.disconnect();
+			}
+			
+			const applications = {...app.state.applications};
+			delete applications[hotword][appId];
+			
+			app.setState({
+				applications
+			});
 		}
-		const applications = {...app.state.applications};
-		delete applications[hotword][appId];
-		app.setState({applications});
+		catch(e) {
+			console.log('remove crash', e);
+			process.exit();
+		}
 	}
 	
 	function assistantRequestAddApplication(assistantSocket, applicationSocket, applicationOptions, appInfo) {
@@ -333,10 +349,10 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				const applications = {
 					...app.state.applications
 				}
-				if (!applications[applicationOptions.hotword]) {
-					applications[applicationOptions.hotword] = {};
+				if (!applications[applicationOptions.assistant]) {
+					applications[applicationOptions.assistant] = {};
 				}
-				if (applications[applicationOptions.hotword][applicationOptions.id]) {
+				if (applications[applicationOptions.assistant][applicationOptions.id]) {
 					applicationSocket.emit('register-application-response', {
 						success: false,
 						error: 'application id already registered: '+applicationOptions.id
@@ -345,30 +361,40 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				}
 				
 				applicationSocket.once('disconnect', function() {
-					unregisterApplication(applicationOptions.hotword, applicationOptions.id);
-					removeApp(applicationOptions.hotword, applicationOptions.id);
+					unregisterApplication(applicationOptions.assistant, applicationOptions.id);
+					removeApp(applicationOptions.assistant, applicationOptions.id);
 				});
 				
-				applications[applicationOptions.hotword][applicationOptions.id] = {
-					applicationSocket: applicationSocket.id,
-					assistantSocket: assistantSocket.id,
-					id: applicationOptions.id,
-					name: applicationOptions.name,
-					options: applicationOptions
+				applications[applicationOptions.assistant][applicationOptions.id] = {
+					...applicationOptions,
+					applicationSocketId: applicationSocket.id,
+					assistantSocketId: assistantSocket.id,
+					// id: applicationOptions.id,
+					// name: applicationOptions.name,
+					// options: applicationOptions
 				};
 				
-				app.setState({applications});
+				const socketApplications = {...app.state.socketApplications};
+				socketApplications[applicationSocket.id] = {
+					appId: applicationOptions.id,
+					assistant: applicationOptions.assistant
+				};
 				
-				debugger;
+				app.setState({
+					applications,
+					socketApplications
+				});
+				
+				// debugger;
 				
 				applicationSocket.emit('register-application-response', {
 					success: true
 					//
 				});
 				
-				if (applicationOptions.autoStart) {
-					debugger;
-				}
+				// if (applicationOptions.autoStart) {
+				// 	debugger;
+				// }
 			}
 		})
 		debugger;
@@ -378,7 +404,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	function registerApplication(socket, applicationOptions) {
 		app.log('register-application', applicationOptions);
 		bumblebee.console('application '+JSON.stringify(applicationOptions));
-		if (!applicationOptions.hotword) applicationOptions.hotword = 'bumblebee';
+		if (!applicationOptions.assistant) applicationOptions.assistant = 'bumblebee';
 		if (!applicationOptions.id) applicationOptions.id = applicationOptions.name;
 		if (!applicationOptions.name) {
 			socket.emit('register-application-response', {
@@ -388,13 +414,11 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			return;
 		}
 		
-		// todo: notify app
-		
-		const assistantSocket = getAssistantSocket(applicationOptions.hotword);
+		const assistantSocket = getAssistantSocket(applicationOptions.assistant);
 		if (!assistantSocket) {
 			socket.emit('register-application-response', {
 				success: false,
-				error: 'assistant not active: '+applicationOptions.hotword
+				error: 'assistant not active: '+applicationOptions.assistant
 			});
 			return;
 		}
@@ -584,6 +608,42 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			}
 		});
 		
+		// message from assistant OR applications
+		socket.on('run-application', (runId, appId, args, options) => {
+			console.log('run-application -----------------');
+			console.log('run-application -----------------');
+			console.log('run-application -----------------');
+			console.log('run-application', runId, appId, args, options);
+			
+			let assistant;
+			if (socket.id in app.state.socketAssistants) {
+				// is assistant
+				assistant = app.state.socketAssistants[socket.id];
+			}
+			if (socket.id in app.state.socketApplications) {
+				// is application
+				assistant = app.state.socketApplications[socket.id].assistant;
+			}
+			
+			//if (app.state.socketApplications[socket.id]
+			
+			if (assistant) {
+				if (assistant === getActiveAssistant()) {
+					if (appId in app.state.applications[assistant]) {
+						const appOptions = app.state.applications[assistant][appId];
+						
+						// console.log('found appId', appId, appOptions);
+						console.log('found appOptions.applicationSocketId', appOptions.applicationSocketId);
+						const appSocket = bumblebee.bbWebsocketServer.sockets[appOptions.applicationSocketId];
+						if (appSocket) {
+							console.log('appSocket', appSocket);
+						}
+						process.exit();
+					}
+				}
+			}
+		});
+		
 		// socket.on('exit-assistant', (value) => {
 		// 	let activeAssistantSocket = getActiveAssistantSocket();
 		// 	if (activeAssistantSocket === socket) {
@@ -596,6 +656,15 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	function onSocketDisconnect(socket) {
 		console.log('onSocketDisconnect', socket.id);
 		// debugger;
+		
+		if (socket in app.state.socketApplications) {
+			const socketApplications = {...app.state.socketApplications};
+			delete socketApplications[socket.id];
+			app.setState({
+				socketApplications
+			});
+		}
+		
 		unregisterAssistant(socket);
 	}
 	
