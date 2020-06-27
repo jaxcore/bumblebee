@@ -1,6 +1,6 @@
 ![screenshot](assets/logo.png)
 
-### JavaScript Voice Application Platform
+### JavaScript Voice Application Framework
 
 Write your own voice apps and assistants with an easy-to-learn JavaScript API!
 

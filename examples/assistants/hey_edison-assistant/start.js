@@ -1,6 +1,6 @@
 const Bumblebee = require('jaxcore-bumblebee');
 
-class EdisonAssistant extends Bumblebee.Assistant {
+class HeyEdisonAssistant extends Bumblebee.Assistant {
 	
 	// every time the assistant connects to the server, a new instance of the assistant will be created
 	constructor() {
@@ -40,12 +40,14 @@ class EdisonAssistant extends Bumblebee.Assistant {
 		}
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
 		await this.bumblebee.say('Exiting...');
 	}
 }
 
-Bumblebee.connectAssistant('hey_edison', EdisonAssistant, {
-	autoStart: true
+Bumblebee.connectAssistant(HeyEdisonAssistant, {
+	hotword: 'hey_edison',
+	autoStart: true,
+	timeout: 3000
 });

@@ -37,12 +37,14 @@ class PorcupineAssistant extends Bumblebee.Assistant {
 		await this.bumblebee.say('You said: ' + recognition.text);
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
 		await this.bumblebee.say('Exiting...');
 	}
 }
 
-Bumblebee.connectAssistant('porcupine', PorcupineAssistant, {
-	autoStart: true
+Bumblebee.connectAssistant(PorcupineAssistant, {
+	hotword: 'porcupine',
+	autoStart: true,
+	timeout: 3000
 });

@@ -32,12 +32,16 @@ class GrasshopperAssistant extends Bumblebee.Assistant {
 		// not called in this scenario
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
-		await this.bumblebee.say('Goodbye');
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
+		await this.bumblebee.say('Goodbye', {
+			profile: 'Xenu'
+		});
 	}
 }
 
-Bumblebee.connectAssistant('grasshopper', GrasshopperAssistant, {
-	autoStart: true
+Bumblebee.connectAssistant(GrasshopperAssistant, {
+	hotword: 'grasshopper',
+	autoStart: true,
+	timeout: 3000
 });
