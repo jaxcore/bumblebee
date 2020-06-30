@@ -8,7 +8,7 @@ class GrasshopperHelloWorld extends Bumblebee.Assistant {
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		await this.bumblebee.say('grasshopper ready');
+		await this.bumblebee.say('grasshopper begin');
 	}
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
@@ -18,12 +18,18 @@ class GrasshopperHelloWorld extends Bumblebee.Assistant {
 		let recognition = await this.bumblebee.recognize();
 		if (recognition.text === 'hello') {
 			console.log('waiting Hello World return')
-			const appReturn = await this.run('Hello World', {
-				arg1: 123
-			});
-			
-			console.log('appReturn', appReturn);
-			process.exit();
+			try {
+				const appReturn = await this.run('Hello World', {
+					arg1: 123
+				});
+				console.log('appReturn', appReturn);
+				await this.bumblebee.say('the response was ' + appReturn)
+			}
+			catch(e) {
+				await this.bumblebee.console('Hello World error: ' + e);
+				await this.bumblebee.say('error: ' + e);
+				// process.exit();
+			}
 		}
 		// not called in this scenario
 	}

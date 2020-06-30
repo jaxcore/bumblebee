@@ -38,13 +38,15 @@ async function launchApplication(api, applicationClass, applicationOptions) {
 	if (success) {
 		let adapterProfileName = 'bbassistant:' + websocketOptions.host + ':' + websocketOptions.port;
 		console.log('connecting ADAPTER', adapterProfileName);
-		console.log('connecting ADAPTER', adapterProfileName);
 		
 		jaxcore.addAdapter(adapterProfileName, applicationClass);
+		console.log('applicationOptions.initialState', applicationOptions.initialState)
+		
 		jaxcore.defineAdapter(adapterProfileName, {
 			adapterType: adapterProfileName,
 			websocketOptions,
-			serviceProfiles: [serviceProfileName]
+			serviceProfiles: [serviceProfileName],
+			initialState: applicationOptions.initialState
 		});
 		
 		return connectAdapter(adapterProfileName);
