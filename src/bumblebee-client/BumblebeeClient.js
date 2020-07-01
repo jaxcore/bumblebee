@@ -74,9 +74,9 @@ class BumblebeeClient extends EventEmitter {
 		}
 		
 		// receive speech recognition result by a synchronous message from public/electron.js
-		window.hotwordAssistantApp = (activeApp) => {
-			this.setActiveAssistantApp(activeApp);
-		};
+		// window.hotwordAssistantApp = (assistant, appInfo) => {
+		// 	this.setActiveAssistantApp(assistant, appInfo);
+		// };
 
 		window.hotwordAssistant = (hotword, assistantName, activeApp) => {
 			this.setActiveAssistant(hotword, assistantName, activeApp);
@@ -115,7 +115,13 @@ class BumblebeeClient extends EventEmitter {
 		app.vadStatusRef.current.width = window.innerWidth;
 		
 		window.updateVADStatus = (status) => {
-			drawVADCanvas(app.vadStatusRef.current, status);
+			if (app.vadStatusRef && app.vadStatusRef.current) {
+				drawVADCanvas(app.vadStatusRef.current, status);
+			}
+			else {
+				console.log('no vadStatusRef');
+				debugger;
+			}
 		};
 
 		window.updateClientConfig = (config) => {
@@ -457,7 +463,7 @@ class BumblebeeClient extends EventEmitter {
 		});
 	}
 	
-	setActiveAssistantApp(activeApp) {
+	setActiveAssistantApp(assistant, appInfo) {
 		this.app.updateConfig();
 		this.app.updateBanner();
 		

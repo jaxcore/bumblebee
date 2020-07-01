@@ -402,14 +402,23 @@ class App extends Component {
 
 		if (hotword && this.state.config.assistants) {
 			const assistantName = this.state.config.assistants[hotword].name;
-			if (this.state.config.activeAssistantsApp) {
-				if (this.state.config.activeAssistantsApp === 'main') {
-					name = assistantName;
-					clss = 'assistant-main';
+			if (this.state.config.activeApplications[hotword] && this.state.config.applications[hotword]) {
+				let appId = this.state.config.activeApplications[hotword].appId;
+				if (appId in this.state.config.applications[hotword]) {
+					let appName = this.state.config.applications[hotword][appId].name;
+					name = appName;
 				}
-				else name = this.state.config.activeAssistantsApp;
+				else name = assistantName;
 			}
 			else name = assistantName;
+			// if (this.state.config.activeAssistantsApp) {
+			// 	if (this.state.config.activeAssistantsApp === 'main') {
+			// 		name = assistantName;
+			// 		clss = 'assistant-main';
+			// 	}
+			// 	else name = this.state.config.activeAssistantsApp;
+			// }
+			// else name = assistantName;
 		}
 		else name = 'Main Menu';
 		
