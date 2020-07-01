@@ -5,42 +5,47 @@ class HelloWorldApp extends Bumblebee.Application {
 	constructor() {
 		super(...arguments);
 		
-		// this.bumblebee.say('Hello World started');
-		this.bumblebee.say(this.state.greetings);
+		console.log('HelloWorldApp constructor');
+		this.console('HelloWorldApp constructor');
+		// this.say('Hello World started');
+		this.say('greetings '+this.state.greetings);
 	}
 	
 	async onBegin(args) {
 		// args.text
-		console.log('onBegin', args);
-		debugger;
-		await this.bumblebee.say('Hello World Begin');
+		console.log('HelloWorldApp onBegin', args);
+		
+		// debugger;
+		this.console('onBegin '+JSON.stringify(args));
+		
+		await this.say('Hello World Begin');
 	}
 	
 	async loop() {
-		this.bumblebee.console('Say "Hello World"');
-		let recognition = await this.bumblebee.recognize();
+		this.console('Say "Hello World"');
+		let recognition = await this.recognize();
 		if (recognition.text === 'hello world') {
-			await this.bumblebee.say('Hello World');
-			await this.bumblebee.say('ending');
+			await this.say('Hello World');
+			await this.say('ending');
 			this.return('he said hello world');
 		}
 		else if (recognition.text === 'exit') {
-			await this.bumblebee.say('Exiting');
+			await this.say('Exiting');
 			return false;
 			// this.error('did not say hello world');
 		}
 		else {
-			await this.bumblebee.say('did not recognize '+recognition.text);
+			await this.say('hello world did not recognize '+recognition.text);
 		}
 	}
 	
 	async onEnd(e, r) {
-		if (e) this.bumblebee.console('onEnd e = '+e);
+		if (e) this.console('onEnd e = '+e);
 		if (r) {
-			this.bumblebee.console('onEnd r = '+r);
-			await this.bumblebee.say('returned '+r);
+			this.console('onEnd r = '+r);
+			await this.say('returned '+r);
 		}
-		await this.bumblebee.say('Hello World Ending');
+		await this.say('Hello World Ending');
 	}
 }
 
@@ -48,6 +53,9 @@ let application = Bumblebee.connectApplication(HelloWorldApp, {
 	name: "Hello World",
 	assistant: 'grasshopper',
 	autoStart: true,
+	initialArgs: {
+		arg1: 123
+	},
 	initialState: {
 		greetings: 'hi galaxy'
 	},
