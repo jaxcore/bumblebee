@@ -39,16 +39,77 @@ that can be called upon at any time.
 
 ## Install Bumblebee
 
-First release coming soon:
+The [latest release](https://github.com/jaxcore/bumblebee/releases) is **COMING SOON**:
 
-[https://github.com/jaxcore/bumblebee/releases](https://github.com/jaxcore/bumblebee/releases)
+- MacOSX: [jaxcore-bumblebee-0.0.1-darwin-x64.dmg]()
+- Linux: [jaxcore-bumblebee-0.0.1-linux-x64.tar.gz]()
+- Windows [jaxcore-bumblebee-0.0.1-win-x64.tar.gz]()
+- or install from [source](https://github.com/jaxcore/bumblebee-electron-app)
+
+Disk Space Requirements:
+
+- Bumblebee Application: 450 MB (approx.)
+- DeepSpeech English model: 1.4 GB
 
 ![screenshot](assets/screenshot.png)
 
-#### (Optional) Developer Installation
-
-To install Bumblebee from source code, see the [source code INSTALL](https://github.com/jaxcore/bumblebee-electron-app).
-
 ## Hello World
 
-todo...
+To get started, create the most simple Bumblebee app possible, a "Hello World" voice application.
+
+Create a new directory and NPM project:
+
+```
+mkdir helloworld
+cd helloworld
+npm init
+npm install jaxcore-bumblebee
+```
+
+Create a new file named `helloworld.js`:
+
+```
+const Bumblebee = require('jaxcore-bumblebee');
+
+class HelloWorldApp extends Bumblebee.Application {
+	constructor() {
+		super(...arguments);
+	}
+
+	async loop() {
+		this.console('Say "Hello World"');
+
+		let recognition = await this.recognize();
+		this.console(recognition);
+
+		if (recognition.text === 'hello world') {
+			await this.playSound('okay');
+			await this.say('Hello World');
+		}
+		else {
+			await this.playSound('error');
+		}
+	}
+}
+
+Bumblebee.connectApplication(HelloWorldApp, {
+	name: "Hello World",
+	autoStart: true
+});
+```
+
+Run the voice app:
+
+```
+node helloworld.js
+```
+
+With the speakers and microphone turned on, you will be able to talk to this application and listen to it's responses.  It doesn't do very much yet, if it hears you say "hello world' it will respond by making a beep sound and also saying "hello world".
+
+This program will run continuously until the NodeJS script is closed using `Command+C` or `Control+C` and it can be started and stopped at any time.
+
+## Documentation (Coming Soon)
+
+This is a brand new project with much more to come.  
+
+Use github's "watch" feature to stay tuned for updates!

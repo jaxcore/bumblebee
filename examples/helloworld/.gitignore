@@ -1,5 +1,6 @@
+/.idea/*
+/.idea
 /node_modules
-.idea/
 # misc
 .DS_Store
 .env.local
