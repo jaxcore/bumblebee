@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const Bumblebee = require('@jaxcore/bumblebee');
-=======
 const Bumblebee = require('jaxcore-bumblebee');
->>>>>>> app
 
 class PorcupineAssistant extends Bumblebee.Assistant {
 	constructor() {
@@ -47,14 +43,8 @@ class PorcupineAssistant extends Bumblebee.Assistant {
 	}
 }
 
-<<<<<<< HEAD
-Bumblebee.connectAssistant('porcupine', PorcupineAssistant, {
-	autoStart: true
-});
-=======
 Bumblebee.connectAssistant(PorcupineAssistant, {
 	hotword: 'porcupine',
 	autoStart: true,
 	timeout: 3000
 });
->>>>>>> app

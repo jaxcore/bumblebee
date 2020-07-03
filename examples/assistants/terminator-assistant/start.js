@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const Bumblebee = require('@jaxcore/bumblebee');
-=======
 const Bumblebee = require('jaxcore-bumblebee');
->>>>>>> app
 
 const playSoundFile = require('play-sound-file');
 const {loopSoundFile} = playSoundFile;
@@ -124,13 +120,8 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	}
 }
 
-<<<<<<< HEAD
-Bumblebee.connectAssistant('terminator', TerminatorAssistant, {
-	autoStart: true
-=======
 Bumblebee.connectAssistant(TerminatorAssistant, {
 	hotword: 'terminator',
 	autoStart: true,
 	timeout: 3000
->>>>>>> app
 });

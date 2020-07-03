@@ -1,8 +1,4 @@
-<<<<<<< HEAD:examples/assistants/hey_edison-assistant/start.js
-const Bumblebee = require('@jaxcore/bumblebee');
-=======
 const Bumblebee = require('jaxcore-bumblebee');
->>>>>>> app:examples/assistants/hey_edison-assistant/start.js
 
 class HeyEdisonAssistant extends Bumblebee.Assistant {
 	
@@ -50,14 +46,8 @@ class HeyEdisonAssistant extends Bumblebee.Assistant {
 	}
 }
 
-<<<<<<< HEAD:examples/assistants/hey_edison-assistant/start.js
-Bumblebee.connectAssistant('hey_edison', HeyEdisonAssistant, {
-	autoStart: true
-});
-=======
 Bumblebee.connectAssistant(HeyEdisonAssistant, {
 	hotword: 'hey_edison',
 	autoStart: true,
 	timeout: 3000
 });
->>>>>>> app:examples/assistants/hey_edison-assistant/start.js
