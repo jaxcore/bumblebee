@@ -10,7 +10,7 @@ Although Bumblebee Electron App supplies its own version of NodeJS, to write new
 
 - for Ubuntu Linux there are additional dependencies:
 
-- ```
+```
 sudo apt install build-essentials libasound2-dev git gcc-multilib libstdc++6
 ```
 
@@ -27,14 +27,24 @@ npm run rebuild
 
 #### 3. (Optional) DeepSpeech Model
 
+The first time Bumblebee is run, it will prompt to download the DeepSpeech english language models.
+
 If you already have
 [DeepSpeech 0.7.4](https://github.com/mozilla/DeepSpeech/releases/tag/v0.7.4) installed,
-you can copy or softlink
+you can skip the download step by copying or softlinking
 [deepspeech-0.7.4-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.pbmm)
 and
 [deepspeech-0.7.4-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.scorer)
-to the root of the `bumblebee-electron-app` directory to skip the DeepSpeech install procedure.
-This can also be used to change or test different DeepSpeech models.
+to the root of the `bumblebee-electron-app` directory.
+This can also be used to change or test different DeepSpeech models, including different languages.
+
+If the auto-downloaded models are already installed, they can be found at:
+
+- MacOSX: `~/Library/Application\ Support/com.jaxcore.bumblebee`
+- Linux:  `~/.config/com.jaxcore.bumblebee`
+- Windows: `?`
+
+Bumblebee first looks here for the models, delete them if yoou would like to try a different model.
 
 #### 4. Start the bumblebee application + assistant
 

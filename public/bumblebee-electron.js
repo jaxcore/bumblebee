@@ -99,10 +99,37 @@ class BumblebeeElectron extends Service {
 	}
 	
 	startBumblebeeAssistant() {
-		Bumblebee.connectAssistant('bumblebee', BumblebeeAssistant, {
-			autoStart: true,
-			timeout: 3000
-		});
+		// Bumblebee.connectAssistant('bumblebee', BumblebeeAssistant, {
+		// 	autoStart: true,
+		// 	timeout: 3000
+		// });
+		(async () => {
+			try {
+				const api = await Bumblebee.connect({
+					timeout: 3000
+				});
+				
+				const assistant = Bumblebee.launchAssistant(api, BumblebeeAssistant, {
+					hotword: 'bumblebee',
+					autoStart: true,
+					timeout: 3000
+				});
+				
+				console.log('assistant connected', typeof assistant);
+			}
+			catch(e) {
+				if (e.timeout) {
+					console.log('Trying again...');
+					setTimeout(() => {
+						this.startBumblebeeAssistant();
+					}, 3000);
+				}
+				else {
+					console.log('Bumblebee assistant error:', e);
+					// process.exit();
+				}
+			}
+		})();
 	}
 	
 	async startServices() {
