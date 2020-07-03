@@ -532,6 +532,7 @@ class App extends Component {
 	}
 	executeConsoleInput() {
 		let text = this.consoleInputRef.current.value;
+		console.log('executeConsoleInput', this.state.inputMode, text);
 		if (this.state.inputMode === 'stt') {
 			this.bumblebee.simulateSTT(text);
 		}
