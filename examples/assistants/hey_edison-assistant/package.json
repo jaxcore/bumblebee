@@ -9,7 +9,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+<<<<<<< HEAD:examples/assistants/hey_edison-assistant/package.json
     "jaxcore-bumblebee": "0.0.1",
+=======
+    "jaxcore-bumblebee": "0.0.3",
+>>>>>>> app:examples/assistants/hey_edison-assistant/package.json
     "jaxcore": "0.0.3",
     "play-sound-file": "0.0.2",
     "speaker": "^0.5.1"

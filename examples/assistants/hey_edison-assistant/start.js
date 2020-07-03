@@ -1,4 +1,8 @@
+<<<<<<< HEAD:examples/assistants/hey_edison-assistant/start.js
 const Bumblebee = require('@jaxcore/bumblebee');
+=======
+const Bumblebee = require('jaxcore-bumblebee');
+>>>>>>> app:examples/assistants/hey_edison-assistant/start.js
 
 class HeyEdisonAssistant extends Bumblebee.Assistant {
 	
@@ -9,25 +13,25 @@ class HeyEdisonAssistant extends Bumblebee.Assistant {
 	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
-		this.bumblebee.console('hotword detected: ' + hotword);
+		this.console('hotword detected: ' + hotword);
 	}
 	
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
 	async onCommand(recognition) {
-		this.bumblebee.console('command detected: ' + recognition.text);
+		this.console('command detected: ' + recognition.text);
 	}
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		await this.bumblebee.say('Hello, I am Edison');
-		await this.bumblebee.say('Ask me anything');
+		await this.say('Hello, I am Edison');
+		await this.say('Ask me anything');
 	}
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
-		let recognition = await this.bumblebee.recognize();
+		let recognition = await this.recognize();
 		console.log('recognition:', recognition.text);
-		this.bumblebee.console(recognition);
+		this.console(recognition);
 		
 		if (recognition.text === 'exit') {
 			// say "exit" to shut down the assistant
@@ -36,16 +40,24 @@ class HeyEdisonAssistant extends Bumblebee.Assistant {
 		
 		if (/^who |what |when |where |why |how |is |are |were |was |does |will |am | should |would |if |have |had |may |could /.test(recognition.text)) {
 			// answer everything with 42
-			await this.bumblebee.say('The answer is 42');
+			await this.say('The answer is 42');
 		}
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
-		await this.bumblebee.say('Exiting...');
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
+		await this.say('Exiting...');
 	}
 }
 
+<<<<<<< HEAD:examples/assistants/hey_edison-assistant/start.js
 Bumblebee.connectAssistant('hey_edison', HeyEdisonAssistant, {
 	autoStart: true
 });
+=======
+Bumblebee.connectAssistant(HeyEdisonAssistant, {
+	hotword: 'hey_edison',
+	autoStart: true,
+	timeout: 3000
+});
+>>>>>>> app:examples/assistants/hey_edison-assistant/start.js

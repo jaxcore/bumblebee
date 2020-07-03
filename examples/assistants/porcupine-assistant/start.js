@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const Bumblebee = require('@jaxcore/bumblebee');
+=======
+const Bumblebee = require('jaxcore-bumblebee');
+>>>>>>> app
 
 class PorcupineAssistant extends Bumblebee.Assistant {
 	constructor() {
@@ -8,25 +12,25 @@ class PorcupineAssistant extends Bumblebee.Assistant {
 	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
-		this.bumblebee.console('hotword detected: ' + hotword);
+		this.console('hotword detected: ' + hotword);
 	}
 	
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
 	async onCommand(recognition) {
-		this.bumblebee.console('command detected: ' + recognition.text);
+		this.console('command detected: ' + recognition.text);
 	}
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		await this.bumblebee.say('Porcupine Ready');
+		await this.say('Porcupine Ready');
 	}
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
-		let recognition = await this.bumblebee.recognize();
+		let recognition = await this.recognize();
 		// received a speech-to-text recognition
 		console.log('recognition:', recognition.text);
-		this.bumblebee.console(recognition);
+		this.console(recognition);
 		
 		// say "exit" to shut down the assistant
 		if (recognition.text === 'exit') {
@@ -34,15 +38,23 @@ class PorcupineAssistant extends Bumblebee.Assistant {
 		}
 		
 		// respond with a text-to-speech instruction
-		await this.bumblebee.say('You said: ' + recognition.text);
+		await this.say('You said: ' + recognition.text);
 	}
 	
-	// onStop is called after this.loop() returns, or if this.abort() was called
-	async onStop() {
-		await this.bumblebee.say('Exiting...');
+	// onEnd() is called after this.loop() returns, or if this.abort() was called
+	async onEnd() {
+		await this.say('Exiting...');
 	}
 }
 
+<<<<<<< HEAD
 Bumblebee.connectAssistant('porcupine', PorcupineAssistant, {
 	autoStart: true
 });
+=======
+Bumblebee.connectAssistant(PorcupineAssistant, {
+	hotword: 'porcupine',
+	autoStart: true,
+	timeout: 3000
+});
+>>>>>>> app

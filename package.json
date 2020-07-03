@@ -1,8 +1,13 @@
 {
   "name": "jaxcore-bumblebee",
+<<<<<<< HEAD
   "version": "0.0.1",
   "private": false,
   "description": "Bumblebee - JavaScript Voice Platform API",
+=======
+  "version": "0.0.3",
+  "description": "Bumblebee voice application framework - Websocket Client API",
+>>>>>>> app
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
