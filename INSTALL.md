@@ -2,15 +2,17 @@
 
 ## Developer Installation
 
-#### 1. Install NodeJS and Yarn and dependencies
+#### 1. Install NodeJS and dependencies
 
 Although Bumblebee Electron App supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
 
 - Install [NodeJS](https://nodejs.org/en/), v12 or higher
 
-- Install [Yarn](https://classic.yarnpkg.com/en/docs/install) package manager, v1.12.3 or higher
+- for Ubuntu Linux there are additional dependencies:
 
-- for Ubuntu Linux [see here](https://gist.github.com/dsteinman/cbe926e8ac787ca0b8f84f9c4bd7f07c) for additional dependencies
+- ```
+sudo apt install build-essentials libasound2-dev git gcc-multilib libstdc++6
+```
 
 #### 2. Clone this repository
 
@@ -19,8 +21,8 @@ Clone the bumblebee repo and follow these instructions:
 ```
 git clone https://github.com/jaxcore/bumblebee-electron-app
 cd bumblebee-electron-app
-yarn install
-yarn run rebuild
+npm install
+npm run rebuild
 ```
 
 #### 3. (Optional) DeepSpeech Model
@@ -37,7 +39,7 @@ This can also be used to change or test different DeepSpeech models.
 #### 4. Start the bumblebee application + assistant
 
 ```
-yarn run bumblebee
+npm run bumblebee
 ```
 
 The console like this should load it up.
@@ -49,7 +51,7 @@ The console like this should load it up.
 The bumblebee application can be started without an assistant, instead of `yarn run bumblebee` use:
 
 ```
-yarn run dev
+npm run dev
 ```
 
 The console without an assistant looks like this;
@@ -62,7 +64,7 @@ If you would like to run the development version of the Bumblebee Assistant,
 it can be started and stopped from a separate terminal window:
 
 ```
-yarn run bumblebee-assistant
+npm run bumblebee-assistant
 ```
 
 #### 6. (Optional) Production Build
@@ -70,5 +72,5 @@ yarn run bumblebee-assistant
 The `dist` command will produce a packaged version of Bumblebee in the `/dist` directory.
 
 ```
-yarn run dist
+npm run dist
 ```

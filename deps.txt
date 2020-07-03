@@ -1,0 +1,12 @@
+sudo apt install build-essentials xz-utils curl libasound2-dev git gcc-multilib libstdc++6
+wget https://nodejs.org/dist/v14.4.0/node-v14.4.0-linux-x64.tar.xz
+unxz node-v14.4.0-linux-x64.tar.xz
+tar xfv ./node-v14.4.0-linux-x64.tar
+sudo mv node-v14.4.0-linux-x64 /usr/local/lib/node
+export PATH=$PATH:/usr/local/lib/node/bin
+sudo apt update
+git clone https://github.com/jaxcore/bumblebee-electron-app
+cd bumblebee-electron-app
+yarn install
+yarn run rebuild
+yarn run dev
