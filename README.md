@@ -37,23 +37,31 @@ systems and build upon eachother to create larger and smarter voice applications
 By associating a voice app with a hotword, your app becomes a voice assistant
 that can be called upon at any time.
 
-## Install Bumblebee
+## Installation
 
-It is recommended to install the packaged release version.
+### Requirements
 
-- [See latest release](releases)
-
-If you would like to install Bumblebee from the source files, see [INSTALL](INSTALL.md).
-
-### Resource Requirements
-
-The computing resources to run Bumblebee are much larger than a typical application.
+The computing resources required to run Bumblebee are much larger than a typical application.
 
 - Disk Space: 1.9 GB of space is required for installation
-	- Bumblebee: ~450 MB (approx.)
+	- Bumblebee: ~450 MB
 	- DeepSpeech: ~1.4 GB
 - CPU's with AVX support are [required](https://github.com/tensorflow/tensorflow/issues/19584), GPU may be utilized if available
 - RAM usage will fluctuate ~350 MB (or higher)
+
+### Desktop Application
+
+It is recommended to install the packaged release version.
+
+- [releases](https://github.com/jaxcore/bumblebee-electron-app/releases)
+
+To install the development version of Bumblebee from the source files, see:
+
+- [developer install](https://github.com/jaxcore/bumblebee-electron-app/blob/master/INSTALL.md)
+
+After installation, the first time Bumblebee is run it will prompt to download the DeepSpeech [pre-trained English model](https://github.com/mozilla/DeepSpeech/releases) files (1.4 GB disk space required).
+
+When installed successfully and with the microphone and speakers turned on, the console will react in real-time to the audio it hears.  Test the that speech-to-text is operational before proceeding.
 
 ![screenshot](assets/screenshot.png)
 
@@ -114,6 +122,8 @@ This program will run continuously until the NodeJS script is closed using `Comm
 
 ## Documentation (Coming Soon)
 
-This is a brand new project with much more to come.  
+This is a brand new project with much more to come.
+
+There are some additional [examples](https://github.com/jaxcore/bumblebee/tree/master/examples) to try and many more are in the works.
 
 Use github's "watch" feature to stay tuned for updates!
