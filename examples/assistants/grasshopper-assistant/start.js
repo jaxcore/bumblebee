@@ -4,25 +4,19 @@ class GrasshopperAssistant extends Bumblebee.Assistant {
 	constructor() {
 		// every time the socket is started or stopped, a new instance of the assistant will be created
 		super(...arguments);
+		this.setSayProfile('Xenu');
 	}
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		await this.bumblebee.say('Hi', {
-			profile: 'Xenu'
-		});
-		await this.bumblebee.say('I\'m a grasshopper', {
-			profile: 'Xenu'
-		});
-		await this.bumblebee.delay(1500);
-		await this.bumblebee.say('Well...', {
-			profile: 'Xenu'
-		});
-		await this.bumblebee.say('This has been fun', {
-			profile: 'Xenu'
-		});
-		await this.bumblebee.delay(100);
-		// return false in onBegin() to immediatley exit
+		await this.say('Hi');
+		await this.say('I\'m a grasshopper');
+		await this.delay(1000);
+		await this.say('Well...');
+		await this.delay(500);
+		await this.say('This has been fun...');
+		await this.delay(500);
+		// return false in onBegin() to immediately exit
 		return false;
 	}
 	
@@ -34,9 +28,7 @@ class GrasshopperAssistant extends Bumblebee.Assistant {
 	
 	// onEnd() is called after this.loop() returns, or if this.abort() was called
 	async onEnd() {
-		await this.bumblebee.say('Goodbye', {
-			profile: 'Xenu'
-		});
+		await this.say('Goodbye');
 	}
 }
 

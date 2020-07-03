@@ -34,29 +34,29 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	}
 	
 	async scan() {
-		this.bumblebee.console('Scanning...');
+		this.console('Scanning...');
 		await playSoundFile(__dirname + '/scanning.wav');
-		this.bumblebee.console('Target not found');
+		this.console('Target not found');
 	}
 	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
-		// this.bumblebee.console('onHotword(): ' + hotword);
-		// await this.bumblebee.say('I need your clothes... your boots...');
-		// await this.bumblebee.say('and your motorcycle');
+		// this.console('onHotword(): ' + hotword);
+		// await this.say('I need your clothes... your boots...');
+		// await this.say('and your motorcycle');
 	}
 	
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
 	async onCommand(recognition) {
-		this.bumblebee.console('onCommand(): ' + recognition.text);
+		this.console('onCommand(): ' + recognition.text);
 		
 		if (recognition.text === 'exit') {
-			await this.bumblebee.say('Exiting...');
+			await this.say('Exiting...');
 			// to exit the assistant from a command, call bumblebee.abort()
 			return this.abort('command exited');
 		}
 		else {
-			await this.bumblebee.say('Your command was not recognized: ' + recognition.text);
+			await this.say('Your command was not recognized: ' + recognition.text);
 		}
 	}
 	
@@ -65,7 +65,7 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 		
 		await playSoundFile('./terminator.wav', 0.7);
 		
-		await this.bumblebee.say('Where is Sarah Connor?', {
+		await this.say('Where is Sarah Connor?', {
 			replacements: {
 				'sare ah': 'Sarah'
 			}
@@ -87,10 +87,10 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
-		let recognition = await this.bumblebee.recognize();
+		let recognition = await this.recognize();
 		
 		console.log('recognition:', recognition.text);
-		this.bumblebee.console(recognition);
+		this.console(recognition);
 		
 		if (recognition.text === 'error') {
 			// throwing errors will exit the assistant
@@ -103,17 +103,16 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 		}
 		else {
 			// respond with a text-to-speech instruction
-			await this.bumblebee.say('You said: ' + recognition.text);
+			await this.say('You said: ' + recognition.text);
 		}
 	}
 	
 	// onEnd() is called after this.loop() returns, or if this.abort() was called
 	async onEnd() {
 		// this.soundLoop.stop();
-		await this.bumblebee.say('I\'ll be back');
-		await playSoundFile(__dirname + '/terminator.wav', 0.7);
-		
 		this.stopScanning();
+		await this.say('I\'ll be back');
+		await playSoundFile(__dirname + '/terminator.wav', 0.7);
 	}
 	
 	async onTeardown() {
