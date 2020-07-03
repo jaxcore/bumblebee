@@ -6,7 +6,7 @@
 
 Although Bumblebee Electron App supplies its own version of NodeJS, to write new voice apps requires that NodeJS be installed on your system.
 
-- Install [NodeJS](https://nodejs.org/en/), v13 or higher
+- Install [NodeJS](https://nodejs.org/en/), v12 or higher
 
 - Install [Yarn](https://classic.yarnpkg.com/en/docs/install) package manager, v1.12.3 or higher
 
@@ -34,30 +34,38 @@ and
 to the root of the `bumblebee-electron-app` directory to skip the DeepSpeech install procedure.
 This can also be used to change or test different DeepSpeech models.
 
-#### 4. Start the bumblebee app
+#### 4. Start the bumblebee application + assistant
+
+```
+yarn run bumblebee
+```
+
+The console like this should load it up.
+
+![screenshot](assets/screenshot.png)
+
+#### 5. (Optional) Run without an assistant
+
+The bumblebee application can be started without an assistant, instead of `yarn run bumblebee` use:
 
 ```
 yarn run dev
 ```
 
-The console like this should load it up.
+The console without an assistant looks like this;
 
 ![screenshot](assets/dev-screenshot.png)
-
-The app will start at the main menu with no assistants running by default.
-
-#### 4. Start an assistant
 
 If you are developing an assistant you can run it now.
 
 If you would like to run the development version of the Bumblebee Assistant,
-it runs in a separate process and can be started and stopped at any time:
+it can be started and stopped from a separate terminal window:
 
 ```
 yarn run bumblebee-assistant
 ```
 
-#### 5. (Optional) Production Build
+#### 6. (Optional) Production Build
 
 The `dist` command will produce a packaged version of Bumblebee in the `/dist` directory.
 
