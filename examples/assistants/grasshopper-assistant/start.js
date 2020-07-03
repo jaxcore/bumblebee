@@ -22,13 +22,12 @@ class GrasshopperAssistant extends Bumblebee.Assistant {
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop() {
-		console.log('loop()');
 		// not called in this scenario
 	}
 	
 	// onEnd() is called after this.loop() returns, or if this.abort() was called
 	async onEnd() {
-		await this.say('Goodbye');
+		console.log('exiting');
 	}
 }
 
