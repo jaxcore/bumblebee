@@ -39,17 +39,21 @@ that can be called upon at any time.
 
 ## Install Bumblebee
 
-The [latest release](https://github.com/jaxcore/bumblebee/releases) is **COMING SOON**:
+It is recommended to install the packaged release version.
 
-- MacOSX: [jaxcore-bumblebee-0.0.1-darwin-x64.dmg]()
-- Linux: [jaxcore-bumblebee-0.0.1-linux-x64.tar.gz]()
-- Windows [jaxcore-bumblebee-0.0.1-win-x64.tar.gz]()
-- or install from [source](https://github.com/jaxcore/bumblebee-electron-app)
+- [See latest release](releases)
 
-Disk Space Requirements:
+If you would like to install Bumblebee from the source files, see [INSTALL](INSTALL.md).
 
-- Bumblebee Application: 450 MB (approx.)
-- DeepSpeech English model: 1.4 GB
+### Resource Requirements
+
+The computing resources to run Bumblebee are much larger than a typical application.
+
+- Disk Space: 1.9 GB of space is required for installation
+	- Bumblebee: ~450 MB (approx.)
+	- DeepSpeech: ~1.4 GB
+- CPU's with AVX support are [required](https://github.com/tensorflow/tensorflow/issues/19584), GPU may be utilized if available
+- RAM usage will fluctuate ~350 MB (or higher)
 
 ![screenshot](assets/screenshot.png)
 
