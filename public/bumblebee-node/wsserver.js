@@ -137,15 +137,15 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	});
 	
 	deepspeech.on('recognize', function (text, stats) {
+		console.log('DS recognize', text, stats);
 		let activeAssistantSocket = getActiveAssistantSocket();
 		if (activeAssistantSocket) {
-			app.execFunction('systemError', ['activeAssistantSocket recognize '+text]);
+			// app.execFunction('systemError', ['activeAssistantSocket recognize '+text]);
 			// console.log('DS Assistant recognize ('+app.state.activeAssistant+')', text, stats);
 			// const recogId = Math.random().toString().substring(2);
 			let hotword = app.state.activeAssistant;
 			if (app.state.activeApplications[hotword].appId === 'main') {
-				console.log('activeAssistantSocket emit','recognize', text, stats, 'hotword='+hotword);
-				
+				// console.log('activeAssistantSocket emit','recognize', text, stats, 'hotword='+hotword);
 				activeAssistantSocket.emit('recognize', text, stats);
 			}
 			else {
@@ -170,7 +170,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			let args = [text, stats];
 			app.execFunction(functionName, args);
 			// activeAssistantSocket.on('recognize-response-'+recogId, text, stats, recogId);
-			console.log('DS recognize', text, stats);
+			
 		}
 	});
 	
@@ -389,7 +389,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	}
 	
 	function assistantRequestAddApplication(assistantSocket, applicationSocket, applicationOptions, appInfo) {
-		debugger;
+		// debugger;
 		assistantSocket.once('application-added-'+applicationOptions.id, function(response) {
 			if (response === true) {
 				// applicationOptions.autoStart
@@ -775,6 +775,17 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					}
 				// }
 			}
+		});
+		
+		socket.on('play-sound', (id, name, theme) => {
+			const onBegin = function() {
+				console.log('emit play-sound-begin-'+id+' =========================s');
+				socket.emit('play-sound-begin-'+id);
+			};
+			bumblebee.saySound(name, theme, onBegin).then(() => {
+				console.log('emit play-sound-end-'+id);
+				socket.emit('play-sound-end-'+id);
+			});
 		});
 		
 		// socket.on('exit-assistant', (value) => {

@@ -43,21 +43,21 @@ class BumblebeeNode extends EventEmitter {	// todo: refactor into an adapter
 		});
 	}
 	
-	async playSoundNode(name, theme) {
-		if (!theme) theme = 'startrek1';
-		let file = this.soundThemesPath + '/' + theme + '/' + name + '.wav';
-		console.log('playSoundNode:', file);
-		// return playsound(file, 1);
-	}
-	
-	async playSound(name, theme) {
-		if (!theme) theme = 'startrek1';
-		console.log('execFunction: playSound', name, theme);
-		let id = this.app.execFunction('playSound', [name, theme]);
-		ipcMain.once('playsound-end-'+id, () => {
-			console.log('sound-end-'+id, name, 'has ended');
-		});
-	}
+	// async playSoundNode(name, theme) {
+	// 	if (!theme) theme = 'startrek1';
+	// 	let file = this.soundThemesPath + '/' + theme + '/' + name + '.wav';
+	// 	console.log('playSoundNode:', file);
+	// 	// return playsound(file, 1);
+	// }
+	//
+	// async playSound(name, theme) {
+	// 	if (!theme) theme = 'startrek1';
+	// 	console.log('execFunction: playSound', name, theme);
+	// 	let id = this.app.execFunction('playSound', [name, theme]);
+	// 	ipcMain.once('playsound-end-'+id, () => {
+	// 		console.log('sound-end-'+id, name, 'has ended');
+	// 	});
+	// }
 	
 	console(data) {
 		this.app.execFunction('displayConsole', [data]);

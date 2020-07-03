@@ -5,7 +5,7 @@ const ipcMain = require('electron').ipcMain;
 module.exports = function connectTTS(bumblebee, app, sayNode) {
 	
 	// this promise issues a call to the front-end to perform a TTS operation
-	async function say(text, options, onBegin, onEnd) {
+	function say(text, options, onBegin) {
 		return new Promise((resolve, reject) => {
 			
 			console.log('bumblebeeNode say', text, options);
@@ -15,17 +15,14 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 			// the audio is played client-side for visualization
 			app.execFunction('say', [text, options], function (id) {
 				console.log('SAY id=', id);
-				// debugger;
 				
-				ipcMain.once('say-begin-'+id, function (id, text, optionss) {
-					// debugger;
+				ipcMain.once('say-begin-'+id, function (id, text, options) {
 					if (onBegin) onBegin();
 				})
-				ipcMain.once('say-end-'+id, function (id, text, optionss) {
-					// debugger;
-					if (onEnd) onEnd();
+				ipcMain.once('say-end-'+id, function (id, text, options) {
 					resolve();
 				});
+				
 				// ipcMain.on('say-cancel', function (id, text, optionss) {
 				// 	reject();
 				// 	onEnd
@@ -33,6 +30,30 @@ module.exports = function connectTTS(bumblebee, app, sayNode) {
 			});
 		});
 	}
+	
+	// use the sayQueue for sound effects tp be played between TTS commands
+	function saySound(name, theme, onBegin) {
+		return new Promise((resolve, reject) => {
+			const id = Math.random().toString().substring(2);
+			ipcMain.once('say-begin-'+id, function (id) {
+				console.log('got on begin');
+				console.log('got on begin');
+				console.log('got on begin');
+				console.log('got on begin ===========================');
+				if (onBegin) onBegin();
+			})
+			
+			ipcMain.once('say-end-'+id, function (id) {
+				resolve();
+			});
+			
+			app.execFunction('saySound', [name, theme, id], function () {
+				// console.log('SAY SOUND id=', id);
+			});
+		});
+	}
+	
+	bumblebee.saySound = saySound;
 	
 	// fornt-end calls the back-end to retrieve the TTS audio buffer
 	ipcMain.handle('say-data', async (event, text, options) => {

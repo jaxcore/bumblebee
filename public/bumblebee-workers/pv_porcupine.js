@@ -41,8 +41,6 @@ var PorcupineModule = (function () {
 			var nodeFS;
 			var nodePath;
 			if (ENVIRONMENT_IS_NODE) {
-				console.log('ENVIRONMENT_IS_NODE', _scriptDir);
-				// process.exit();
 				scriptDirectory = __dirname + "/";
 				read_ = function shell_read(filename, binary) {
 					if (!nodeFS) nodeFS = require("fs");
@@ -76,9 +74,6 @@ var PorcupineModule = (function () {
 				}
 			}
 			else if (ENVIRONMENT_IS_SHELL) {
-				console.log('ENVIRONMENT_IS_SHELL');
-				process.exit();
-				
 				if (typeof read != "undefined") {
 					read_ = function shell_read(f) {
 						return read(f)
@@ -111,9 +106,6 @@ var PorcupineModule = (function () {
 				}
 			}
 			else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
-				console.log('ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER');
-				// process.exit();
-				
 				if (ENVIRONMENT_IS_WORKER) {
 					scriptDirectory = self.location.href
 				}

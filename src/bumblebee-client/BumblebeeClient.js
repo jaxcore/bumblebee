@@ -67,7 +67,7 @@ class BumblebeeClient extends EventEmitter {
 		// });
 		
 		this.sayQueue = connectSayQueue(this, app);
-		this.playSound = connectPlaySound(this, app);
+		// this._playSound = connectPlaySound(this, app);
 		
 		window.systemError = (error) => {
 			this.console(error);
@@ -281,6 +281,9 @@ class BumblebeeClient extends EventEmitter {
 		this.app.console(component);
 	}
 	
+	async playSound() {
+		return this.sayQueue.playSound(...arguments);
+	}
 	async say() {
 		return this.sayQueue.say(...arguments);
 	}

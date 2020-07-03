@@ -4,7 +4,7 @@
 
 // const playSoundFile = require('bumblebee-api/server/playSoundFile');
 
-module.exports = async function playsound(path, volume) {
+// module.exports = async function playsound(path, volume) {
 	// if (typeof volume === 'undefined' || volume === 1) {
 	// 	return new Promise((resolve, reject) => {
 	// 		try {
@@ -28,4 +28,4 @@ module.exports = async function playsound(path, volume) {
 	// else {
 	//
 	// }
-}
+// }

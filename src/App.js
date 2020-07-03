@@ -184,7 +184,10 @@ class App extends Component {
 			// appTextColor,
 		}, () => {
 			if (this.bumblebee.analyser) {
-				this.bumblebee.analyser.setLineColor(this.theme.colors.sttColor);
+				if (this.state.soundPlaying && this.state.soundPlayingColor) {
+					this.bumblebee.analyser.setLineColor(this.state.soundPlayingColor);
+				}
+				else this.bumblebee.analyser.setLineColor(this.theme.colors.sttColor);
 			}
 		});
 	}
