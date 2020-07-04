@@ -1,6 +1,6 @@
 {
   "name": "jaxcore-bumblebee",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Bumblebee voice application framework - Websocket Client API",
   "main": "index.js",
   "scripts": {
