@@ -164,7 +164,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			}
 		}
 		else {
-			app.execFunction('systemError', ['default recognize '+text]);
+			//app.execFunction('systemError', ['default recognize '+text]);
 			
 			let functionName = 'deepspeechResults';
 			let args = [text, stats];

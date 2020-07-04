@@ -41,7 +41,7 @@ class SpeechDownloader extends EventEmitter {
 		}
 		
 		this.path = path.resolve(electron.app.getPath('appData'), 'com.jaxcore.bumblebee');
-		
+		console.log('appData:', this.path);
 		this.modelsPath = path.resolve(this.path, 'deepspeech-'+DEEPSPEECH_VERSION+'-models');
 		this.file1path = this.modelsPath + '.pbmm';
 		this.file2path = this.modelsPath + '.scorer';

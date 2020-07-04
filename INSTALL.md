@@ -14,6 +14,12 @@ Although Bumblebee Electron App supplies its own version of NodeJS, to write new
 sudo apt install build-essentials libasound2-dev git gcc-multilib libstdc++6
 ```
 
+- for Windows:
+    - install [Git Bash](https://gitforwindows.org/) for a terminal prompt
+    - make sure `node` and `npm` are in your $PATH
+    - add A BROWSER environment variable using `export BROWSER=NONE`
+    - use the `-win` versions of the npm commands
+
 #### 2. Clone this repository
 
 Clone the bumblebee repo and follow these instructions:
@@ -42,7 +48,7 @@ If the auto-downloaded models are already installed, they can be found at:
 
 - MacOSX: `~/Library/Application\ Support/com.jaxcore.bumblebee`
 - Linux:  `~/.config/com.jaxcore.bumblebee`
-- Windows: `?`
+- Windows: `~/AppData/Roaming/com.jaxcore.bumblebee`
 
 Bumblebee first looks here for the models, delete them if yoou would like to try a different model.
 
@@ -51,6 +57,8 @@ Bumblebee first looks here for the models, delete them if yoou would like to try
 ```
 npm run bumblebee
 ```
+
+Windows users use `npm run bumblebee-win` instead.
 
 The console like this should load it up.
 
@@ -63,6 +71,8 @@ The bumblebee application can be started without an assistant, instead of `yarn 
 ```
 npm run dev
 ```
+
+Windows users use `npm run dev-win` instead.
 
 The console without an assistant looks like this;
 
@@ -84,3 +94,5 @@ The `dist` command will produce a packaged version of Bumblebee in the `/dist` d
 ```
 npm run dist
 ```
+
+Windows users use `npm run dist-win` instead.
