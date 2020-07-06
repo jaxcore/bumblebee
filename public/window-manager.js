@@ -31,18 +31,18 @@ function createWindow() {
 	
 	mainWindow.on('closed', () => mainWindow = null);
 	
-	mainWindow.on('close', function (event) {
-		// console.log('close -> hide');
-		// event.preventDefault();
-		// mainWindow.hide();
-		app.quit()
-	});
+	// mainWindow.on('close', function (event) {
+	// 	// console.log('close -> hide');
+	// 	// event.preventDefault();
+	// 	// mainWindow.hide();
+	// 	app.quit()
+	// });
 	
 	app.on('window-all-closed', () => {
-		if (process.platform !== 'darwin') {
-			app.quit()
-		}
-	})
+		// if (process.platform !== 'darwin') {
+			app.quit();
+		// }
+	});
 	
 	ipcMain.on('dev-tools', (event, arg) => {
 		console.log('open dev tools');
