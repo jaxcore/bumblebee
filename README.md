@@ -14,7 +14,7 @@ For more information about the Bumblebee voice application framework, be sure to
 
 It is recommended to install the packaged release version.
 
-- [See latest release](releases)
+- [See latest release](https://github.com/jaxcore/bumblebee-electron-app/releases)
 
 ### Developer Installation
 
