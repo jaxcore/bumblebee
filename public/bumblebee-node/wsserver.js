@@ -640,6 +640,11 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		
 		socket.on('assistant-return-error', (message) => {
 			console.log('assistant-return-error', message);
+			bumblebee.console({
+				type: 'error',
+				text: message,
+				assistant: hotword
+			});
 			
 			const hotword = app.state.socketAssistants[socket.id];
 			
@@ -678,6 +683,9 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					debugger;
 				}
 				
+			}
+			else {
+			
 			}
 		});
 		
