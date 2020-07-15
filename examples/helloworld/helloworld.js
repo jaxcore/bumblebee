@@ -13,7 +13,9 @@ class HelloWorldApp extends Bumblebee.Application {
 		
 		if (recognition.text === 'hello world') {
 			await this.playSound('okay');
-			await this.say('Hello World');
+			await this.say('Hello World', {
+				profile: 'Borg'
+			});
 		}
 		else {
 			await this.playSound('error');
