@@ -1,5 +1,8 @@
 import EventEmitter from "events";
 import SpectrumAnalyser from "./audio-spectrum-analyser";
+import borgGetAudioData from "./say-borg";
+
+global.borgGetAudioData = borgGetAudioData;
 
 const ipcRenderer = window.ipcRenderer;
 
@@ -50,22 +53,47 @@ function getAudioContext() {
 	return audioContext;
 }
 
-function playAudio(data, volume, analyzerCallback) {
+function playAudio(text, options, data, volume, analyzerCallback) {
 	if (!volume) {
 		return new Promise((resolve, reject) => {
 			resolve();
 		});
 	}
-	return new Promise((resolve, reject) => {
-		let audioContext = getAudioContext();
-		let source = audioContext.createBufferSource();
-		audioContext.decodeAudioData(data, (buffer) => {
-			source.buffer = buffer;
+	if (options.profile === 'Borg') {
+		return new Promise((resolve, reject) => {
+			let audioContext = data.audioContext;
+			let source = data.source;
+			// audioContext.decodeAudioData(data, (buffer) => {
+			// 	source.buffer = buffer;
 			
-			const gainNode = audioContext.createGain();
-			gainNode.gain.setValueAtTime(volume, 0);
-			// gainNode.gain.setValueAtTime(1, audioBuffer.duration-0.5);
-			// gainNode.gain.linearRampToValueAtTime(0.0001, audioBuffer.duration - 0.2);
+			// debugger;
+			
+			// const gainNode = audioContext.createGain();
+			// gainNode.gain.setValueAtTime(volume, 0);
+			// // gainNode.gain.setValueAtTime(1, audioBuffer.duration-0.5);
+			// // gainNode.gain.linearRampToValueAtTime(0.0001, audioBuffer.duration - 0.2);
+			// source.connect(gainNode);
+			// gainNode.connect(audioContext.destination);
+			//
+			// const audioAnalyser = audioContext.createAnalyser();
+			// gainNode.connect(audioAnalyser);
+			//
+			// if (analyzerCallback) analyzerCallback(audioAnalyser);
+			//
+			// source.onended = function () {
+			// 	audioContext.close();
+			// 	resolve();
+			// };
+			// source.start(0);
+			//
+			//
+			//
+			// // attempt to mitigate audio click/pops at the end of the clip using a gain node
+			//
+			var gainNode = audioContext.createGain();
+			gainNode.gain.setValueAtTime(1, 0);
+			gainNode.gain.setValueAtTime(1, source.buffer.duration-0.5);
+			gainNode.gain.linearRampToValueAtTime(0.0001, source.buffer.duration - 0.2);
 			source.connect(gainNode);
 			gainNode.connect(audioContext.destination);
 			
@@ -74,17 +102,59 @@ function playAudio(data, volume, analyzerCallback) {
 			
 			if (analyzerCallback) analyzerCallback(audioAnalyser);
 			
+			let didexit = false;
+			setTimeout(function() {
+				if (!didexit) {
+					didexit = true;
+					// stopping early seems to help with click/pops as well
+					source.stop();
+					audioContext.close();
+					resolve();
+				}
+			}, source.buffer.duration * 1000 - 200); // stop 0.2s early
+
 			source.onended = function () {
-				audioContext.close();
-				resolve();
+				if (!didexit) {
+					didexit = true;
+					audioContext.close();
+					resolve();
+				}
 			};
+
 			source.start(0);
-		}, function (e) {
-			console.log('error', e);
-			// debugger;
-			reject();
 		});
-	});
+	}
+	else {
+		return new Promise((resolve, reject) => {
+			let audioContext = getAudioContext();
+			let source = audioContext.createBufferSource();
+			audioContext.decodeAudioData(data, (buffer) => {
+				source.buffer = buffer;
+				
+				const gainNode = audioContext.createGain();
+				gainNode.gain.setValueAtTime(volume, 0);
+				// gainNode.gain.setValueAtTime(1, audioBuffer.duration-0.5);
+				// gainNode.gain.linearRampToValueAtTime(0.0001, audioBuffer.duration - 0.2);
+				source.connect(gainNode);
+				gainNode.connect(audioContext.destination);
+				
+				const audioAnalyser = audioContext.createAnalyser();
+				gainNode.connect(audioAnalyser);
+				
+				if (analyzerCallback) analyzerCallback(audioAnalyser);
+				
+				source.onended = function () {
+					audioContext.close();
+					resolve();
+				};
+				source.start(0);
+			}, function (e) {
+				console.log('error', e);
+				// debugger;
+				reject();
+			});
+		});
+	}
 }
 
 class SayQueue extends EventEmitter {
@@ -97,14 +167,15 @@ class SayQueue extends EventEmitter {
 		this.profile = null;
 		this.app = app;
 	}
-
+	
 	setProfile(profile) {
 		this.profile = profile;
 	}
+	
 	setVolume(v) {
 		this.volume = v;
 	}
-
+	
 	queue(text, options, data, onBegin, onEnd, callback) {
 		if (!options) options = {};
 		this._audio.push({
@@ -119,7 +190,7 @@ class SayQueue extends EventEmitter {
 			this.playNext();
 		}
 	}
-
+	
 	play(text, options, data) {
 		this.emit('play', text, options, data);
 		const getAnalyzer = (analyser) => {
@@ -131,14 +202,14 @@ class SayQueue extends EventEmitter {
 			this.analyser.setBackgroundColor('#222');
 			this.analyser.start();
 		};
-		return playAudio(data, this.volume, getAnalyzer);
+		return playAudio(text, options, data, this.volume, getAnalyzer);
 		// .then(() => {
 		// playAudio(data, this.volume, getAnalyzer).then(() => {
 		// 	if (callback) callback();
 		// 	this.playNext();
 		// })
 	}
-
+	
 	playNext() {
 		// if (this.playing) {
 		// 	debugger;
@@ -153,7 +224,7 @@ class SayQueue extends EventEmitter {
 				this.playing = true;
 				this.emit('playing');
 			}
-
+			
 			this.emit('say-begin', currAudio);
 			if (currAudio.onBegin) currAudio.onBegin();
 			
@@ -173,14 +244,11 @@ class SayQueue extends EventEmitter {
 						console.log('color', color);
 						bumblebee.analyser.setLineColor(color);
 					}
-					else {
-						debugger;
-					}
 					
 					themes[theme][name].onended = () => {
 						// debugger;
 						this.app.setState({
-							soundPlaying : false
+							soundPlaying: false
 						}, () => {
 							if (currAudio.onEnd) currAudio.onEnd();
 							this.emit('say-end', currAudio);
@@ -193,8 +261,8 @@ class SayQueue extends EventEmitter {
 					};
 					
 					this.app.setState({
-						soundPlaying : true,
-						soundPlayingColor : color
+						soundPlaying: true,
+						soundPlayingColor: color
 					}, () => {
 						this.app.updateBanner();
 						
@@ -261,13 +329,22 @@ class SayQueue extends EventEmitter {
 	say(text, options, onBegin, onEnd) {
 		if (!options) options = {};
 		return new Promise((resolve, reject) => {
-			ipcRenderer.invoke('say-data', text, options).then((data) => {
-				this.queue(text, options, data, onBegin, onEnd, resolve);
-			});
+			// todo: should do queue first, then get data to preserve order
+			if (options.profile === 'Borg') {
+				borgGetAudioData(text, options, (audioContext, source) => {
+					this.queue(text, options, {
+						audioContext, source
+					}, onBegin, onEnd, resolve);
+				});
+			}
+			else {
+				ipcRenderer.invoke('say-data', text, options).then((data) => {
+					this.queue(text, options, data, onBegin, onEnd, resolve);
+				});
+			}
 		});
 	};
 }
-
 
 const connectSayQueue = function(bumblebee, app) {
 	const sayQueue = new SayQueue(app);
