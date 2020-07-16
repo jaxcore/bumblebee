@@ -11,6 +11,8 @@ const BumblebeeWebSocketPlugin = {
 
 const Application = require('./lib/Application');
 const Assistant = require('./lib/Assistant');
+const numberize = require('./lib/numberize');
+const {parseInteger, makeReplacements} = numberize;
 
 let _jaxcore;
 
@@ -158,7 +160,10 @@ const Bumblebee = {
 	connectAssistant,
 	launchAssistant,
 	Application,
-	Assistant
+	Assistant,
+	numberize,
+	parseInteger,
+	makeReplacements
 };
 
 module.exports = Bumblebee;

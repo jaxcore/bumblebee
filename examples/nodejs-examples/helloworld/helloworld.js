@@ -3,6 +3,7 @@ const Bumblebee = require('jaxcore-bumblebee');
 class HelloWorldApp extends Bumblebee.Application {
 	constructor() {
 		super(...arguments);
+		this.setSayProfile('Borg');
 	}
 	
 	async loop() {
@@ -13,9 +14,7 @@ class HelloWorldApp extends Bumblebee.Application {
 		
 		if (recognition.text === 'hello world') {
 			await this.playSound('okay');
-			await this.say('Hello World', {
-				profile: 'Borg'
-			});
+			await this.say('Hello World');
 		}
 		else {
 			await this.playSound('error');
