@@ -27,7 +27,7 @@ export default function(data) {
 				type: 'text'
 			});
 		}
-		else if (data.type === 'stt' && data.text && data.options) {
+		else if (data.type === 'stt' && data.text) {
 			this.addSpeechOutput({
 				text: data.text,
 				stats: data.stats,
@@ -43,7 +43,7 @@ export default function(data) {
 				type: 'command'
 			});
 		}
-		else if (data.type === 'tts' && data.text && data.options) {
+		else if (data.type === 'tts' && data.text) {
 			if (data.options.consoleOutput === false) {
 				return;
 			}

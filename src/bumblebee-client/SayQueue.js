@@ -1,6 +1,6 @@
 import EventEmitter from "events";
-import SpectrumAnalyser from "./audio-spectrum-analyser";
-import borgGetAudioData from "./say-borg";
+import SpectrumAnalyser from "./SpectrumAnalyser";
+import borgGetAudioData from "./SayBorg";
 
 global.borgGetAudioData = borgGetAudioData;
 
@@ -17,6 +17,7 @@ const colors = {
 	off: '#f7f',
 	okay: '#44f',
 	on: '#7ff',
+	select: 'green',
 	up: '#f77',
 	warn: 'yellow'
 };
@@ -30,9 +31,10 @@ const themes = {
 		down: new Audio('sounds/startrek1/down.wav'),
 		error: new Audio('sounds/startrek1/error.wav'),
 		hail: new Audio('sounds/startrek1/hail.wav'),
-		okay: new Audio('sounds/startrek1/okay.wav'),
 		off: new Audio('sounds/startrek1/off.wav'),
+		okay: new Audio('sounds/startrek1/okay.wav'),
 		on: new Audio('sounds/startrek1/on.wav'),
+		select: new Audio('sounds/startrek1/select.wav'),
 		up: new Audio('sounds/startrek1/up.wav'),
 		warn: new Audio('sounds/startrek1/warn.wav')
 	}

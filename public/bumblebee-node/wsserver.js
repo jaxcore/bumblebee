@@ -613,6 +613,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		});
 		
 		socket.on('console', (data) => {
+			this.log('console', data);
 			if (typeof data === 'string' || typeof data === 'number' || typeof data === 'boolean') {
 				data = {
 					type: 'text',
@@ -621,7 +622,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			}
 			const hotword = app.state.socketAssistants[socket.id];
 			data.assistant = hotword;
-			debugger;
+			// debugger;
 			bumblebee.console(data);
 		});
 		
