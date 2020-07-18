@@ -137,7 +137,7 @@ async function connectAssistant(assistantClass, assistantOptions) {
 		return Bumblebee.launchAssistant(api, assistantClass, assistantOptions);
 	} catch (e) {
 		console.error('connectAssistant error:', e);
-		process.exit();
+		if (typeof process === 'object') process.exit();
 	}
 }
 
@@ -149,7 +149,7 @@ async function connectApplication(applicationClass, applicationOptions) {
 		return Bumblebee.launchApplication(api, applicationClass, applicationOptions);
 	} catch (e) {
 		console.error('connectApplication error:', e);
-		process.exit();
+		if (typeof process === 'object') process.exit();
 	}
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Bumblebee = require('jaxcore-bumblebee');
+import Bumblebee from 'jaxcore-bumblebee';
 
 class HelloWorldApp extends Bumblebee.Application {
 	constructor() {
