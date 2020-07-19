@@ -271,8 +271,10 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					socket.once('assistant-active-'+id, function() {
 						console.log('confirmed assistant-active', id);
 						socket.emit('assistant-active-confirm-'+id);
+						
+						app.emit('assistant-active-'+hotword);
 					})
-					socket.emit('assistant-active', true,id);
+					socket.emit('assistant-active', true, id);
 				}
 				else {
 					console.log('the assistant was not found');
@@ -416,7 +418,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					console.log('applicationSocket disconnect');
 					
 					let isActive = false;
-					if (app.state.activeApplications[applicationOptions.assistant].appId === applicationOptions.id) {
+					if (app.state.activeApplications[applicationOptions.assistant] && app.state.activeApplications[applicationOptions.assistant].appId === applicationOptions.id) {
 						console.log('disconnect application is the active app', applicationOptions.id);
 						
 						// let appId = app.state.activeApplications[applicationOptions.assistant].appId;
@@ -428,6 +430,9 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 						
 						// process.exit();
 						isActive = true;
+					}
+					else {
+					
 					}
 					
 					// send messaage to assistant
@@ -510,14 +515,23 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			return;
 		}
 		
-		assistantRequestAddApplication(assistantSocket, socket, applicationOptions, {
-			socketId: socket.id,
-			removeAddress: socket.conn.remoteAddress
-		});
-		
-		// return;
-		
-		// debugger;
+		if (app.state.activeAssistant !== applicationOptions.assistant) {
+			// if the assistant is not active, activate it, then wait until after the assistant onBegin() has completed
+			assistantSocket.once('application-begun', function() {
+				// after "Bumblebee Ready"
+				assistantRequestAddApplication(assistantSocket, socket, applicationOptions, {
+					socketId: socket.id,
+					removeAddress: socket.conn.remoteAddress
+				});
+			});
+			hotwordDetected(applicationOptions.assistant);
+		}
+		else {
+			assistantRequestAddApplication(assistantSocket, socket, applicationOptions, {
+				socketId: socket.id,
+				removeAddress: socket.conn.remoteAddress
+			});
+		}
 	}
 	
 	function registerAssistant(socket, assistantOptions) {

@@ -9,7 +9,7 @@ const BumblebeeElectron = require('./bumblebee-electron');
 const BumblebeeWebsocketPlugin = require('./services/websocket')
 const Path = require('path');
 
-logger.quiet(true);
+logger.quiet(false);
 
 const BUMBLEBEE_PORT = 37688;
 

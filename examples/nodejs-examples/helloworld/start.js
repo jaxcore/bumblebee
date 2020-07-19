@@ -3,7 +3,10 @@ const Bumblebee = require('jaxcore-bumblebee');
 class HelloWorldApp extends Bumblebee.Application {
 	constructor() {
 		super(...arguments);
-		this.setSayProfile('Borg');
+	}
+	
+	async onBegin() {
+		await this.playSound('hail');
 	}
 	
 	async loop() {
