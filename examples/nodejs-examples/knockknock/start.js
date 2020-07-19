@@ -87,7 +87,6 @@ class KnockKnockApp extends Bumblebee.Application {
 	}
 	
 	async nextLine() {
-		this.console('nextLine '+this.currentJokeLine);
 		const joke = this.jokes[this.currentJoke];
 		if (this.currentJokeLine === null) this.currentJokeLine = 0;
 		else {

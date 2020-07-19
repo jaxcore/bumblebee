@@ -22,7 +22,7 @@ together into an integrated voice application API.  Because these systems
 run locally without any cloud services, stand-alone privacy-focused always-on voice applications can
 finally be realized.
 
-The Bumblebee project includes a voice app server console ([bumblebee-electron-app](https://github.com/jaxcore/bumblebee-electron-app)),
+The Bumblebee project includes an ElectronJS voice app server console,
 which automatically installs and sets up DeepSpeech, and runs the bumblebee websocket service that
 voice applications can connect to. The applications run independently of the bumblebee server,
 and use a websocket API to connect and communicate by receiving speech-to-text results
@@ -51,13 +51,13 @@ The computing resources required to run Bumblebee are much larger than a typical
 
 ### Desktop Application
 
-It is recommended to install the packaged release version.
+To install and run the Bumblebee desktop app from the source files, see:
 
-- [releases](https://github.com/jaxcore/bumblebee-electron-app/releases)
+- [install](https://github.com/jaxcore/bumblebee/blob/master/electron-app/INSTALL.md)
 
-To install the development version of Bumblebee from the source files, see:
+Or install the packaged release:
 
-- [developer install](https://github.com/jaxcore/bumblebee-electron-app/blob/master/INSTALL.md)
+- [releases](https://github.com/jaxcore/bumblebee/releases)
 
 After installation, the first time Bumblebee is run it will prompt to download the DeepSpeech [pre-trained English model](https://github.com/mozilla/DeepSpeech/releases) files (1.4 GB disk space required).
 

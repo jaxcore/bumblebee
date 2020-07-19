@@ -25,13 +25,36 @@ sudo apt install build-essentials libasound2-dev git gcc-multilib libstdc++6
 Clone the bumblebee repo and follow these instructions:
 
 ```
-git clone https://github.com/jaxcore/bumblebee-electron-app
-cd bumblebee-electron-app
+git clone https://github.com/jaxcore/bumblebee
+npm install
+```
+
+#### 3. (Optional) Switch to the development branch
+
+To use the latest development version, use the `dev` branch:
+
+```
+git checkout dev
+```
+
+Use `npm link` to link the local version of the `jaxcore-bumblebee` package to the `electron-app` directory:
+
+```
+npm link
+cd electron-app
+rm -rf node_modules/jaxcore-bumblebee
+npm link jaxcore-bumblebee
+```
+
+#### 4. Install `electron-app`
+
+```
+cd electron-app
 npm install
 npm run rebuild
 ```
 
-#### 3. (Optional) DeepSpeech Model
+#### 5. (Optional) DeepSpeech Model
 
 The first time Bumblebee is run, it will prompt to download the DeepSpeech english language models.
 
@@ -41,18 +64,15 @@ you can skip the download step by copying or softlinking
 [deepspeech-0.7.4-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.pbmm)
 and
 [deepspeech-0.7.4-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.scorer)
-to the root of the `bumblebee-electron-app` directory.
+to the root of the `electron-app` directory.
 This can also be used to change or test different DeepSpeech models, including different languages.
 
-If the auto-downloaded models are already installed, they can be found at:
+```
+ln -s ../path/to/deepspeech-0.7.4-models.pbmm
+ln -s ../path/to/deepspeech-0.7.4-models.scorer
+```
 
-- MacOSX: `~/Library/Application\ Support/com.jaxcore.bumblebee`
-- Linux:  `~/.config/com.jaxcore.bumblebee`
-- Windows: `~/AppData/Roaming/com.jaxcore.bumblebee`
-
-Bumblebee first looks here for the models, delete them if yoou would like to try a different model.
-
-#### 4. Start the bumblebee application + assistant
+#### 6. Start the bumblebee application + assistant
 
 ```
 npm run bumblebee
@@ -64,9 +84,11 @@ The console like this should load it up.
 
 ![screenshot](assets/screenshot.png)
 
-#### 5. (Optional) Run without an assistant
+#### 7. (Optional) Run without an assistant
 
-The bumblebee application can be started without an assistant, instead of `yarn run bumblebee` use:
+The Bumblebee system is being developed with the intention that at least one assistant is running (the "bumblebee assistant" is the default), and all other voice apps can be launched by that assistant's "hotword commands" (skills).  Multiple assistants can be run in parallel and the bumblebee assistant itself can be started and stopped independently of the electron application console.
+
+The bumblebee application can be started without an assistant, instead of `npm run bumblebee` use:
 
 ```
 npm run dev
@@ -78,7 +100,7 @@ The console without an assistant looks like this;
 
 ![screenshot](assets/dev-screenshot.png)
 
-If you are developing an assistant you can run it now.
+If you are developing an assistant you can run it now from a separate terminal window.  See the `examples/assistants` directory for examples of how to set up an assistant.
 
 If you would like to run the development version of the Bumblebee Assistant,
 it can be started and stopped from a separate terminal window:
@@ -87,7 +109,7 @@ it can be started and stopped from a separate terminal window:
 npm run bumblebee-assistant
 ```
 
-#### 6. (Optional) Production Build
+#### 8. (Optional) Production Build
 
 The `dist` command will produce a packaged version of Bumblebee in the `/dist` directory.
 
@@ -96,3 +118,13 @@ npm run dist
 ```
 
 Windows users use `npm run dist-win` instead.
+
+#### 9. Uninstall
+
+The auto-downloaded DeepSpeech models are saved to the following directory:
+
+- MacOSX: `~/Library/Application\ Support/com.jaxcore.bumblebee`
+- Linux:  `~/.config/com.jaxcore.bumblebee`
+- Windows: `~/AppData/Roaming/com.jaxcore.bumblebee`
+
+They are very large and are not automatically deleted when removing Bumblebee from the system, even uninstalling the packaged release.  So they must be manually deleted.
