@@ -11,8 +11,9 @@ const BumblebeeWebSocketPlugin = {
 
 const Application = require('./lib/Application');
 const Assistant = require('./lib/Assistant');
-const numberize = require('./lib/numberize');
-const {parseInteger, makeReplacements} = numberize;
+
+const parser = require('./lib/parser');
+const {numberize, sanitize, parseInteger, makeReplacements} = parser;
 
 let _jaxcore;
 
@@ -162,6 +163,7 @@ const Bumblebee = {
 	Application,
 	Assistant,
 	numberize,
+	sanitize,
 	parseInteger,
 	makeReplacements
 };
