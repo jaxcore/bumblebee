@@ -1,7 +1,8 @@
 {
   "name": "com.jaxcore.bumblebee",
-  "description": "Bumblebee - JavaScript voice application server",
+  "description": "Jaxcore Bumblebee electron desktop console",
   "author": "Jaxcore Software Inc.",
+  "license": "GPL-3.0",
   "version": "0.0.1",
   "private": false,
   "main": "public/electron.js",
