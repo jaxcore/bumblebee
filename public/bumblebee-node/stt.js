@@ -77,7 +77,9 @@ module.exports = function connectSTT(bumblebee, app, deepspeech) {
 	});
 	
 	ipcMain.on('simulate-stt', (event, text) => {
-		deepspeech.processRecognition(text.toLowerCase(), {
+		if (!text) return;
+		text = text.toLowerCase().replace(/[^a-z0-9|']+/gi, " ").replace(/ +/," ").trim();
+		deepspeech.processRecognition(text, {
 			recogTime: 0,
 			audioLength: 0,
 			model: deepspeech.state.modelName
