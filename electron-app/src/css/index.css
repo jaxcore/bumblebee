@@ -1,0 +1,70 @@
+html {
+  background-color: #222;
+  color: #eee;
+}
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  line-height: 1.7em;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.block {
+  display: block;
+}
+.none {
+  display: none;
+}
+
+.controls {
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+}
+
+/*#app-bar.assistant-main {*/
+/*  color: #d6bc22;*/
+/*}*/
+/*#app-bar.tts {*/
+/*  color: #7c9fff;*/
+/*}*/
+
+#app-bar {
+  position: absolute;
+  z-index: 2;
+  top: 87px;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  /*border: 1px solid red;*/
+}
+
+#console-input input[type='text']{
+  flex-grow: 1;
+}
+
+#console-input {
+  display: flex;
+  width: 100%;
+  height: 27px;
+  background: black;
+  border-top: 1px solid #999;
+  padding-top: 2px;
+}
+

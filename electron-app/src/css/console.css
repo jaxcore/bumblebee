@@ -1,0 +1,57 @@
+.content-panel {
+    overflow: auto;
+}
+
+.recognition-output {
+    margin-left: 1em;
+    line-height: 1.8em;
+}
+
+.recognition-output a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+.recognition-output a {
+    /*color: #57f;*/
+    color: #7c9fff;
+    /*color: #fff;*/
+    text-decoration: none;
+    /*font-weight: bold;*/
+}
+
+.recognition-output a.number {
+    color: #fff;
+}
+
+.recognition-output img {
+    margin-top: 3px;
+    margin-left: 4px;
+    margin-right: 9px;
+    width: 18px;
+    vertical-align: top;
+}
+.recognition-output svg {
+    vertical-align: top;
+    margin-right: 0.3em;
+    /*border: 1px solid red;*/
+}
+
+
+.recognition-output .text img {
+    opacity: 0.5;
+}
+.recognition-output .text {
+    color: #888;
+}
+
+ul.nobullet {
+    list-style: none;
+    padding-left: 0em;
+}
+
+/*.recognition-output div.hotword {*/
+/*    color: yellow;*/
+/*}*/
+.recognition-output div.command {
+    color: #d6bc22;
+}
