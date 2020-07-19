@@ -53,7 +53,7 @@ The computing resources required to run Bumblebee are much larger than a typical
 
 To install and run the Bumblebee desktop app from the source files, see:
 
-- [install](https://github.com/jaxcore/bumblebee/blob/master/electron-app/INSTALL.md)
+- [install](electron-app/INSTALL.md)
 
 Or install the packaged release:
 
