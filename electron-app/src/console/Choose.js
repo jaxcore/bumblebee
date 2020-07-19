@@ -1,6 +1,6 @@
 import React from "react";
 
-function Chooices(props) {
+function Choices(props) {
 	const choices = props.choose.choices;
 	return (<ul className="choices nobullet">{
 		choices.map((choice, index) => (<li>
@@ -8,7 +8,7 @@ function Chooices(props) {
 		</li>))
 	}</ul>);
 }
-function NumberizedChooices(props) {
+function NumberizedChoices(props) {
 	const choices = props.choose.choices;
 	return (<ul className="choices nobullet">{
 		choices.map((choice, index) => (<li key={index}>
@@ -33,9 +33,9 @@ export default function Choose(props) {
 		return (<YesOrNo {...props}/>);
 	}
 	else if (props.choose.numberize) {
-		return (<NumberizedChooices {...props}/>);
+		return (<NumberizedChoices {...props}/>);
 	}
 	else {
-		return (<Chooices {...props}/>);
+		return (<Choices {...props}/>);
 	}
 }

@@ -76,7 +76,6 @@ class BumblebeeAssistant extends Bumblebee.Assistant {
 		}
 		else {
 			// respond with a text-to-speech instruction
-			await this.console('You said: ' + recognition.text);
 			await this.say('You said: ' + recognition.text);
 		}
 		

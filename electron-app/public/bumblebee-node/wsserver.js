@@ -47,28 +47,11 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
 		// app.execFunction('systemError', ['bbdata '+sampleRate+' '+intData.length]);
 		if (hotword) {
-			console.log('Hotword Detected:', hotword);
-			setActiveAssistant(hotword);
-
-			// let name = app.hotwordNames[hotword];
-			bumblebee.console({
-				type: 'hotword',
-				hotword
-			})
-
-			if (hotword === app.state.activeAssistant) {
-				let activeAssistantSocket = getActiveAssistantSocket();
-				if (activeAssistantSocket) {
-					console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
-					// const recogId = Math.random().toString().substring(2);
-					console.log('activeAssistantSocket emit hotword', hotword);
-					activeAssistantSocket.emit('hotword', hotword);
-				}
-			}
+			let assistantLoaded = hotwordDetected(hotword);
+			if (!assistantLoaded) hotword = null;
 		}
 		var uint8View = new Uint8Array(intData.buffer);
 		let buffer = Buffer.from(uint8View);
-		
 		deepspeech.streamData(buffer, sampleRate, hotword, floatData);
 	});
 	
@@ -230,6 +213,28 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	// 	});
 	// 	app.execFunction('hotwordAssistantApp', [appName]);
 	// }
+	
+	function hotwordDetected(hotword) {
+		if (hotword && hotword in app.state.assistants) {
+			setActiveAssistant(hotword);
+			bumblebee.console({
+				type: 'hotword',
+				hotword
+			})
+			if (hotword === app.state.activeAssistant) {
+				let activeAssistantSocket = getActiveAssistantSocket();
+				if (activeAssistantSocket) {
+					console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
+					activeAssistantSocket.emit('hotword', hotword);
+				}
+			}
+			return true;
+		}
+		else {
+			bumblebee.console(hotword+' assistant not found');
+			return false;
+		}
+	}
 	
 	function setActiveAssistant(hotword) {
 		if (app.state.activeAssistant !== hotword) {

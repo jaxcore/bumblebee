@@ -26,12 +26,12 @@ class BumblebeeClient extends EventEmitter {
 		this.hotword.addHotword('terminator');
 		
 		this.hotword.on('data', (intData, floatData, sampleRate, hotword) => {
-			if (hotword) {
-				this.app.addSpeechOutput({
-					type: 'text',
-					text: 'hotword: ' + hotword
-				});
-			}
+			// if (hotword) {
+			// 	this.app.addSpeechOutput({
+			// 		type: 'text',
+			// 		text: 'hotword: ' + hotword
+			// 	});
+			// }
 			ipcRenderer.send('hotword-data', intData, floatData, sampleRate, hotword);
 		});
 		
