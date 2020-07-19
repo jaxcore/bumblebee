@@ -10,8 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "jaxcore": "0.0.3",
-    "socket.io-client": "^2.3.0",
-    "numerizer": "git+https://github.com/dsteinman/numerizerJS#master"
+    "numberize": "0.0.1",
+    "socket.io-client": "^2.3.0"
   },
   "repository": {
     "type": "git",
