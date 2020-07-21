@@ -1,5 +1,5 @@
 const Jaxcore = require('jaxcore');
-const BumblebeeWebsocketClient = require('./lib/BumblebeeWebsocketClient');
+const BumblebeeWebsocketClient = require('./lib/WebsocketClient');
 const BumblebeeWebSocketPlugin = {
 	services: {
 		bumblebee: {

@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jaxcore-bumblebee": "0.0.4"
+    "jaxcore-bumblebee": "0.0.5"
   }
 }

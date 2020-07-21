@@ -9,7 +9,7 @@
   "author": "Jaxcore Software Inc",
   "license": "MIT",
   "dependencies": {
-    "jaxcore": "0.0.3",
+    "jaxcore": "0.0.4",
     "numberize": "0.0.1",
     "socket.io-client": "^2.3.0"
   },
