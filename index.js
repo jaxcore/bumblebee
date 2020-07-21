@@ -40,10 +40,9 @@ async function launchApplication(api, applicationClass, applicationOptions) {
 	const success = await bumblebee.registerApplication(applicationClass, applicationOptions);
 	if (success) {
 		let adapterProfileName = 'bbassistant:' + websocketOptions.host + ':' + websocketOptions.port;
-		console.log('connecting ADAPTER', adapterProfileName);
 		
 		jaxcore.addAdapter(adapterProfileName, applicationClass);
-		console.log('applicationOptions.initialState', applicationOptions.initialState)
+		// console.log('applicationOptions.initialState', applicationOptions.initialState)
 		
 		jaxcore.defineAdapter(adapterProfileName, {
 			adapterType: adapterProfileName,
@@ -105,7 +104,6 @@ function connect(options) {
 					})
 				}
 				
-				console.log('bbWebsocketClient', typeof bbWebsocketClient);
 				const api = {
 					jaxcore,
 					bumblebee: bbWebsocketClient,
