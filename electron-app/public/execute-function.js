@@ -1,4 +1,5 @@
 const executeFunction = (win, functionName, args, callback) => {
+	if (!args) args = [];
 	let jargs = args.map(JSON.stringify);
 	let codeStr = 'if (typeof '+functionName+' === "function") '+functionName+'(' + jargs.join(',') + ')';
 	executeJavaScript(win, codeStr, callback);

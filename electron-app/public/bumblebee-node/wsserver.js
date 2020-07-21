@@ -10,42 +10,12 @@ const hotwordSubstitutions = {
 	hey_edison: ['he addison', 'he had in'],
 	terminator: ['grass over'],
 	porcupine: []
-}
+};
 
 module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocketServer) {
-	
-	// const deepspeech = app.deepspeech;
-	// const bumblebeeHowtord = app.bumblebeeHotword;
-	// const say = app.say;
-	
 	let doBumblebeeIntro = false;
 	
-	// bbHotword.on('hotword', function (hotword) {
-	// 	console.log('Hotword Detected:', hotword);
-	// 	setActiveAssistant(hotword);
-	//
-	// 	// let name = app.hotwordNames[hotword];
-	// 	bumblebee.console({
-	// 		type: 'hotword',
-	// 		hotword
-	// 	})
-	//
-	// 	if (hotword === app.state.activeAssistant) {
-	// 		let activeAssistantSocket = getActiveAssistantSocket();
-	// 		if (activeAssistantSocket) {
-	// 			console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
-	// 			// const recogId = Math.random().toString().substring(2);
-	// 			console.log('activeAssistantSocket emit hotword', hotword);
-	// 			activeAssistantSocket.emit('hotword', hotword);
-	// 		}
-	// 	}
-	// });
-	
-	
 	ipcMain.on('hotword-data', function (event, intData, floatData, sampleRate, hotword) {
-		// console.log('bb', intData.length, sampleRate, hotword, floatData.length);
-		// deepspeech.dualStreamData(intData, float32arr, 16000, hotword);
-		// app.execFunction('systemError', ['bbdata '+sampleRate+' '+intData.length]);
 		if (hotword) {
 			let assistantLoaded = hotwordDetected(hotword);
 			if (!assistantLoaded) hotword = null;
@@ -55,36 +25,10 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		deepspeech.streamData(buffer, sampleRate, hotword, floatData);
 	});
 	
-	// bumblebee.on('hotword', function (hotword) {
-	// 	console.log('Hotword Detected:', hotword);
-	// 	setActiveAssistant(hotword);
-	//
-	// 	// let name = app.hotwordNames[hotword];
-	// 	bumblebee.console({
-	// 		type: 'hotword',
-	// 		hotword
-	// 	})
-	//
-	// 	if (hotword === app.state.activeAssistant) {
-	// 		let activeAssistantSocket = getActiveAssistantSocket();
-	// 		if (activeAssistantSocket) {
-	// 			console.log('DS Assistant (' + app.state.activeAssistant + ') hotword detected', hotword);
-	// 			// const recogId = Math.random().toString().substring(2);
-	// 			console.log('activeAssistantSocket emit hotword', hotword);
-	// 			activeAssistantSocket.emit('hotword', hotword);
-	// 		}
-	// 	}
-	// });
-	
 	deepspeech.on('hotword', function (hotword, text, stats) {
-		// console.log('DS hotword:'+hotword, 'text='+text, stats);
-		// let functionName = 'hotwordResults';
-		// let args = [hotword, text, stats];
-		// app.execFunction(functionName, args);
 		let activeAssistantSocket = getActiveAssistantSocket();
 		if (activeAssistantSocket) {
 			console.log('DS Assistant ('+app.state.activeAssistant+') command', text, stats);
-			// const recogId = Math.random().toString().substring(2);
 			
 			let subs = hotwordSubstitutions[hotword];
 			for (let sub of subs) {
@@ -111,11 +55,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			else {
 				bumblebee.console('the '+hotword+' assistant is unavailable');
 			}
-			// let functionName = 'deepspeechResults';
-			// let args = [text, stats];
-			// app.execFunction(functionName, args);
-			// // activeAssistantSocket.on('recognize-response-'+recogId, text, stats, recogId);
-			// console.log('DS recognize', text, stats);
 		}
 	});
 	
@@ -140,20 +79,14 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				}
 				else {
 					console.log('on recognize: app socket does not exist', hotword, appId);
-					// process.exit();
-					
 					// setActiveApplication(hotword, 'main');
 				}
 			}
 		}
 		else {
-			//app.execFunction('systemError', ['default recognize '+text]);
-			
 			let functionName = 'deepspeechResults';
 			let args = [text, stats];
 			app.execFunction(functionName, args);
-			// activeAssistantSocket.on('recognize-response-'+recogId, text, stats, recogId);
-			
 		}
 	});
 	
@@ -173,12 +106,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 		}
 	}
 	
-	// function getApplicationSocket(socketId) {
-		// appOptions.applicationSocketId
-		// app.state.socketApplications[socketId]
-		//: {   //socketApplications[socket.id] = {appId, hotword}
-	// }
-	
 	function getApplicationSocket(hotword, appId) {
 		const assistant = app.state.assistants[hotword];
 		if (assistant && app.state.applications[hotword][appId]) {
@@ -189,30 +116,16 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	
 	function setActiveApplication(assistant, appId, runId) {
 		console.log('setActiveApplication assistant=', assistant, 'appId=', appId, runId);
-		// process.exit();
 		const activeApplications = {
 			...app.state.activeApplications
 		};
-		
 		activeApplications[assistant] = {
 			appId,
 			runId
 		};
 		app.setState({activeApplications});
-		
-		// const appName = app.state.applications[assistant][appId];
-		// app.execFunction('hotwordAssistantApp', [assistant, appName]);
-		// app.execFunction('hotwordAssistantApp', [assistant, appName]);
 		app.updateClientConfig();
 	}
-	
-	// function setActiveAssistantApp(appName) {
-	// 	console.log('setActiveAssistantApp', appName);
-	// 	app.setState({
-	// 		activeAssistantsApp: appName
-	// 	});
-	// 	app.execFunction('hotwordAssistantApp', [appName]);
-	// }
 	
 	function hotwordDetected(hotword) {
 		if (hotword && hotword in app.state.assistants) {
@@ -287,7 +200,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					activeAssistantSocket.emit('assistant-active', false);
 				}
 				
-				debugger;
 				app.setState({
 					activeAssistant: null
 					// activeAssistantsApp: null
@@ -295,27 +207,10 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				app.execFunction('hotwordAssistant', [null, null, null]);
 			}
 		}
-		
-		// app.execFunction('hotwordAssistant', [hotword]);
-		// setActiveAssistantApp(null);
 	}
-	
-	// function setActiveAssistantApp(appName) {
-	// 	app.setState({
-	// 		activeAssistantApp: appName
-	// 	});
-	// 	app.execFunction('hotwordAssistant', [this.state.activeAssistant, appName]);
-	// }
 	
 	function unregisterAssistant(socket) {
 		if (socket.id in app.state.socketAssistants) {
-			
-			// const hotword = socketAssistants[socket.id];
-			// const socketId = app.state.assistants[hotword];
-			// if (socketId === socketId.id) {
-			// 	debugger;
-			// }
-			
 			let assistants = app.state.assistants;
 			let socketAssistants = app.state.socketAssistants;
 			let hotwordsAvailable = app.state.hotwordsAvailable;
@@ -431,9 +326,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 						// process.exit();
 						isActive = true;
 					}
-					else {
-					
-					}
 					
 					// send messaage to assistant
 					unregisterApplication(applicationOptions.assistant, applicationOptions.id);
@@ -442,12 +334,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					removeApp(applicationOptions.assistant, applicationOptions.id);
 					
 					if (isActive) {
-						
-						
-						
 						// return to main
-						// send abort app
-						
 						// setActiveApplication(applicationOptions.assistant, 'main');
 					}
 				});
@@ -455,10 +342,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				applications[applicationOptions.assistant][applicationOptions.id] = {
 					...applicationOptions,
 					applicationSocketId: applicationSocket.id,
-					assistantSocketId: assistantSocket.id,
-					// id: applicationOptions.id,
-					// name: applicationOptions.name,
-					// options: applicationOptions
+					assistantSocketId: assistantSocket.id
 				};
 				
 				const socketApplications = {...app.state.socketApplications};
@@ -472,24 +356,16 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					socketApplications
 				});
 				
-				// debugger;
-				
 				applicationSocket.emit('register-application-response', {
 					success: true
-					//
 				});
 				
 				if (applicationOptions.autoStart === true) {
 					console.log('autoStart emit application-autostart ----------------');
 					assistantSocket.emit('application-autostart', applicationOptions.id);
 				}
-				
-				// if (applicationOptions.autoStart) {
-				// 	debugger;
-				// }
 			}
-		})
-		debugger;
+		});
 		assistantSocket.emit('request-add-application', applicationOptions, appInfo);
 	}
 	
@@ -581,7 +457,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			// socket.bbAssistant = hotword;
 		}
 		else {
-			debugger;
 			socket.emit('register-assistant-response', {
 				success: false,
 				hotwordsAvailable: app.state.hotwordsAvailable
@@ -592,9 +467,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	// todo: there is a bug where in some cases the assistant can connect multiple times and create duplicate instances
 	
 	function onSocketConnect(socket) {
-		
-		// debugger;
-		
 		socket.on('register-assistant', (assistantOptions) => {
 			registerAssistant(socket, assistantOptions);
 		});
@@ -620,14 +492,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			if (socket === activeAssistantSocket) {
 				const hotword = app.state.socketAssistants[socket.id];
 				setActiveApplication(hotword, appId, runId);
-				
-				// process.exit();
-				// setActiveAssistantApp(appName);
-				// deepspeech.removeAllListeners('recognize');
-				// deepspeech.on('recognize', function (text, stats) {
-				// 	console.log('DS Assistant recognize (' + app.state.activeAssistant + ')', text, stats);
-				// 	socket.emit('recognize', text, stats);
-				// });
 			}
 		});
 		
@@ -641,7 +505,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			}
 			const hotword = app.state.socketAssistants[socket.id];
 			data.assistant = hotword;
-			// debugger;
 			bumblebee.console(data);
 		});
 		
@@ -662,8 +525,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			console.log('assistant-return-error', message);
 			const hotword = app.state.socketAssistants[socket.id];
 			
-			debugger;
-			
 			bumblebee.console({
 				type: 'error',
 				text: message,
@@ -679,10 +540,6 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				}
 				
 				if (typeof message === 'string') {
-					// app.addSpeechOutput({
-					// 	text: assistantName+' Error: '+message,
-					// 	type: 'text'
-					// });
 					bumblebee.console({
 						type: 'error',
 						text: message,
@@ -704,34 +561,22 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 					console.log('this socket is NOT the active assistant');
 					debugger;
 				}
-				
-			}
-			else {
-			
 			}
 		});
 		
 		socket.on('assistant-return-value', (value) => {
-			console.log('assistant-return-value', value);
-			
 			const hotword = app.state.socketAssistants[socket.id];
 			if (hotword) {
-				const assistantName = app.state.assistants[hotword].name;
-				
 				if (hotword === getActiveAssistant()) {
 					console.log('this socket is the active assistant')
 					setActiveAssistant();
 				}
 				else {
 					console.log('this socket is NOT the active assistant');
-					debugger;
+					// debugger;
 				}
-				
 				bumblebee.console('assistant '+hotword+' returned '+JSON.stringify(value));
-				
-				bumblebee.say('the '+hotword+' assistant has exited').then(() => {
-				
-				});
+				bumblebee.say('the '+hotword+' assistant has exited');
 			}
 		});
 		
@@ -750,87 +595,67 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				assistant = app.state.socketApplications[socket.id].assistant;
 			}
 			
-			//if (app.state.socketApplications[socket.id]
-			
 			if (assistant) {
-				
 				if (!app.state.applications[assistant]) {
 					console.log('ERROR ------- app.state.applications[assistant]', assistant, runId, appId);
 					debugger;
 				}
 				
-				debugger;
-				
-				// getAssistantSocket
-				// if (assistant === getActiveAssistant()) {
-					if (appId in app.state.applications[assistant]) {
-						const appOptions = app.state.applications[assistant][appId];
-						
-						// console.log('found appId', appId, appOptions);
-						console.log('found appOptions.applicationSocketId', appOptions.applicationSocketId);
-						const appSocket = bumblebee.bbWebsocketServer.sockets[appOptions.applicationSocketId];
-						
-						if (appSocket) {
-							console.log('run-application appSocket', typeof appSocket);
-							// setTimeout(function() {
-							// 	let errValue = null;
-							// 	let returnValue = 12345;
-							// 	socket.emit('run-application-response-'+runId, errValue, returnValue);
-							// },2000);
-							
-							let _currentAppId = app.state.activeApplications[assistant].appId;
-							let _currentRunId = app.state.activeApplications[assistant].runId;
-							
-							setActiveApplication(assistant, appId, runId);
-							
-							// appSocket.once('disconnect', (errValue, returnValue) => {
-							//
-							// });
-							
-							appSocket.once('run-application-response-'+assistant+'-'+runId, (errValue, returnValue) => {
-								// socket.emit('run-application-response-'+runId, value);
-								
-								console.log('app has exited, return to', _currentAppId);
-								
-								setActiveApplication(assistant, _currentAppId, _currentRunId);
-								socket.emit('run-application-response-'+runId, errValue, returnValue);
-							});
-
-							appSocket.emit('run-application-request', assistant, runId, args, options);
-							// app.state.applications[assistant][appId];
-						}
-						else {
-							console.log('appSocket not found');
-						}
+				if (appId in app.state.applications[assistant]) {
+					const appOptions = app.state.applications[assistant][appId];
+					const appSocket = bumblebee.bbWebsocketServer.sockets[appOptions.applicationSocketId];
+					if (appSocket) {
+						let _currentAppId = app.state.activeApplications[assistant].appId;
+						let _currentRunId = app.state.activeApplications[assistant].runId;
+						setActiveApplication(assistant, appId, runId);
+						appSocket.once('run-application-response-'+assistant+'-'+runId, (errValue, returnValue) => {
+							console.log('app has exited, return to', _currentAppId);
+							setActiveApplication(assistant, _currentAppId, _currentRunId);
+							socket.emit('run-application-response-'+runId, errValue, returnValue);
+						});
+						appSocket.emit('run-application-request', assistant, runId, args, options);
 					}
-				// }
+					else {
+						console.log('appSocket not found');
+					}
+				}
 			}
 		});
 		
 		socket.on('play-sound', (id, name, theme) => {
 			const onBegin = function() {
-				console.log('emit play-sound-begin-'+id+' =========================s');
 				socket.emit('play-sound-begin-'+id);
 			};
 			bumblebee.saySound(name, theme, onBegin).then(() => {
-				console.log('emit play-sound-end-'+id);
 				socket.emit('play-sound-end-'+id);
 			});
 		});
 		
-		// socket.on('exit-assistant', (value) => {
-		// 	let activeAssistantSocket = getActiveAssistantSocket();
-		// 	if (activeAssistantSocket === socket) {
-		// 		console.log('exit-assistant')
-		// 		setActiveAssistant();
-		// 	}
-		// });
+		socket.on('system-request', (id, dataId, args) => {
+			if (dataId === 'select-microphone') {
+				ipcMain.on('microphone-selected', (event, deviceid) => {
+					const response = {
+						response: deviceid
+					};
+					socket.emit('system-response-'+id, response);
+				});
+				let deviceId = args[0];
+				app.execFunction('selectMicrophone', [deviceId]);
+			}
+			if (dataId === 'microphone-list') {
+				ipcMain.on('get-microphones', (event, mics) => {
+					const response = {
+						response: mics
+					}
+					socket.emit('system-response-'+id, response)
+				});
+				app.execFunction('getMicrophones');
+			}
+		});
 	}
 	
 	function onSocketDisconnect(socket) {
 		console.log('onSocketDisconnect', socket.id);
-		// debugger;
-		
 		if (socket in app.state.socketApplications) {
 			const socketApplications = {...app.state.socketApplications};
 			delete socketApplications[socket.id];
@@ -846,49 +671,8 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	bbWebsocketServer.onSocketDisconnect = onSocketDisconnect;
 	
 	ipcMain.on('start-bumblebee-intro', function(event) {
-		// debugger;
 		doBumblebeeIntro = true;
-		// debugger;
 	});
-	
-	// async function startServer() {
-	// 	return new Promise(function(resolve, reject) {
-	// 		app.jaxcore.startServiceProfile('Bumblebee Assistant Server', (err, bbWebsocketServer) => {
-	// 			if (err) {
-	// 				debugger;
-	// 				reject(err);
-	// 			}
-	// 			else {
-	// 				debugger;
-	//
-	// 				bbWebsocketServer.init(bumblebee, app, onSocketConnect, onSocketDisconnect);
-	//
-	// 				bumblebee.bbWebsocketServer = bbWebsocketServer;
-	// 				// bumblebee.say('okay, starting server...');
-	//
-	// 				// callback(bbWebsocketServer);
-	//
-	// 				resolve(bbWebsocketServer);
-	// 			}
-	// 			// bbWebsocketServer
-	// 		})
-	// 	})
-	// }
-	
-	// ipcMain.on('bumblebee-start-server', async (event, hotword, command) => {
-	// 	console.log('bumblebee-start-service', hotword, command);
-	// 	try {
-	// 		const server = await startServer();
-	// 		console.log('server', server.state);
-	// 		debugger;
-	// 		return true;
-	// 	}
-	// 	catch(e) {
-	// 		return {
-	// 			error: e.toString()
-	// 		}
-	// 	}
-	// });
 	
 	return bbWebsocketServer;
 }

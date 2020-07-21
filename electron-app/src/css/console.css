@@ -22,6 +22,9 @@
 .recognition-output a.number {
     color: #fff;
 }
+.recognition-output a.text {
+    color: #7c9fff;
+}
 
 .recognition-output img {
     margin-top: 3px;
@@ -44,6 +47,12 @@
     color: #888;
 }
 
+div.yes_or_no {
+    margin: 1em;
+}
+ul.choices {
+    margin-left: 1em;
+}
 ul.nobullet {
     list-style: none;
     padding-left: 0em;

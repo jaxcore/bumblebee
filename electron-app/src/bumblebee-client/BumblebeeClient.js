@@ -116,7 +116,26 @@ class BumblebeeClient extends EventEmitter {
 		window.displayConsole = (component) => {
 			this.app.console(component);
 		};
+		
+		window.selectMicrophone = (deviceId) => {
+			this.stopRecording();
+			this.hotword.setMicrophone(deviceId);
+			this.startRecording();
+			setTimeout(() => {
+				ipcRenderer.send('microphone-selected', deviceId);
+			}, 100);
+		};
+		
+		window.getMicrophones = () => {
+			this.hotword.getMicrophones().then(mics => {
+				ipcRenderer.send('get-microphones', mics);
+			});
+		}
 
+	}
+	
+	getMicrophones() {
+		this.hotword.getMicrophones()
 	}
 	
 	// addAssistant(hotword, appName, assistantFunction) {

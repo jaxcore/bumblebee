@@ -1,4 +1,5 @@
 const Bumblebee = require('jaxcore-bumblebee');
+const settings = require('./settings');
 
 class BumblebeeAssistant extends Bumblebee.Assistant {
 	
@@ -48,9 +49,17 @@ class BumblebeeAssistant extends Bumblebee.Assistant {
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
 	async loop(returnValue) {
+		this.console('Bumblebee Assistant');
 		let recognition = await this.recognize();
 		
-		if (returnValue.previous) {
+		if (!returnValue) {
+			returnValue = {
+				count: 0,
+				previous: null
+			};
+		}
+		
+		if (returnValue && returnValue.previous) {
 			console.log('pervious recognition:', recognition.text);
 		}
 		
@@ -59,6 +68,9 @@ class BumblebeeAssistant extends Bumblebee.Assistant {
 		
 		if (recognition.text === 'error') {
 			throw new Error('oops');
+		}
+		else if (recognition.text === 'setting' || recognition.text === 'settings') {
+			return await settings.call(this);
 		}
 		
 		// say "exit" to shut down the assistant
