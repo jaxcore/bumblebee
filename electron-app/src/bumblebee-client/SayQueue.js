@@ -330,6 +330,9 @@ class SayQueue extends EventEmitter {
 	
 	say(text, options, onBegin, onEnd) {
 		if (!options) options = {};
+		if (!options.profile && this.profile) {
+			options.profile = this.profile;
+		}
 		return new Promise((resolve, reject) => {
 			// todo: should do queue first, then get data to preserve order
 			if (options.profile === 'Borg') {
@@ -383,6 +386,9 @@ const connectSayQueue = function(bumblebee, app) {
 		if (utterance.options.consoleOutput === false) return;
 		if (utterance.options.sound) {
 			// bumblebee.console('sound');
+		}
+		else if (utterance.options.displayConsole === false) {
+			return;
 		}
 		else {
 			bumblebee.console({

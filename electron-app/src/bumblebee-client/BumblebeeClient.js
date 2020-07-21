@@ -130,8 +130,12 @@ class BumblebeeClient extends EventEmitter {
 			this.hotword.getMicrophones().then(mics => {
 				ipcRenderer.send('get-microphones', mics);
 			});
-		}
-
+		};
+		
+		window.setDefaultSayProfile = (profile) => {
+			debugger;
+			this.setSayProfile(profile);
+		};
 	}
 	
 	getMicrophones() {

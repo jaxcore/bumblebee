@@ -631,7 +631,18 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 			});
 		});
 		
+		socket.on('', (id) => {
+		
+		});
+		
 		socket.on('system-request', (id, dataId, args) => {
+			if (dataId === 'say-default-profile') {
+				let profile = args[0];
+				app.execFunction('setDefaultSayProfile', [profile]);
+				socket.emit('system-response-'+id, {
+					response: true
+				});
+			}
 			if (dataId === 'select-microphone') {
 				ipcMain.on('microphone-selected', (event, deviceid) => {
 					const response = {

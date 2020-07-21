@@ -1,11 +1,9 @@
-// todo: convert Settings to an app
-
 async function settings() {
 	await this.say('Bumblebee Settings');
 	
 	const mic = {
 		text: 'Select Microphone',
-		matches: ['microphone', 'changed microphone', 'change microphone', 'choose microphone']
+		matches: ['microphone', 'changed microphone', 'change microphone', 'choose microphone', 'switch microphone']
 	};
 	const voice = {
 		text: 'Select Voice',
@@ -19,36 +17,25 @@ async function settings() {
 	
 	let choice = await this.choose("The options are:", choices, {
 		style: 'confirm',
-		timeout: 5000,
+		timeout: 25000,
 		retryTimeout: true,
 		retryUnrecognized: false,
-		maximumRetries: 1,
-		// unrecognizedText: "Sorry, I didn't understand",
+		maximumRetries: 2,
 		narrateChoices: true,
 		enumerate: true
 	});
 	
-	console.log('choice', typeof choice, choice);
-	
-	if (choice.error) {
-		if (choice.recognition) {
-			await this.say('Oops, you said '+choice.recognition.text);
-		}
-		if (choice.error === 'TIMEOUT') {
-			await this.say('timed out');
-		}
-	}
-	else {
-		if (choice === mic) await chooseMicrophone.call(this);
-		if (choice === voice) await chooseVoice.call(this);
-	}
+	if (choice === mic) await chooseMicrophone.call(this);
+	if (choice === voice) await chooseVoice.call(this);
 	
 	let workingChoice = await this.choose('Do you want to exit settings?', [
 		{
-			text: 'Yes'
+			text: 'Yes',
+			matches: ['okay', 'yeah', 'yup', 'alright', 'affirmative']
 		},
 		{
-			text: 'No'
+			text: 'No',
+			matches: ['nope', 'negative']
 		}
 	], {
 		style: 'yes_or_no',
@@ -58,9 +45,8 @@ async function settings() {
 	if (workingChoice.index === 1) {
 		return settings.call(this);
 	}
-	else {
-		await this.say('Returning to the Bumblebee menu...');
-	}
+	
+	/// Returning to the Bumblebee menu
 }
 
 async function chooseMicrophone() {
@@ -109,12 +95,8 @@ async function chooseMicrophone() {
 					await this.say('Returning to settings...');
 				}
 				else {
-					await this.say('Again');
 					return chooseMicrophone.call(this);
 				}
-			}
-			else {
-				debugger;
 			}
 		}
 		else {
@@ -126,35 +108,90 @@ async function chooseMicrophone() {
 	}
 }
 
+const profiles = [
+	{
+		text: 'Jack',
+		matches: []
+	},
+	{
+		text: 'Pris',
+		tts: 'priss',
+		matches: ['press']
+	},
+	{
+		text: 'Roy',
+		matches: []
+	},
+	{
+		text: 'Scotty',
+		matches: []
+	},
+	{
+		text: 'Xenu',
+		tts: 'zeenu',
+		matches: ['zeno']
+	},
+	{
+		text: 'Cylon',
+		matches: ['simon', 'sile']
+	},
+	{
+		text: 'Leon',
+		matches: []
+	},
+	{
+		text: 'Rachel',
+		matches: []
+	},
+	{
+		text: 'Zhora',
+		tts: 'zhor-ah',
+		matches: []
+	},
+	{
+		text: 'The Borg',
+		value: 'Borg',
+		matches: ['the board', 'the boar', 'he bore', 'the lord', 'to the borg', 'the more', 'board', 'born', 'more', 'boar', 'lord']
+	}
+];
+
 async function chooseVoice() {
-	await this.say('this part isn\'t finished yet');
+	await this.say("Which voice do you prefer?");
 	
-	// let choices = [
-	// 	{
-	// 		text: 'Jack',
-	// 		matches: []
-	// 	},
-	// 	{
-	// 		text: 'Cylon',
-	// 		matches: ['silon']
-	// 	}
-	// ];
-	//
-	// let choice = await this.choose("Which voice do you prefer?", choices, {
-	// 	style: 'confirm',
-	// 	timeout: 25000,
-	// 	retryTimeout: true,
-	// 	retryUnrecognized: true,
-	// 	maximumRetries: 2,
-	// 	// unrecognizedText: "Sorry, I didn't understand",
-	// 	narrateChoices: true,
-	// 	enumerate: true
-	// });
-	//
-	// console.log('choice', choice);
-	// if (choice) {
-	// 	await this.say('you have chosen '+choice.text);
-	// }
-	// debugger;
+	let c = 1;
+	for (let profile of profiles) {
+		console.log('profile', profile.text);
+		let ttsName = profile.tts || profile.text;
+		await this.say(c.toString()+': '+ttsName, {
+			displayConsole: false,
+			profile: profile.value || profile.text
+		});
+		c++;
+	}
+	
+	let choice = await this.choose(null, profiles, {
+		style: 'confirm',
+		timeout: 25000,
+		retryTimeout: true,
+		retryUnrecognized: true,
+		maximumRetries: 2,
+		// unrecognizedText: "Sorry, I didn't understand",
+		narrateChoices: false,
+		enumerate: true
+	});
+	
+	this.console('choice returned '+JSON.stringify(choice));
+	
+	if (choice.error) {
+		await this.say('invalid selection');
+		return;
+	}
+	else {
+		let ttsName = choice.tts || choice.text;
+		let value = choice.value || choice.text;
+		this.console('say-default-profile: '+value);
+		const returnValue = await this.systemRequest('say-default-profile', value);
+		await this.say('The default voice has been set to '+ttsName);
+	}
 }
 module.exports = settings;
