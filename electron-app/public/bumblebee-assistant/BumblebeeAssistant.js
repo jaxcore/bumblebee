@@ -26,7 +26,6 @@ class BumblebeeAssistant extends Bumblebee.Assistant {
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
 	async onCommand(recognition) {
 		if (recognition.text === 'settings' || recognition.text === 'setting') {
-			await this.say('launching settings');
 			this.services.bumblebee.emit('recognize', recognition);
 		}
 		else {

@@ -59,12 +59,12 @@ async function chooseMicrophone() {
 		const microphones = returnValue.response.map(microphone => {
 			return {
 				text: microphone.name,
-				tts: microphone.name.replace(/ \(.*/,''),
+				tts: microphone.name.replace(/ \(.*/, ''),
 				value: microphone.id
 			}
 		});
 		
-		let choice = await this.choose('There are '+l+' microphones to choose from:', microphones, {
+		let choice = await this.choose('There are ' + l + ' microphones to choose from:', microphones, {
 			timeout: 25000,
 			retryTimeout: true,
 			retryUnrecognized: true,
@@ -75,19 +75,19 @@ async function chooseMicrophone() {
 		});
 		
 		if (choice) {
-			await this.say('you have chosen '+choice.text);
+			await this.say('you have chosen ' + choice.text);
 			
 			const returnValue = await this.systemRequest('select-microphone', choice.value);
 			if (returnValue.response) {
 				await this.say('Okay, I\'ve switched the microphone');
 				let workingChoice = await this.choose('Can you tell me if it is working?', [
-						{
-							text: 'Yes'
-						},
-						{
-							text: 'No'
-						}
-					], {
+					{
+						text: 'Yes'
+					},
+					{
+						text: 'No'
+					}
+				], {
 					style: 'yes_or_no'
 				});
 				if (workingChoice.index === 0) {
@@ -162,7 +162,7 @@ async function chooseVoice() {
 	for (let profile of profiles) {
 		console.log('profile', profile.text);
 		let ttsName = profile.tts || profile.text;
-		await this.say(c.toString()+': '+ttsName, {
+		await this.say(c.toString() + ': ' + ttsName, {
 			displayConsole: false,
 			profile: profile.value || profile.text
 		});
@@ -180,18 +180,23 @@ async function chooseVoice() {
 		enumerate: true
 	});
 	
-	this.console('choice returned '+JSON.stringify(choice));
-	
 	if (choice.error) {
 		await this.say('invalid selection');
 		return;
 	}
 	else {
-		let ttsName = choice.tts || choice.text;
+		// let ttsName = choice.tts || choice.text;
+		let replacements = {};
+		if (choice.tts && choice.tts !== choice.text) {
+			replacements[choice.text] = choice.tts;
+		}
 		let value = choice.value || choice.text;
-		this.console('say-default-profile: '+value);
+		this.console('say-default-profile: ' + value);
 		const returnValue = await this.systemRequest('say-default-profile', value);
-		await this.say('The default voice has been set to '+ttsName);
+		await this.say('The default voice has been set to ' + choice.text, {
+			replacements
+		});
 	}
 }
+
 module.exports = settings;

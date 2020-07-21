@@ -1,22 +1,11 @@
 const Bumblebee = require('jaxcore-bumblebee');
-
 const playSoundFile = require('play-sound-file');
-const {loopSoundFile} = playSoundFile;
 
 class TerminatorAssistant extends Bumblebee.Assistant {
 	
 	// every time the assistant connects to the server, a new instance of the assistant will be created
 	constructor() {
 		super(...arguments);
-		
-		// playSoundFile(__dirname + '/terminator.wav', 0.7);
-		
-		// this.firstTime = true;
-		
-		setInterval(function() {
-			console.log('.');
-		},1000);
-		// this.soundLoop = loopSoundFile(__dirname + '/loop.wav', 0.7);
 	}
 	
 	startScanning() {
@@ -41,9 +30,7 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	
 	// onHotword is called immediately when the hotword is detected
 	async onHotword(hotword) {
-		// this.console('onHotword(): ' + hotword);
-		// await this.say('I need your clothes... your boots...');
-		// await this.say('and your motorcycle');
+		this.console('onHotword(): ' + hotword);
 	}
 	
 	// onCommand is called when speech-to-text was processed at the same time hotword was detected
@@ -62,27 +49,14 @@ class TerminatorAssistant extends Bumblebee.Assistant {
 	
 	// onBegin() is called once when the assistant called upon using a hotword or activated automatically
 	async onBegin() {
-		
 		await playSoundFile('./terminator.wav', 0.7);
-		
 		await this.say('Where is Sarah Connor?', {
 			replacements: {
 				'sare ah': 'Sarah'
 			}
 		});
-		
 		await playSoundFile('./loop.wav', 0.7);
-		
-		// if (this.firstTime) {
-		// 	this.firstTime = false;
-		// 	return;
-		// }
-		// else {
-		// }
-		
 		await this.startScanning();
-		
-		// this.soundLoop.start();
 	}
 	
 	// loop() is called repeatedly and waits for speech-to-text recognition events
