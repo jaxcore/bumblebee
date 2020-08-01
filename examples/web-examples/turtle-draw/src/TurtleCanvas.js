@@ -16,18 +16,42 @@ class TurtleCanvas extends Component {
         this.reset();
         global.turtle = this;
     }
-
+    
+    getMidPoint() {
+        return { x: Math.floor(this.canvasWidth / 2), y: Math.floor(this.canvasHeight / 2) };
+    }
+    
+    addStartingPoint() {
+        this.lastPoint = this.getMidPoint();
+    }
+    
+    redo() {
+        if (this._undo_procedure) {
+            this.addProcedure(this._undo_procedure);
+        }
+    }
+    undo() {
+        this._undo_procedure = this.procedures.pop();
+        this.redraw();
+    }
+    
     redraw() {
+        this.isRedrawing = true;
+        this.replay();
+    }
+    
+    replay() {
         this.clearRect();
         this.proceduresIndex = -1;
         this.angle = 0;
-        this.lastPoint = { x: this.canvasWidth / 2, y: this.canvasHeight / 2 };
+        this.addStartingPoint();
         this.resetTurtle();
         this.stopDrawProcedures();
         this.startDrawProcedures();
     }
     
     addProcedure(name, value) {
+        this._undo_procedure = null;
         let proc = [name, value];
         this.procedures.push(proc);
         this.startDrawProcedures();
@@ -49,13 +73,18 @@ class TurtleCanvas extends Component {
     nextProcedure() {
         this.proceduresIndex++;
         this.runProcedure(this.procedures[this.proceduresIndex]).then(r => {
-            if (this.proceduresRunning) {
+            if (this.proceduresRunning || this.isRedrawing) {
                 if (this.proceduresIndex === this.procedures.length - 1) {
                     this.proceduresRunning = false;
+                    this.isRedrawing = false;
+                    this.props.voiceApp.emit('procedures-complete');
                 }
                 else {
                     this.nextProcedure();
                 }
+            }
+            else {
+                debugger;
             }
         });
     }
@@ -83,9 +112,12 @@ class TurtleCanvas extends Component {
         }
         
         let intervalTime = totalTime / intervals;
+        
         return new Promise((resolve, reject) => {
             let i = 0;
-            let interval = setInterval(() => {
+            let interval;
+            const run = () => {
+                console.log('i', i, intervals);
                 let dist = (i / intervals) * distance;
                 if (intervals === 1) dist = distance;
                 let point = {
@@ -99,12 +131,20 @@ class TurtleCanvas extends Component {
                     this.lastPoint = point;
                     this.resetTurtle();
                 }
-                i ++;
-                if (i >= intervals) {
+                i++;
+                if (i > intervals) {
                     clearInterval(interval);
                     resolve();
                 }
-            },intervalTime);
+            };
+            if (this.isRedrawing) {
+                while (i <= intervals) {
+                    run();
+                }
+            }
+            else {
+                interval = setInterval(run,intervalTime);
+            }
         });
     }
     
@@ -158,17 +198,35 @@ class TurtleCanvas extends Component {
             else totalTime = 100 + (adiff/360) * 900;
             
             let intervalTime = totalTime / adiff;
+            if (this.isRedrawing) intervalTime = 0;
+            
             let inc = diff > 0? 1 : -1;
-            let interval = setInterval(() => {
+            let interval;
+            let done = false;
+            const run = () => {
                 angle += inc;
                 this.refTurtle.current.style.transform = 'rotate('+angle+'deg) scale(0.5)';
                 if (angle === degrees) {
+                    if (this.isRedrawing) {
+                        // debugger;
+                    }
+                    done = true;
                     if (degrees < 0) degrees += 360;
                     this.angle = degrees;
                     clearInterval(interval);
                     resolve();
                 }
-            }, intervalTime);
+            };
+            
+            if (this.isRedrawing) {
+                // debugger;
+                while (!done) {
+                    run();
+                }
+            }
+            else {
+                interval = setInterval(run, intervalTime);
+            }
         });
     }
     
@@ -181,11 +239,16 @@ class TurtleCanvas extends Component {
         let tH = 77;
         let l = lastPoint.x - tW/2;
         let t = lastPoint.y - tH/2;
+        
+        if (!this.refTurtle.current) return;
+        
         this.refTurtle.current.style.left = l + 'px';
         this.refTurtle.current.style.top = t + 'px';
         
         this.refTurtle.current.style.opacity = this.isDrawing? '1' : '0.3';
         this.refTurtle.current.src = this.isDrawing? 'turtle.png' : 'turtle-off.png';
+    
+        this.refTurtle.current.style.transform = 'rotate('+this.angle+'deg) scale(0.5)';
     }
     
     setSize(edgeSize) {
@@ -220,6 +283,8 @@ class TurtleCanvas extends Component {
         this.proceduresRunning = false;
         this.angle = 0;
         this.isDrawing = true;
+        this.addStartingPoint();
+        this.resetTurtle();
     }
 
     clearRect() {
@@ -227,14 +292,50 @@ class TurtleCanvas extends Component {
     }
 
     componentDidMount() {
-        this.props.events.on('clear', () => {
+        this.props.voiceApp.on('clear', () => {
             this.reset();
         });
         const canvas = this.refCanvas.current;
         this.ctx = canvas.getContext('2d');
         this.setSize(0);
-        this.redraw();
+        this.reset();
+        
         this.resetTurtle();
+        this.props.voiceApp.init(this);
+        
+        this.props.voiceApp.on('procedure', (name, value) => {
+            this.addProcedure(name, value);
+        });
+    
+        this.props.voiceApp.on('redo', () => {
+            this.redo();
+        });
+        this.props.voiceApp.on('undo', () => {
+            this.undo();
+        });
+        
+        this.props.voiceApp.on('replay', () => {
+            this.replay();
+        });
+        
+        this.props.voiceApp.on('turnTowards', (direction) => {
+            let angle;
+            if (direction === 'up') {
+                angle = 0;
+            }
+            else if (direction === 'down') {
+                angle = 180;
+            }
+            else if (direction === 'left') {
+                angle = 270;
+            }
+            else if (direction === 'right') {
+                angle = 90;
+            }
+            this.addProcedure('rotateTo', angle);
+    
+        });
+    
     }
 
     addPoint(point, skip) {
