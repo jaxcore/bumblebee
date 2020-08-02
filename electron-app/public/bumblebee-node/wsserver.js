@@ -28,7 +28,7 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	deepspeech.on('hotword', function (hotword, text, stats) {
 		let activeAssistantSocket = getActiveAssistantSocket();
 		if (activeAssistantSocket) {
-			console.log('DS Assistant ('+app.state.activeAssistant+') command', text, stats);
+			console.log('DS ('+app.state.activeAssistant+') HOTWORD COMMAND', text, stats);
 			
 			let subs = hotwordSubstitutions[hotword];
 			for (let sub of subs) {

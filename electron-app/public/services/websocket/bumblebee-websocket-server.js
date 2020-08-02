@@ -63,22 +63,6 @@ class BumblebeeWebsocketServer extends Client {
 		this.bumblebee = bumblebee;
 		this.onSocketConnect = onSocketConnect;
 		this.onSocketDisconnect = onSocketDisconnect;
-		
-		// console.log('init', typeof app, typeof bumblebee);
-		// bumblebee.connectWebsocketServer();
-		// bumblebee.on('hotword', (hotword) => {
-		// 	console.log('hotword', hotword)
-		// 	if (hotword in this.app.state.assistants) {
-		// 		this.setActiveAssistant(hotword);
-		//
-		// 		// const hotword = this.app.state.socketAssistants[socketId];
-		// 	}
-		// 	else {
-		// 		debugger;
-		// 	}
-		//
-		// })
-		// debugger;
 	}
 	
 	onConnect(socket) {
@@ -111,12 +95,6 @@ class BumblebeeWebsocketServer extends Client {
 		});
 		
 		this.sockets[socket.id] = socket;
-		
-		// const handshake = {
-		// 	stuff: 123
-		// };
-		// console.log('send handshake');
-		// this.io.emit('handshake', handshake);
 	};
 	
 	onDisconnect(socket) {

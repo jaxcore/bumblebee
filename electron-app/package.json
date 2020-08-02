@@ -9,11 +9,11 @@
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
-    "bumblebee-deepspeech": "0.0.2",
+    "bumblebee-deepspeech": "0.1.0",
     "bumblebee-hotword": "0.1.0",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.5",
-    "jaxcore-bumblebee": "0.0.5",
+    "jaxcore-bumblebee": "0.1.0",
     "jaxcore-say-node": "0.0.9",
     "lodash": "^4.17.15",
     "node-abi": "^2.18.0",

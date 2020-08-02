@@ -59,17 +59,17 @@ npm run rebuild
 The first time Bumblebee is run, it will prompt to download the DeepSpeech english language models.
 
 If you already have
-[DeepSpeech 0.7.4](https://github.com/mozilla/DeepSpeech/releases/tag/v0.7.4) installed,
+[DeepSpeech 0.8.0](https://github.com/mozilla/DeepSpeech/releases/tag/v0.8.0) installed,
 you can skip the download step by copying or softlinking
-[deepspeech-0.7.4-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.pbmm)
+[deepspeech-0.8.0-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/download/v0.8.0/deepspeech-0.8.0-models.pbmm)
 and
-[deepspeech-0.7.4-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.scorer)
+[deepspeech-0.8.0-models.scorer](https://github.com/mozilla/DeepSpeech/releases/download/v0.8.0/deepspeech-0.8.0-models.scorer)
 to the root of the `electron-app` directory.
 This can also be used to change or test different DeepSpeech models, including different languages.
 
 ```
-ln -s ../path/to/deepspeech-0.7.4-models.pbmm
-ln -s ../path/to/deepspeech-0.7.4-models.scorer
+ln -s ../path/to/deepspeech-0.8.0-models.pbmm
+ln -s ../path/to/deepspeech-0.8.0-models.scorer
 ```
 
 #### 6. Start the bumblebee application + assistant

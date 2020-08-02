@@ -6,7 +6,7 @@ const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const request = require('request');
 
-const DEEPSPEECH_VERSION = '0.7.4';
+const DEEPSPEECH_VERSION = '0.8.0';
 
 class SpeechDownloader extends EventEmitter {
 	constructor(bumblebeeElectron) {
@@ -18,8 +18,8 @@ class SpeechDownloader extends EventEmitter {
 		// this.deepSpeechModelUrl = url + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.pbmm';
 		// this.deepSpeechScorerUrl = url +'/deepspeech-'+DEEPSPEECH_VERSION+'-models.scorer';
 		
-		// const server = 'http://localhost:8000';
-		const server = 'https://github.com/mozilla/DeepSpeech/releases/download/v'+DEEPSPEECH_VERSION;
+		const server = 'http://localhost:8000';
+		// const server = 'https://github.com/mozilla/DeepSpeech/releases/download/v'+DEEPSPEECH_VERSION;
 		
 		this.deepSpeechModelUrl = server + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.pbmm';
 		this.deepSpeechScorerUrl = server + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.scorer';
@@ -46,6 +46,15 @@ class SpeechDownloader extends EventEmitter {
 		this.file1path = this.modelsPath + '.pbmm';
 		this.file2path = this.modelsPath + '.scorer';
 		
+		let old_path = path.resolve(this.path, 'deepspeech-0.7.4-models');
+		if (fs.existsSync(old_path+'.pbmm')) {
+			fs.unlinkSync(old_path+'.pbmm');
+			console.log('deleted', old_path+'.pbmm')
+		}
+		if (fs.existsSync(old_path+'.scorer')) {
+			fs.unlinkSync(old_path+'.scorer');
+			console.log('deleted', old_path+'.scorer')
+		}
 		
 		this.isInstalled = fs.existsSync(this.file1path) && fs.existsSync(this.file2path);
 		
