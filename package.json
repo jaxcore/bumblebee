@@ -16,8 +16,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jaxcore/bumblebee"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }
