@@ -18,8 +18,8 @@ class SpeechDownloader extends EventEmitter {
 		// this.deepSpeechModelUrl = url + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.pbmm';
 		// this.deepSpeechScorerUrl = url +'/deepspeech-'+DEEPSPEECH_VERSION+'-models.scorer';
 		
-		const server = 'http://localhost:8000';
-		// const server = 'https://github.com/mozilla/DeepSpeech/releases/download/v'+DEEPSPEECH_VERSION;
+		// const server = 'http://localhost:8000';
+		const server = 'https://github.com/mozilla/DeepSpeech/releases/download/v'+DEEPSPEECH_VERSION;
 		
 		this.deepSpeechModelUrl = server + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.pbmm';
 		this.deepSpeechScorerUrl = server + '/deepspeech-'+DEEPSPEECH_VERSION+'-models.scorer';
