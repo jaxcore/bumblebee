@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "jaxcore-bumblebee": "0.0.5",
+    "jaxcore-bumblebee": "file:../../../../",
     "play-sound-file": "0.0.2",
     "speaker": "^0.5.1"
   }

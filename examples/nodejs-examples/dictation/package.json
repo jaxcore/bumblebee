@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jaxcore-bumblebee": "0.0.5",
+    "jaxcore-bumblebee": "file:../../../",
     "robotjs": "^0.6.0"
   }
 }

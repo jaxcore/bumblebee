@@ -1,6 +1,6 @@
-### ABOUT
+## About
 
-This example uses [robotjs](https://www.npmjs.com/package/robotjs) to control the computer mouse.
+This example uses [robotjs](https://www.npmjs.com/package/robotjs) to control the computer mouse and navigation keys.
 
 Available voice commands are:
 
@@ -22,13 +22,17 @@ Available voice commands are:
 - `scroll up"
 - `scroll up 100` - scrolls up 100 pixels
 
-### INSTALL
+### Install and Run Bumblebee
+
+Make sure you have installed the [bumblebee](https://github.com/jaxcore/bumblebee) desktop app and that it is running properly.
+
+### Install NPM modules
 
 ```
 npm install
 ```
 
-### RUN
+### Run Example
 
 ```
 node start.js

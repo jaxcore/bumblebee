@@ -1,4 +1,4 @@
-### ABOUT
+## About
 
 This example uses [robotjs](https://www.npmjs.com/package/robotjs) to control the computer number keys and math symbols.
 
@@ -53,13 +53,17 @@ Saying the following words will press the corresponding key(s) on the keyboard:
 
 For something try, open your operating system's calculator app, and then run this program and see if you can use the calculator with your voice.
 
-### INSTALL
+### Install and Run Bumblebee
+
+Make sure you have installed the [bumblebee](https://github.com/jaxcore/bumblebee) desktop app and that it is running properly.
+
+### Install NPM modules
 
 ```
 npm install
 ```
 
-### RUN
+### Run Example
 
 ```
 node start.js
