@@ -13,7 +13,7 @@
     "bumblebee-hotword": "0.1.0",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.5",
-    "jaxcore-bumblebee": "0.1.0",
+    "jaxcore-bumblebee": "file:../",
     "jaxcore-say-node": "0.0.9",
     "lodash": "^4.17.15",
     "node-abi": "^2.18.0",
@@ -33,7 +33,7 @@
     "bumblebee-win": "concurrently \"npm run dev-win\" \"npm run bumblebee-assistant\"",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
     "dev-win": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron --inspect=5858 .\"",
-    "rebuild": "npm rebuild --runtime=electron --target=9.0.5 --disturl=https://atom.io/download/atom-shell --abi=75",
+    "rebuild": "npm rebuild --runtime=electron --target=9.1.2 --disturl=https://atom.io/download/atom-shell --abi=75",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "dist-win": "npm run build && electron-builder --x64"
@@ -106,7 +106,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.0.0",
-    "electron": "9.0.5",
+    "electron": "9.1.2",
     "electron-builder": "^22.7.0",
     "electron-rebuild": "^1.11.0",
     "wait-on": "^3.3.0"
