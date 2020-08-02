@@ -1,6 +1,22 @@
 import Bumblebee from 'jaxcore-bumblebee';
+import Color from 'ts-color-class';
+
 const {makeReplacements, parseInteger, numberize} = Bumblebee;
 global.numberize = numberize;
+global.parseInteger = parseInteger;
+
+const colorNames = Color.getNames();
+
+function parseIntegers(text) {
+	return numberize(text).split(/ +/)
+	.map(n => {
+		if (/^(\d+)$/.test(n)) {
+			return parseInt(n);
+		}
+		else return n;
+	});
+}
+
 
 class TurtleVoiceApp extends Bumblebee.Application {
 	constructor() {
@@ -8,7 +24,6 @@ class TurtleVoiceApp extends Bumblebee.Application {
 	}
 	
 	init(turtleCanvas) {
-		this.turtleCanvas = turtleCanvas;
 		this.say('Welcome to Turtle Draw');
 	}
 	
@@ -31,6 +46,11 @@ class TurtleVoiceApp extends Bumblebee.Application {
 		) {
 			await this.playSound('select');
 			this.emit('turnTowards', text);
+		}
+		
+		else if (text === 'let' || text === 'laugh') {
+			await this.playSound('select');
+			this.emit('turnTowards', 'left');
 		}
 		
 		else if (text === 'turn left' || text === 'rotate left' || text === 'counter clockwise' || text === 'counterclockwise') {
@@ -65,31 +85,61 @@ class TurtleVoiceApp extends Bumblebee.Application {
 			await this.askClear();
 		}
 		else {
-			let integerText = parseInteger(text);
 			text = makeReplacements(text, {
-				'left': 'laughed'
+				'left': 'laughed|laugh|lacked'
 			});
+			
+			let numberizedWords = parseIntegers(text);
+			
 			let numberizedText = numberize(text);
 			
 			let m;
-			if (integerText !== null) {
-				// await this.say('number '+integerText);
+			if (numberizedWords.length === 1 && typeof numberizedWords[0] === 'number') {
+				let integerText = numberizedWords[0];
 				this.playSound('down');
 				this.emit('procedure', 'move', integerText);
 			}
-			else if (m = text.match(/^([a-z]+ )?(up|down|left|right)$/)) {
-				await this.say('unfinished '+text);
-				await this.playSound('click');
-				debugger;
+			else if (m = numberizedText.match(/^(set roughness|roughness|a roughness|at roughness) (\d+)$/)) {
+				let num = m[2];
+				this.emit('procedure', 'setRoughness', num);
+				this.playSound('okay');
+				this.say('Roughness set to ' + num);
+			}
+			else if (m = numberizedText.match(/^(set color|color|at color) (.*)/)) {
+				let color = m[2];
+				if (color in colorNames) {
+					this.emit('procedure', 'setColor', color);
+					this.playSound('okay');
+					this.say('Color set to ' + color);
+				}
+			}
+			else if (m = numberizedText.match(/^(set width|width|set size|size|at size) (\d+)$/)) {
+				let num = parseInt(m[2]);
+				this.emit('procedure', 'setWidth', num);
+				this.playSound('okay');
+				this.say('Draw width set to ' + num);
+			}
+			// deepspeech has trouble with "opacity"
+			else if (m = numberizedText.match(/^(set opacity|sat opacity|opacity|at capacity|set of pasty|set a past teeth|set or pass it|at opacity|set a pasty|set a parity|pasty|to pass teeth) (\d+) (percent|per cent)/)) {
+				let num = parseInt(m[2]);
+				this.emit('procedure', 'setOpacity', num / 100);
+				this.playSound('okay');
+				this.say('Opacity set to ' + num + ' percent');
+			}
+			else if (m = text.match(/^(set drawing|drawing|at drawing|sat drawing) (on|off|enabled|disabled)$/)) {
+				let enabled = (m[2] === 'on' || m[2] === 'enabled');
+				this.emit('procedure', 'setDrawing', enabled);
+				this.playSound('okay');
+				this.say('Drawing has been turned ' + (enabled ? 'on' : 'off'));
 			}
 			else if (m = numberizedText.match(/^move (\d+)$/)) {
 				let num = parseInt(m[1]);
 				this.playSound('down');
 				this.emit('procedure', 'move', num);
 			}
-			else if (m = numberizedText.match(/^(move )?(up|down|left|right) (\d+)$/)) {
+			else if (m = numberizedText.match(/^(move |moved )?(up|down|left|right) (\d+)$/)) {
 				let dir = m[2];
-				let num = parseInteger(m[3]);
+				let num = parseInt(m[3]);
 				if (num !== null) {
 					this.playSound('select');
 					this.emit('turnTowards', dir);

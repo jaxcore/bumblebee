@@ -203,7 +203,7 @@ class BumblebeeElectron extends Service {
 				vadMode: 'VERY_AGGRESSIVE',
 				debug: false,
 				debugProcess: false,
-				bufferSize: 16 //  (8192 bytes / 512 byte chunk size)
+				bufferSize: 64 //  (8192 bytes / 1024 byte chunk size)
 			});
 			
 			this.jaxcore.startServiceProfile('Deepspeech English',  (err, deepspeech) => {

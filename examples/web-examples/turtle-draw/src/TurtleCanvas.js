@@ -86,7 +86,11 @@ class TurtleCanvas extends Component {
             else {
                 debugger;
             }
-        });
+        }).catch(e => {
+            console.log('runProcedure error', this.procedures[this.proceduresIndex]);
+            console.log(e);
+            debugger;
+        })
     }
     
     async runProcedure(proc) {
@@ -159,7 +163,15 @@ class TurtleCanvas extends Component {
         this.opacity = opacity;
     }
     async setColor(color) {
-        this.color = new Color(color).getRGB();
+        let c;
+        try {
+            c = new Color(color)
+            this.color = c.getRGB();
+        }
+        catch(e) {
+            console.log('invalid color', color);
+            debugger;
+        }
     }
     
     async setDrawing(on) {
@@ -332,7 +344,14 @@ class TurtleCanvas extends Component {
             else if (direction === 'right') {
                 angle = 90;
             }
-            this.addProcedure('rotateTo', angle);
+            
+            let diff = angle - this.angle;
+            if (Math.abs(diff) > 180) {
+                diff -= 360;
+                // debugger;
+            }
+            // this.addProcedure('rotateTo', angle);
+            this.addProcedure('rotateBy', diff);
     
         });
     
