@@ -53,11 +53,7 @@ The computing resources required to run Bumblebee are much larger than a typical
 
 To install and run the Bumblebee desktop app from the source files, see:
 
-- [install](electron-app/INSTALL.md)
-
-Or install the packaged release:
-
-- [releases](https://github.com/jaxcore/bumblebee/releases)
+- [INSTALL.md](electron-app/INSTALL.md)
 
 After installation, the first time Bumblebee is run it will prompt to download the DeepSpeech [pre-trained English model](https://github.com/mozilla/DeepSpeech/releases) files (1.4 GB disk space required).
 
