@@ -9,7 +9,7 @@
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
-    "bumblebee-deepspeech": "0.1.0",
+    "bumblebee-deepspeech": "^0.1.1",
     "bumblebee-hotword": "0.1.0",
     "electron-is-dev": "^1.1.0",
     "jaxcore": "0.0.5",
