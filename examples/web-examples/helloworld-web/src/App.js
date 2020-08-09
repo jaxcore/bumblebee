@@ -7,6 +7,10 @@ class HelloWorldApp extends Bumblebee.Application {
 		super(...arguments);
 	}
 	
+	async onBegin() {
+		await this.playSound('warn');
+	}
+	
 	async loop() {
 		this.console('Say "Hello World"');
 		
