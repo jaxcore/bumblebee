@@ -1,5 +1,3 @@
-although this is working the connectivity in bumblebee isn't reliable enough yet, and has problems reloading web-based voice apps
-
 ## About
 
 This is the web version of "hello world" written with ReactJS (create-react-app).

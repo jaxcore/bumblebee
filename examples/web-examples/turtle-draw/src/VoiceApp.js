@@ -120,7 +120,7 @@ class TurtleVoiceApp extends Bumblebee.Application {
 				this.say('Draw width set to ' + num);
 			}
 			// deepspeech has trouble with "opacity"
-			else if (m = numberizedText.match(/^(set opacity|sat opacity|opacity|at capacity|set of pasty|set a past teeth|set or pass it|at opacity|set a pasty|set a parity|pasty|to pass teeth) (\d+) (percent|per cent)/)) {
+			else if (m = numberizedText.match(/^(set opacity|sat opacity|set a pasty|opacity|at capacity|set of pasty|set a past teeth|set or pass it|at opacity|set a pasty|set a parity|pasty|to pass teeth|set of past|set or pass it|set a party|salacity) (\d+) (percent|per cent)/)) {
 				let num = parseInt(m[2]);
 				this.emit('procedure', 'setOpacity', num / 100);
 				this.playSound('okay');
@@ -149,23 +149,30 @@ class TurtleVoiceApp extends Bumblebee.Application {
 					});
 				}
 			}
+			else if (m = numberizedText.match(/^(left|right|clockwise|counterclockwise|counter clockwise) (\d+) degrees/)) {
+				this.log('match turn', m);
+				debugger;
+				let dir = m[1];
+				let num = parseInt(m[2]);
+				if (dir === 'counterclockwise' || dir === 'counter clockwise') dir = 'left';
+				if (dir === 'clockwise') dir = 'right';
+				if (dir === 'left' || dir === 'right') {
+					this.playSound('up');
+					this.emit('procedure', dir, num);
+				}
+			}
 			else if (m = numberizedText.match(/^(turn|rotate) (up|down|left|right|clockwise|counterclockwise|counter clockwise) (\d+)/)) {
-				this.log('match', m);
+				this.log('match turn', m);
 				let command = m[1] ? m[1].trim() : '';
 				let dir = m[2];
-				let num = parseInteger(m[3]);
-				if (num !== null) {
-					if (command === 'turn' || command === 'rotate') {
-						if (dir === 'counterclockwise' || dir === 'counter clockwise') dir = 'left';
-						if (dir === 'clockwise') dir = 'right';
-						if (dir === 'left' || dir === 'right') {
-							this.playSound('up');
-							this.emit('procedure', dir, num);
-						}
+				let num = parseInt(m[3]);
+				if (command === 'turn' || command === 'rotate') {
+					if (dir === 'counterclockwise' || dir === 'counter clockwise') dir = 'left';
+					if (dir === 'clockwise') dir = 'right';
+					if (dir === 'left' || dir === 'right') {
+						this.playSound('up');
+						this.emit('procedure', dir, num);
 					}
-				}
-				else {
-				
 				}
 			}
 			else {
