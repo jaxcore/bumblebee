@@ -667,14 +667,13 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 	
 	function onSocketDisconnect(socket) {
 		console.log('onSocketDisconnect', socket.id);
-		if (socket in app.state.socketApplications) {
+		if (socket.id in app.state.socketApplications) {
 			const socketApplications = {...app.state.socketApplications};
 			delete socketApplications[socket.id];
 			app.setState({
 				socketApplications
 			});
 		}
-		
 		unregisterAssistant(socket);
 	}
 	
