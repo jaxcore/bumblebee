@@ -15,6 +15,19 @@ const hotwordSubstitutions = {
 module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocketServer) {
 	let doBumblebeeIntro = false;
 	
+	ipcMain.on('click-logo', function () {
+		let hotword = app.state.activeAssistant;
+		if (hotword) {
+			if (hotword === 'bumblebee') {
+				let activeAssistantSocket = getActiveAssistantSocket();
+				activeAssistantSocket.emit('exit-assistant');
+			}
+		}
+		else {
+			hotwordDetected('bumblebee');
+		}
+	});
+	
 	ipcMain.on('hotword-data', function (event, intData, floatData, sampleRate, hotword) {
 		if (hotword) {
 			let assistantLoaded = hotwordDetected(hotword);
@@ -311,19 +324,13 @@ module.exports = function connectWSServer(bumblebee, app, deepspeech, bbWebsocke
 				
 				applicationSocket.once('disconnect', function() {
 					console.log('applicationSocket disconnect');
-					
 					let isActive = false;
 					if (app.state.activeApplications[applicationOptions.assistant] && app.state.activeApplications[applicationOptions.assistant].appId === applicationOptions.id) {
-						console.log('disconnect application is the active app', applicationOptions.id);
-						
-						// let appId = app.state.activeApplications[applicationOptions.assistant].appId;
+						// console.log('disconnect application is the active app', applicationOptions.id);
 						let runId = app.state.activeApplications[applicationOptions.assistant].runId;
-						
 						const assistantSoocket = getAssistantSocket(applicationOptions.assistant);
-						console.log('EMIT run-application-abort-' + runId);
+						// console.log('EMIT run-application-abort-' + runId);
 						assistantSoocket.emit('run-application-abort-' + runId, 'app disconnected');
-						
-						// process.exit();
 						isActive = true;
 					}
 					
