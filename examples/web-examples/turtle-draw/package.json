@@ -9,7 +9,7 @@
     "jaxcore-bumblebee": "0.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "ts-color-class": "^0.9.0"
   },
   "scripts": {
